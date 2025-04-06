@@ -1,3 +1,12 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #00885C, #003539);
+    min-height: 100vh;
+    color: white;
+}
+
 .main-container {
     display: flex;
     justify-content: space-between;
@@ -34,17 +43,18 @@
 .profile-name {
     font-size: 1.5em;
     margin: 10px 0;
+    color: white;
 }
 
 .profile-email {
-    color: #555;
     margin-bottom: 10px;
+    color: white;
 }
 
 .profile-bio {
     font-size: 0.9em;
-    color: #666;
     margin-bottom: 20px;
+    color: white;
 }
 
 .articles-container {
@@ -74,21 +84,25 @@
 .article-title {
     font-size: 1.5em;
     margin-bottom: 10px;
+    color: white;
 }
 
 .article-summary {
     font-size: 0.9em;
-    color: #555;
     margin-bottom: 15px;
+    color: white;
 }
 
 .read-more {
-    text-decoration: none;
-    color: #007bff;
+    color: #FFD700;
     font-weight: bold;
     transition: color 0.2s ease;
 }
 
 .read-more:hover {
-    color: #0056b3;
+    color: #FFA500;
+}
+
+.link {
+    color: #FFD700;
 }
