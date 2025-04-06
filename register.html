@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="container">
+            <div class="wrapper">
+                <div class="title">Create an Account</div>
+                <div class="subtitle">Welcome to Epicare - Let’s enter your details</div>
+                <form action="/register" method="POST">
+                    <div class="input-container">
+                        <label for="name">Name</label> <br>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div class="input-container">
+                        <label for="email">Email</label> <br>
+                        <input type="text" name="email" required>
+                    </div>
+                    <div class="input-container">
+                        <label for="password">Password</label> <br>
+                        <input type="password" name="password" required>
+                    </div>
+                    <div class="input-container">
+                        <input type="checkbox" name="terms" required>
+                        <label for="terms">I agree to all Term of Use and Privacy Policy</label> <br>
+                        <button type="submit">Sign Up</button>
+                        <div class="login">
+                            <p>Already have an account? <a href="login.html" class="link">Login</a></p>
+                        </div>
+                    </div>
+            </div>
+
+
+        </div>
+        <div class="container">
+            <div class="wrapper">
+                <div class="profile">
+                    <img src="profile-placeholder.png" alt="Profile Picture" class="profile-pic">
+                    <h2 class="profile-name">John Doe</h2>
+                    <p class="profile-email">johndoe@example.com</p>
+                    <p class="profile-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia
+                        odio
+                        vitae
+                        vestibulum.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
