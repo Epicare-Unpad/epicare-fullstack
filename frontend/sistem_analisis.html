@@ -161,5 +161,58 @@
 
       <p class="text-center text-sm text-gray-200 mt-5">⚠️ Hasil prediksi bukan diagnosis medis resmi. Konsultasikan dengan tenaga medis untuk validasi lebih lanjut.</p>
     </main>
+    
+    <script>
+      // Ambil elemen form
+      const form = document.querySelector("form");
+    
+      // Fungsi untuk mengumpulkan data yang dipilih
+      function collectFormData() {
+        const formData = {};
+    
+        // Ambil data setiap input radio dan simpan dalam object formData
+        formData.q1 = document.querySelector('input[name="q1"]:checked')?.value || null;
+        formData.q2 = document.querySelector('input[name="q2"]:checked')?.value || null;
+        formData.q3 = document.querySelector('input[name="q3"]:checked')?.value || null;
+        formData.q4 = document.querySelector('input[name="q4"]:checked')?.value || null;
+        formData.q5 = document.querySelector('input[name="q5"]:checked')?.value || null;
+        formData.q6 = document.querySelector('input[name="q6"]:checked')?.value || null;
+        formData.q7 = document.querySelector('input[name="q7"]:checked')?.value || null;
+        formData.q8 = document.querySelector('input[name="q8"]:checked')?.value || null;
+        formData.q9 = document.querySelector('input[name="q9"]:checked')?.value || null;
+        formData.q10 = document.querySelector('input[name="q10"]:checked')?.value || null;
+    
+        return formData;
+      }
+    
+      // Fungsi untuk menampilkan data di console
+      function displayFormData() {
+        const data = collectFormData();
+        console.log("Form Data: ", data);
+        
+        // Simpan data di localStorage
+        localStorage.setItem('formData', JSON.stringify(data));
+
+        // Pindah ke halaman 2 setelah data ditampilkan
+        setTimeout(() => {
+          window.location.href = './sistem_analisis_page2.html';
+        }, 1000); // Delay 1 detik
+      }
+
+    
+      document.addEventListener('DOMContentLoaded', function () {
+      const nextButton = document.querySelector('a[href="./sistem_analisis_page2.html"]');
+
+      if (nextButton) {
+        nextButton.addEventListener('click', function (event) {
+          event.preventDefault(); // Mencegah halaman berpindah langsung
+          displayFormData();
+          window.location.href = event.target.href;
+        });
+      }
+    });
+
+    </script>
+    
   </body>
 </html>
