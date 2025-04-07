@@ -1,28 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Articles</title>
-    <link rel="stylesheet" href="./style/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="articles-container">
-        <div class="article-card">
-            <h2 class="article-title">Article 1</h2>
-            <p class="article-summary">This is a short summary of Article 1. Click to read more.</p>
-            <a href="article1.html" class="read-more">Read More</a>
-        </div>
-        <div class="article-card">
-            <h2 class="article-title">Article 2</h2>
-            <p class="article-summary">This is a short summary of Article 2. Click to read more.</p>
-            <a href="article2.html" class="read-more">Read More</a>
-        </div>
-        <div class="article-card">
-            <h2 class="article-title">Article 3</h2>
-            <p class="article-summary">This is a short summary of Article 3. Click to read more.</p>
-            <a href="article3.html" class="read-more">Read More</a>
+
+<body class="bg-gradient-to-br from-[#00885C] to-[#003539] min-h-screen text-white font-sans">
+    <aside
+        class="fixed top-5 bottom-5 left-5 h-auto w-16 flex flex-col items-center py-6 bg-white bg-opacity-10 backdrop-blur-md z-50 shadow-lg rounded-xl">
+        <a href="#">
+            <img src="./img/epicare-logo.png" alt="Logo" class="w-8 h-8 mb-8">
+        </a>
+        <div class="flex-grow"></div>
+        <a href="#" class="w-10 h-10 rounded-full overflow-hidden border-2 border-white hover:scale-105 transition">
+            <img src="./img/profile.png" alt="Profile" class="w-full h-full object-cover">
+        </a>
+    </aside>
+
+    <div class="ml-24 p-8">
+        <div class="space-y-6">
+            <div class="bg-white text-gray-900 p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold mb-2">Article 1</h2>
+                <p class="text-sm mb-4">This is a short summary of Article 1. Click to read more.</p>
+                <a href="article1.html" class="text-[#01BF81] underline">Read More</a>
+            </div>
+            <div class="bg-white text-gray-900 p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold mb-2">Article 2</h2>
+                <p class="text-sm mb-4">This is a short summary of Article 2. Click to read more.</p>
+                <a href="article2.html" class="text-[#01BF81] underline">Read More</a>
+            </div>
+            <div class="bg-white text-gray-900 p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold mb-2">Article 3</h2>
+                <p class="text-sm mb-4">This is a short summary of Article 3. Click to read more.</p>
+                <a href="article3.html" class="text-[#01BF81] underline">Read More</a>
+            </div>
         </div>
     </div>
 </body>
+
 </html>
