@@ -4,7 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chatbot - Epicare</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
       body {
         background: linear-gradient(to right, #0a996a, #0e3f2c);
@@ -14,97 +16,318 @@
         background: rgba(255, 255, 255, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.2);
       }
+
+      /* Scrollbar Styling */
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        border: 2px solid transparent;
+        background-clip: content-box;
+      }
+
+      /* Markdown Styling for Chatbot */
+      .prose-invert a {
+        color: #a5f3fc;
+        text-decoration: underline;
+      }
+      .prose-invert strong {
+        color: white;
+        font-weight: 600;
+      }
+      .prose-invert em {
+        color: #d1fae5;
+        font-style: italic;
+      }
+      .prose-invert code {
+        background: rgba(0,0,0,0.2);
+        padding: 0.2em 0.4em;
+        border-radius: 0.25em;
+        font-family: monospace;
+      }
+      .prose-invert pre {
+        background: rgba(0,0,0,0.3);
+        padding: 1em;
+        border-radius: 0.5em;
+        overflow-x: auto;
+      }
+      .prose-invert ul {
+        list-style-type: disc;
+        padding-left: 1.5em;
+      }
+      .prose-invert ol {
+        list-style-type: decimal;
+        padding-left: 1.5em;
+      }
+      .prose-invert blockquote {
+        border-left: 3px solid #10b981;
+        padding-left: 1em;
+        margin-left: 0;
+        color: #d1fae5;
+      }
+      .prose-invert h1, 
+      .prose-invert h2, 
+      .prose-invert h3 {
+        color: white;
+        font-weight: 600;
+        margin-top: 1em;
+        margin-bottom: 0.5em;
+      }
+
+      /* Typing Animation */
+.dot-typing {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  height: 24px;
+  padding: 10px 0;
+}
+.dot-typing span {
+  width: 8px;
+  height: 8px;
+  background-color: white;
+  border-radius: 50%;
+  display: inline-block;
+  animation: dotBounce 1.2s infinite ease-in-out;
+}
+.dot-typing span:nth-child(1) {
+  animation-delay: 0s;
+}
+.dot-typing span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.dot-typing span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes dotBounce {
+  0%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-8px);
+  }
+}
+
     </style>
   </head>
   <body class="text-white min-h-screen font-sans">
 
     <!-- SIDEBAR -->
-    <aside class="fixed top-5 bottom-5 bg-[#01BF81] left-5 h-auto w-16 flex flex-col items-center py-6 glass z-50 shadow-lg rounded-xl">
-      <a href="#">
-        <img src="./img/epicare-logo.png" alt="Logo" class="w-8 h-8 mb-8" />
-      </a>
-      <div class="flex-grow"></div>
-      <a href="#" class="w-10 h-10 rounded-full overflow-hidden border-2 border-white hover:scale-105 transition">
-        <img src="./img/profile.png" alt="Profile" class="w-full h-full object-cover" />
-      </a>
+    <!-- Sidebar -->
+<!-- Sidebar -->
+   <!-- Sidebar -->
+<!-- Sidebar -->
+    <aside class="fixed top-5 bottom-5 bg-[#01BF81] left-5 w-16 flex flex-col items-center py-6 glass z-50 shadow-lg rounded-3xl">
+      <div class="flex flex-col justify-between h-full items-center w-full">
+
+        <!-- Logo -->
+        <a href="#">
+          <img src="./img/epicare-logo.png" alt="Logo" class="w-8 h-8" />
+        </a>
+
+        <!-- Tabs Tengah -->
+        <div class="flex flex-col items-center space-y-6">
+          
+          <!-- Tab: Analisis Gejala -->
+          <div class="relative group">
+            <a href="./sistem_analisis.html"
+              class="w-10 h-10 flex items-center justify-center rounded-full border-2 border-white text-white text-xl hover:scale-110 transition-all"
+              title="Sistem Analisis Gejala">
+              <i class="fas fa-stethoscope"></i>
+            </a>
+            <!-- Tooltip -->
+            <div class="absolute left-12 top-1/2 transform -translate-y-1/2 bg-white text-[#01BF81] text-xs font-semibold px-3 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50">
+              Sistem Analisis Gejala
+            </div>
+          </div>
+
+          <!-- Tab: Chatbot -->
+          <div class="relative group">
+            <a href="./chatbot.html"
+              class="w-10 h-10 flex items-center justify-center rounded-full border-2 border-white text-white text-xl hover:scale-110 transition-all"
+              title="Chatbot">
+              <i class="fas fa-robot"></i>
+            </a>
+            <!-- Tooltip -->
+            <div class="absolute left-12 top-1/2 transform -translate-y-1/2 bg-white text-[#01BF81] text-xs font-semibold px-3 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50">
+              Chatbot
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Profile -->
+        <a href="#"
+          class="w-10 h-10 rounded-full overflow-hidden border-2 border-white hover:scale-105 transition">
+          <img src="./img/profile.png" alt="Profile" class="w-full h-full object-cover" />
+        </a>
+
+      </div>
     </aside>
 
+
     <!-- MAIN -->
-    <div class="ml-auto mr-6 flex flex-col w-[90%] h-screen p-6">
-      <div class="flex-grow overflow-y-auto space-y-4 pr-2">
-
-        <!-- CHATBOT -->
-      <div class="flex justify-start">
-        <div class="max-w-[70%] bg-[#01BF81] border border-white/20 backdrop-blur-md p-4 shadow-md rounded-xl rounded-bl-none">
-          <p class="text-white">
-            Hai! Saya Epicare, asisten virtual kamu. Aku di sini buat bantu kamu memahami gejala TBC dan kasih arahan. Gimana kabarmu hari ini?
+    <div class="ml-24 mr-6 flex flex-col h-screen p-6 space-y-6">
+      
+      <!-- HEADER -->
+      <div>
+        <div class="flex items-center justify-between">
+          <h1 class="text-2xl font-bold">Chatbot Epicare</h1>
+          <span class="bg-white/10 border border-white/20 px-3 py-1 text-sm rounded-full font-medium shadow-inner">Versi Beta</span>
+        </div>
+        <p class="text-white/80 mt-2">
+          Asisten virtual yang siap bantu kamu memahami gejala TBC dan penyakit pernapasan sejenis, secara cepat dan informatif.
+        </p>
+        <div class="mt-4 bg-white/10 p-4 rounded-3xl border border-white/20 shadow-inner">
+          <p class="text-sm">
+            <i class="fa-solid fa-circle-info mr-2 text-emerald-300"></i>
+            Informasi yang diberikan bersifat edukatif dan tidak menggantikan diagnosis langsung dari tenaga medis profesional.
           </p>
         </div>
       </div>
 
-      <!-- USER -->
-      <div class="flex justify-end">
-        <div class="max-w-[70%] bg-[#DBFFEF] border border-emerald-300/30 backdrop-blur-md p-4 shadow-md rounded-xl rounded-br-none">
-          <p class="text-[#00885C]">
-            Halo Epicare! Aku mau tanya soal gejala yang aku rasain belakangan ini.
-          </p>
-        </div>
-      </div>
-
-        <!-- 3. Chatbot -->
+      <!-- CHAT AREA -->
+      <div class="flex-grow relative overflow-hidden">
+        <div class="absolute inset-0 bottom-24 overflow-y-auto space-y-6 pr-2 custom-scrollbar scroll-smooth" id="chat-scroll-container">
+      
+        
+        <!-- Bot -->
         <div class="flex justify-start">
-          <div class="max-w-[70%] bg-[#01BF81] border border-white/20 backdrop-blur-md rounded-xl rounded-bl-none p-4 shadow-md ">
-            <p class="text-white">
-              Boleh banget! Ceritain semua gejalamu ya, aku siap bantu kasih penjelasan awal ✨
-            </p>
+          <div class="max-w-[70%] bg-[#01bf80cb] border border-white/20 p-4 rounded-3xl rounded-bl-none text-[18px] font-semibold shadow-md">
+            <p>Hai! Saya Epicare, asisten virtual kamu. Aku di sini buat bantu kamu memahami gejala TBC dan kasih arahan. Gimana kabarmu hari ini?</p>
           </div>
         </div>
 
-        <!-- 4. User -->
-        <div class="flex justify-end">
-          <div class="max-w-[70%] bg-[#DBFFEF] border border-emerald-300/30 backdrop-blur-md rounded-xl rounded-br-none p-4 shadow-md">
-            <p class="text-[#00885C]">
-              Aku batuk berdahak selama 2 minggu, terus demam juga. Kadang dada sakit dan sering keringetan malam.
-            </p>
-          </div>
-        </div>
+        
 
-        <!-- 5. Chatbot -->
-        <div class="flex justify-start">
-          <div class="max-w-[70%] bg-[#01BF81] border border-white/20 backdrop-blur-md rounded-xl rounded-bl-none p-4 shadow-md">
-            <p class="text-white">
-              Wah, gejalanya perlu diwaspadai ya. Bisa jadi mengarah ke infeksi paru seperti pneumonia atau TBC. Aku saranin segera cek ke dokter buat diagnosis akurat. 😊
-            </p>
-          </div>
-        </div>
-
-        <!-- 6-User -->
-        <div class="flex justify-end">
-          <div class="max-w-[70%] bg-[#DBFFEF] border border-emerald-300/30 backdrop-blur-md rounded-xl rounded-br-none p-4 shadow-md">
-            <p class="text-[#00885C]">
-              Okedeh, terimakasih ya!
-            </p>
-          </div>
-        </div>
-      </div>
-
-
-      <!-- INPUT AREA -->
-      <div class="flex items-center gap-2 mt-4">
-        <input 
-          type="text" 
-          placeholder="Ketik pertanyaanmu di sini..." 
-          class="flex-grow px-4 py-3 rounded-md bg-white text-[#00885C] placeholder-[#00885C] border border-green-300 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition" 
-        />
-        <button class="bg-emerald-500 hover:bg-emerald-600 text-white p-3 rounded-full shadow-lg transition">
-          <!-- Panah Kirim -->
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M5 12h14M12 5l7 7-7 7" />
-          </svg>
-        </button>
-      </div>
+      <!-- INPUT -->
+      <!-- INPUT STICKY -->
     </div>
+  </div>
+  <div class="fixed bottom-6 bottom-11 left-1/2 transform -translate-x-1/2 max-w-[80%] w-full z-40">
+    <div class="flex items-center gap-4">
+      <input 
+        type="text" 
+        placeholder="Ketik pertanyaanmu di sini..." 
+        class="flex-grow px-4 py-3 rounded-md bg-white text-[#00885C] placeholder-[#00885C] focus:outline-none focus:ring-2 focus:ring-emerald-400 transition" 
+      />
+      <button class="bg-emerald-500 hover:bg-emerald-600 w-14 h-14 rounded-full flex items-center justify-center transition">
+        <i class="fa-solid fa-paper-plane text-2xl text-white"></i>
+      </button>
+    </div>
+  </div>
+    <script>
+      window.onload = () => {
+        const chatContainer = document.querySelector('.custom-scrollbar');
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      };
+    </script>
+
+    <script>
+      const inputField = document.querySelector('input[type="text"]');
+      const sendButton = document.querySelector('button');
+      const chatContainer = document.querySelector('.custom-scrollbar');
+
+      // Fungsi buat tambahin chat bubble
+      function addChatBubble(text, from = 'user') {
+        const bubble = document.createElement('div');
+        bubble.className = `flex justify-${from === 'user' ? 'end' : 'start'} mt-4`;
+
+        const innerBubble = document.createElement('div');
+          innerBubble.className = `max-w-[70%] ${
+          from === 'user'
+            ? 'bg-[#DBFFEF] text-[#00885C] border border-emerald-300/30 rounded-br-none'
+            : 'bg-[#01BF81] border border-white/20 rounded-bl-none text-white'
+        } p-4 rounded-3xl text-[18px] font-semibold shadow-md`;
+
+        if (from === 'bot') {
+          const markdownContainer = document.createElement('div');
+          markdownContainer.className = 'prose prose-sm prose-invert max-w-none';
+          // Sanitize and parse markdown
+          const sanitizedText = text.replace(/</g, '<').replace(/>/g, '>');
+          markdownContainer.innerHTML = marked.parse(sanitizedText);
+          innerBubble.appendChild(markdownContainer);
+        } else {
+          innerBubble.innerHTML = `<p>${text}</p>`;
+        }
+
+        bubble.appendChild(innerBubble);
+        chatContainer.appendChild(bubble);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+
+      async function sendMessage() {
+    const userInput = inputField.value.trim();
+    if (!userInput) return;
+
+    addChatBubble(userInput, 'user');
+    inputField.value = '';
+
+    // Tampilkan loading bubble
+    showLoading();
+
+    try {
+      const res = await fetch('http://localhost:8000/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_input: `Kamu adalah chatbot medis yang hanya dapat memberikan informasi tentang Tuberkulosis (TBC) dan penyakit serupa. Jika pertanyaan tidak terkait dengan TBC atau penyakit terkait, tetapi masih lingkup penyakit, jawab saja. Jika tidak, beri tahu pengguna bahwa kamu hanya dapat memberikan informasi tentang topik tersebut, tetapi jika pengguna menyapa, tidak apa apa untuk menjawab. Jika pertanyaan pengguna berkaitan dengan gejala jawab juga. Jika pertanyaan tidak langsung spesifik tentang TBC, tetapi berkaitan dengan tbc, jawab juga. Pertanyaan: ${userInput}? Jangan jawab jika pertanyaan tidak relevan.`})
+        
+      });
+
+      const data = await res.json();
+
+// Delay 500ms untuk efek loading
+await new Promise(resolve => setTimeout(resolve, 500));
+
+document.getElementById('loading-bubble')?.remove();
+addChatBubble(data.reply, 'bot');
+
+
+    } catch (err) {
+      clearInterval(loadingInterval);
+      document.getElementById('loading-bubble')?.remove();
+      addChatBubble('⚠️ Gagal menghubungi chatbot.', 'bot');
+      console.error(err);
+    }
+  }
+
+      // Event: klik tombol kirim
+      sendButton.addEventListener('click', sendMessage);
+
+      // Event: tekan Enter
+      inputField.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          sendMessage();
+        }
+      });
+
+      function showLoading() {
+  const loadingBubble = document.createElement('div');
+  loadingBubble.className = 'flex justify-start mt-4';
+  loadingBubble.id = 'loading-bubble';
+
+  const bubbleContent = document.createElement('div');
+  bubbleContent.className = 'max-w-[70%] bg-[#01BF81] border border-white/20 p-4 rounded-3xl rounded-bl-none text-[18px] font-semibold shadow-md text-white';
+  bubbleContent.innerHTML = `<span id="dots" class="text-xs"></span>`;
+
+  const dotWrapper = document.createElement('div');
+  dotWrapper.className = 'dot-typing';
+  dotWrapper.innerHTML = '<span></span><span></span><span></span>';
+
+  bubbleContent.appendChild(dotWrapper);
+  loadingBubble.appendChild(bubbleContent);
+  chatContainer.appendChild(loadingBubble);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+    </script>
   </body>
 </html>

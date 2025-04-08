@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Analisis Gejala TBC - Epicare</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <style>
       body {
         background: linear-gradient(to right, #0a996a, #0e3f2c);
@@ -16,33 +18,71 @@
       }
     </style>
   </head>
-  <body class="text-white min-h-screen font-sans">
+  <body class="text-white min-h-screen font-sans overflow-hidden">
 
     <!-- Sidebar -->  
-    <aside class="fixed top-5 bottom-5 left-5 h-auto w-16 flex flex-col items-center py-6 glass z-50 shadow-lg rounded-xl">
-      <a href="#">
-        <img src="./img/epicare-logo.png" alt="Logo" class="w-8 h-8 mb-8" />
-      </a>
-      <div class="flex-grow"></div>
-      <a href="#" class="w-10 h-10 rounded-full overflow-hidden border-2 border-white hover:scale-105 transition">
-        <img src="./img/profile.png" alt="Profile" class="w-full h-full object-cover" />
-      </a>
+    <aside class="fixed top-5 bottom-5 bg-[#01BF81] left-5 w-16 flex flex-col items-center py-6 glass z-50 shadow-lg rounded-xl">
+      <div class="flex flex-col justify-between h-full items-center w-full">
+
+        <!-- Logo -->
+        <a href="#">
+          <img src="./img/epicare-logo.png" alt="Logo" class="w-8 h-8" />
+        </a>
+
+        <!-- Tabs Tengah -->
+        <div class="flex flex-col items-center space-y-6">
+          
+          <!-- Tab: Analisis Gejala -->
+          <div class="relative group">
+            <a href="./sistem_analisis.html"
+              class="w-10 h-10 flex items-center justify-center rounded-full border-2 border-white text-white text-xl hover:scale-110 transition-all"
+              title="Sistem Analisis Gejala">
+              <i class="fas fa-stethoscope"></i>
+            </a>
+            <!-- Tooltip -->
+            <div class="absolute left-12 top-1/2 transform -translate-y-1/2 bg-white text-[#01BF81] text-xs font-semibold px-3 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50">
+              Sistem Analisis Gejala
+            </div>
+          </div>
+
+          <!-- Tab: Chatbot -->
+          <div class="relative group">
+            <a href="./chatbot.html"
+              class="w-10 h-10 flex items-center justify-center rounded-full border-2 border-white text-white text-xl hover:scale-110 transition-all"
+              title="Chatbot">
+              <i class="fas fa-robot"></i>
+            </a>
+            <!-- Tooltip -->
+            <div class="absolute left-12 top-1/2 transform -translate-y-1/2 bg-white text-[#01BF81] text-xs font-semibold px-3 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50">
+              Chatbot
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Profile -->
+        <a href="#"
+          class="w-10 h-10 rounded-full overflow-hidden border-2 border-white hover:scale-105 transition">
+          <img src="./img/profile.png" alt="Profile" class="w-full h-full object-cover" />
+        </a>
+
+      </div>
     </aside>
 
     <!-- Main Content -->
-    <main class="ml-20 p-8 max-w-7xl mx-auto overflow-hidden">
-      <section class="text-center mb-10">
+    <main class="mt-5 ml-20 px-8 max-w-7xl mx-auto overflow-hidden">
+      <section class="text-center mb-5">
         <h1 class="text-4xl font-bold tracking-wide">Analisis Gejala TBC</h1>
         <p class="text-lg mt-2 text-gray-200">Sistem deteksi dini TBC berbasis gejala menggunakan Machine Learning</p>
       </section>
 
       <form class="grid md:grid-cols-2 gap-8 text-center">
         <!-- Card 1 -->
-        <div class="glass p-6 rounded-2xl shadow-md space-y-6">
+        <div class="glass p-6 rounded-2xl shadow-md space-y-5">
           <!-- Q1 -->
           <div>
-            <label class="block font-semibold mb-2 text-white">Q1. Apakah Anda mengalami batuk?</label>
-            <div class="flex gap-6 text-sm justify-center">
+            <label class="block font-semibold mb-1 text-lg text-white">Q1. Apakah Anda mengalami batuk?</label>
+            <div class="flex gap-6 text-base justify-center">
               <label><input type="radio" name="q1" value="0" class="mr-1 accent-[#0a996a]" /> Tidak/Ringan</label>
               <label><input type="radio" name="q1" value="1" class="mr-1 accent-[#0a996a]" /> Sedang</label>
               <label><input type="radio" name="q1" value="2" class="mr-1 accent-[#0a996a]" /> Parah</label>
@@ -52,8 +92,8 @@
 
           <!-- Q2 -->
           <div>
-            <label class="block font-semibold mb-2 text-white">Q2. Apakah Anda mengalami demam?</label>
-            <div class="flex gap-6 text-sm justify-center">
+            <label class="block font-semibold mb-1 text-lg text-white">Q2. Apakah Anda mengalami demam?</label>
+            <div class="flex gap-6 text-base justify-center">
               <label><input type="radio" name="q2" value="0" class="mr-1 accent-[#0a996a]" /> Tidak/Ringan</label>
               <label><input type="radio" name="q2" value="1" class="mr-1 accent-[#0a996a]" /> Sedang</label>
               <label><input type="radio" name="q2" value="2" class="mr-1 accent-[#0a996a]" /> Parah</label>
@@ -63,8 +103,8 @@
 
           <!-- Q3 -->
           <div>
-            <label class="block font-semibold mb-2 text-white">Q3. Apakah Anda merasa mudah lelah?</label>
-            <div class="flex gap-6 text-sm justify-center">
+            <label class="block font-semibold mb-1 text-lg text-white">Q3. Apakah Anda merasa mudah lelah?</label>
+            <div class="flex gap-6 text-base justify-center">
               <label><input type="radio" name="q3" value="0" class="mr-1 accent-[#0a996a]" /> Tidak/Ringan</label>
               <label><input type="radio" name="q3" value="1" class="mr-1 accent-[#0a996a]" /> Sedang</label>
               <label><input type="radio" name="q3" value="2" class="mr-1 accent-[#0a996a]" /> Parah</label>
@@ -74,8 +114,8 @@
 
           <!-- Q4 -->
           <div>
-            <label class="block font-semibold mb-2 text-white">Q4. Apakah Anda mengalami keringat malam?</label>
-            <div class="flex gap-6 text-sm justify-center">
+            <label class="block font-semibold mb-1 text-lg text-white">Q4. Apakah Anda mengalami keringat malam?</label>
+            <div class="flex gap-6 text-base justify-center">
               <label><input type="radio" name="q4" value="0" class="mr-1 accent-[#0a996a]" /> Tidak/Ringan</label>
               <label><input type="radio" name="q4" value="1" class="mr-1 accent-[#0a996a]" /> Sedang</label>
               <label><input type="radio" name="q4" value="2" class="mr-1 accent-[#0a996a]" /> Parah</label>
@@ -85,8 +125,8 @@
 
           <!-- Q5 -->
           <div>
-            <label class="block font-semibold mb-2 text-white">Q5. Apakah Anda mengalami nyeri dada?</label>
-            <div class="flex gap-6 text-sm justify-center">
+            <label class="block font-semibold mb-1 text-lg text-white">Q5. Apakah Anda mengalami nyeri dada?</label>
+            <div class="flex gap-6 text-base justify-center">
               <label><input type="radio" name="q5" value="0" class="mr-1 accent-[#0a996a]" /> Tidak/Ringan</label>
               <label><input type="radio" name="q5" value="1" class="mr-1 accent-[#0a996a]" /> Sedang</label>
               <label><input type="radio" name="q5" value="2" class="mr-1 accent-[#0a996a]" /> Parah</label>
@@ -96,11 +136,11 @@
         </div>
 
         <!-- Card 2 -->
-        <div class="glass p-6 rounded-2xl shadow-md space-y-6">
+        <div class="glass p-6 rounded-2xl shadow-md space-y-5">
           <!-- Q6 -->
           <div>
-            <label class="block font-semibold mb-2 text-white">Q6. Apakah Anda kehilangan nafsu makan?</label>
-            <div class="flex gap-6 text-sm justify-center">
+            <label class="block font-semibold mb-1 text-lg text-white">Q6. Apakah Anda kehilangan nafsu makan?</label>
+            <div class="flex gap-6 text-base justify-center">
               <label><input type="radio" name="q6" value="0" class="mr-1 accent-[#0a996a]" /> Tidak/Ringan</label>
               <label><input type="radio" name="q6" value="1" class="mr-1 accent-[#0a996a]" /> Sedang</label>
               <label><input type="radio" name="q6" value="2" class="mr-1 accent-[#0a996a]" /> Parah</label>
@@ -110,8 +150,8 @@
 
           <!-- Q7 -->
           <div>
-            <label class="block font-semibold mb-2 text-white">Q7. Apakah Anda merasa menggigil?</label>
-            <div class="flex gap-6 text-sm justify-center">
+            <label class="block font-semibold mb-1 text-lg text-white">Q7. Apakah Anda merasa menggigil?</label>
+            <div class="flex gap-6 text-base justify-center">
               <label><input type="radio" name="q7" value="0" class="mr-1 accent-[#0a996a]" /> Tidak/Ringan</label>
               <label><input type="radio" name="q7" value="1" class="mr-1 accent-[#0a996a]" /> Sedang</label>
               <label><input type="radio" name="q7" value="2" class="mr-1 accent-[#0a996a]" /> Parah</label>
@@ -121,8 +161,8 @@
 
           <!-- Q8 -->
           <div>
-            <label class="block font-semibold mb-2 text-white">Q8. Apakah Anda mengalami gangguan konsentrasi?</label>
-            <div class="flex gap-6 text-sm justify-center">
+            <label class="block font-semibold mb-1 text-lg text-white">Q8. Apakah Anda mengalami gangguan konsentrasi?</label>
+            <div class="flex gap-6 text-base justify-center">
               <label><input type="radio" name="q8" value="0" class="mr-1 accent-[#0a996a]" /> Tidak/Ringan</label>
               <label><input type="radio" name="q8" value="1" class="mr-1 accent-[#0a996a]" /> Sedang</label>
               <label><input type="radio" name="q8" value="2" class="mr-1 accent-[#0a996a]" /> Parah</label>
@@ -132,8 +172,8 @@
 
           <!-- Q9 -->
           <div>
-            <label class="block font-semibold mb-2 text-white">Q9. Apakah Anda mengalami pembesaran kelenjar getah bening?</label>
-            <div class="flex gap-6 text-sm justify-center">
+            <label class="block font-semibold mb-1 text-lg text-white">Q9. Apakah Anda mengalami pembesaran kelenjar getah bening?</label>
+            <div class="flex gap-6 text-base justify-center">
               <label><input type="radio" name="q9" value="0" class="mr-1 accent-[#0a996a]" /> Tidak/Ringan</label>
               <label><input type="radio" name="q9" value="1" class="mr-1 accent-[#0a996a]" /> Sedang</label>
               <label><input type="radio" name="q9" value="2" class="mr-1 accent-[#0a996a]" /> Parah</label>
@@ -143,8 +183,8 @@
 
           <!-- Q10 -->
           <div>
-            <label class="block font-semibold mb-2 text-white">Q10. Apakah Anda mengalami sesak napas?</label>
-            <div class="flex gap-6 text-sm justify-center">
+            <label class="block font-semibold mb-1 text-lg text-white">Q10. Apakah Anda mengalami sesak napas?</label>
+            <div class="flex gap-6 text-base justify-center">
               <label><input type="radio" name="q10" value="0" class="mr-1 accent-[#0a996a]" /> Tidak/Ringan</label>
               <label><input type="radio" name="q10" value="1" class="mr-1 accent-[#0a996a]" /> Sedang</label>
               <label><input type="radio" name="q10" value="2" class="mr-1 accent-[#0a996a]" /> Parah</label>
@@ -158,8 +198,6 @@
       <div class="flex justify-center gap-4 mt-6">
         <a href="./sistem_analisis_page2.html" class="bg-[#192824] hover:bg-[#0e3f2c] transition text-white px-8 py-2 rounded-xl shadow-md text-lg border-white border-2">Next</a>
       </div>
-
-      <p class="text-center text-sm text-gray-200 mt-5">⚠️ Hasil prediksi bukan diagnosis medis resmi. Konsultasikan dengan tenaga medis untuk validasi lebih lanjut.</p>
     </main>
     
     <script>
