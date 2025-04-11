@@ -21,17 +21,29 @@
   <body class="text-white min-h-screen font-sans overflow-hidden">
 
     <!-- Sidebar -->
-    <aside class="fixed top-5 bottom-5 bg-[#01BF81] left-5 w-16 flex flex-col items-center py-6 glass z-50 shadow-lg rounded-xl">
+    <aside class="fixed top-5 bottom-5 bg-[#01BF81] left-5 w-16 flex flex-col items-center py-6 glass z-50 shadow-lg rounded-3xl">
       <div class="flex flex-col justify-between h-full items-center w-full">
-
+  
         <!-- Logo -->
         <a href="#">
           <img src="./img/epicare-logo.png" alt="Logo" class="w-8 h-8" />
         </a>
-
+  
         <!-- Tabs Tengah -->
         <div class="flex flex-col items-center space-y-6">
           
+          <!-- Tab: Analisis Gejala -->
+          <div class="relative group">
+            <a href="./article-list.html"
+              class="w-10 h-10 flex items-center justify-center rounded-full border-2 border-white text-white text-xl hover:scale-110 transition-all"
+              title="Artikel Kesehatan">
+              <i class="fas fa-notes-medical"></i>
+            </a>
+            <!-- Tooltip -->
+            <div class="absolute left-12 top-1/2 transform -translate-y-1/2 bg-white text-[#01BF81] text-xs font-semibold px-3 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50">
+              Artikel Kesehatan
+            </div>
+          </div>
           <!-- Tab: Analisis Gejala -->
           <div class="relative group">
             <a href="./sistem_analisis.html"
@@ -44,7 +56,7 @@
               Sistem Analisis Gejala
             </div>
           </div>
-
+  
           <!-- Tab: Chatbot -->
           <div class="relative group">
             <a href="./chatbot.html"
@@ -57,15 +69,15 @@
               Chatbot
             </div>
           </div>
-
+  
         </div>
-
+  
         <!-- Profile -->
         <a href="#"
           class="w-10 h-10 rounded-full overflow-hidden border-2 border-white hover:scale-105 transition">
           <img src="./img/profile.png" alt="Profile" class="w-full h-full object-cover" />
         </a>
-
+  
       </div>
     </aside>
 
