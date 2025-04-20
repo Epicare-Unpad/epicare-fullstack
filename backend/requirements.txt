@@ -8,3 +8,6 @@ python-dotenv
 tensorflow
 numpy
 google-generativeai
+jinja2
+uvicorn
+python-multipart
