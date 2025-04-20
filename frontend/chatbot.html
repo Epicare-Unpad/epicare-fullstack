@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet" href="./style/style.css">
-  <style>
+    <style>
       body {
         background: linear-gradient(to right, #0a996a, #0e3f2c);
         margin: 0;
@@ -37,12 +37,12 @@
       }
 
       #chat-scroll-container {
-  height: calc(76vh - 12rem); /* Sesuaikan tinggi chat area untuk memberi ruang pada input sticky */
-  overflow-y: auto;
-}
-#chat-scroll-container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
-}
+        height: calc(76vh - 12rem); /* Sesuaikan tinggi chat area untuk memberi ruang pada input sticky */
+        overflow-y: auto;
+      }
+      #chat-scroll-container::-webkit-scrollbar {
+        display: none; /* Chrome, Safari */
+      }
 
       .content {
         margin-left: 272px; /* Menyesuaikan sidebar width (64px + padding) */
@@ -51,8 +51,6 @@
         position: relative;
         z-index: 10;
       }
-
-
 
       .prose-invert a {
         color: #a5f3fc;
@@ -135,20 +133,36 @@
           transform: translateY(-8px);
         }
       }
-
     </style>
   </head>
   <body class="text-white min-h-screen font-sans overflow-hidden">
     <div id="navbar-placeholder"></div>
     <script>
-      fetch('./navbar_with_logout_new.html')
+      fetch('./navbar.html')
         .then(response => response.text())
         .then(data => {
           document.getElementById('navbar-placeholder').innerHTML = data;
+
+          // Tambahkan event listener setelah navbar dimuat
+          const profileIcon = document.getElementById('profile-icon');
+          const dropdownMenu = document.getElementById('dropdown-menu');
+
+          if (profileIcon && dropdownMenu) {
+            profileIcon.addEventListener('click', () => {
+              dropdownMenu.classList.toggle('hidden');
+            });
+
+            // Optional: tutup dropdown saat klik di luar
+            document.addEventListener('click', (e) => {
+              if (!profileIcon.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                dropdownMenu.classList.add('hidden');
+              }
+            });
+          }
         })
         .catch(error => console.error('Error loading navbar:', error));
     </script>
-    
+
     <!-- SIDEBAR -->
     <div class="fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-[#003f2b] border-r border-white/10 shadow-lg z-40 flex flex-col">
       <div class="p-6 border-b border-white/10">
@@ -186,7 +200,6 @@
         <div class="space-y-6 -mt-5 pr-2 scroll-smooth" id="chat-scroll-container"></div>
       </div>
 
-
       <!-- INPUT STICKY -->
       <div class="fixed bottom-6 bottom-11 left-64 max-w-[calc(100%-16rem-1.5rem)] w-[calc(100%-16rem-1.5rem)] z-40" style="box-sizing: border-box; padding-right: 1.5rem;">
         <div class="flex items-center gap-4 justify-center">
@@ -202,6 +215,5 @@
       </div>
     </div>
     <script src="script/chatbot.js"></script>
-    <script src="script/logout.js"></script>
   </body>
 </html>
