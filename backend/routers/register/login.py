@@ -1,13 +1,15 @@
 import traceback
-from fastapi import HTTPException, APIRouter, Form
+from fastapi import HTTPException, APIRouter, Form, Request
+from fastapi.responses import JSONResponse
 from .db import supabase
 from .auth import verify_password
 from model.LoginInput import LoginInput
+
 router = APIRouter()
 
 
 @router.post("/login")
-async def login_user(data: LoginInput):
+async def login_user(data: LoginInput, request: Request):
     try:
         response = supabase.table("users").select(
             "*").eq("email", data.email).execute()
@@ -24,10 +26,17 @@ async def login_user(data: LoginInput):
             raise HTTPException(
                 status_code=401, detail="Invalid email or password")
 
-        return {"message": "Login successful", "user": user}
+        # Simpan user ke session
+        request.session["user"] = {
+            "id": user["id"],
+            "email": user["email"],
+            "name": user.get("name", "")
+        }
+
+        return JSONResponse(content={"message": "Login successful"})
 
     except HTTPException as http_exc:
-        raise http_exc  # lempar lagi langsung, jangan ditangkap sebagai 'error umum'
+        raise http_exc
 
     except Exception as e:
         traceback.print_exc()
