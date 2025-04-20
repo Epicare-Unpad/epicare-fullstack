@@ -1,0 +1,10 @@
+fastapi
+starlette
+pydantic
+supabase
+passlib
+authlib
+python-dotenv
+tensorflow
+numpy
+google-generativeai
