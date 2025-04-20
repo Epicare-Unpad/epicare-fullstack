@@ -1,0 +1,26 @@
+<nav class="fixed w-full top-0 z-50 bg-[#01BF81]/80 backdrop-blur-md border-b border-white/20 shadow-lg">
+  <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="#" class="flex items-center space-x-3">
+      <img src="./img/epicare-logo.png" alt="Logo" class="w-10 h-10" />
+      <span class="text-2xl font-bold text-white">Epicare</span>
+    </a>
+
+    <!-- Navigation Links -->
+    <div class="flex items-center space-x-8">
+      <a href="./article-list.html" class="nav-link">Artikel Kesehatan</a>
+      <a href="./sistem_analisis.html" class="nav-link">Sistem Analisis Gejala</a>
+      <a href="./chatbot.html" class="nav-link">Chatbot</a>
+    </div>
+
+    <!-- Profile Dropdown -->
+    <div class="relative">
+      <button id="profile-icon" class="w-10 h-10 rounded-full overflow-hidden border-2 border-white hover:scale-105 transition duration-300">
+        <img src="./img/profile.png" alt="Profile" class="object-cover w-full h-full" />
+      </button>
+      <div id="dropdown-menu" class="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg hidden transition-opacity duration-300 z-50">
+        <button id="logout-button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md">Logout</button>
+      </div>
+    </div>
+  </div>
+</nav>
