@@ -1,9 +1,3 @@
-import logging
-from pydantic import ValidationError
-from fastapi.responses import JSONResponse
-from fastapi import HTTPException
-from fastapi import status
-from fastapi import Request
 from fastapi import FastAPI, HTTPException
 from .db import supabase
 from model.users import UserRegisterRequest
@@ -12,6 +6,13 @@ from fastapi import APIRouter
 
 router = APIRouter()
 
+
+from fastapi import Request
+from fastapi import status
+from fastapi import HTTPException
+from fastapi.responses import JSONResponse
+from pydantic import ValidationError
+import logging
 
 @router.post("/register")
 async def register_user(request: Request):
