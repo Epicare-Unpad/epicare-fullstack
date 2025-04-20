@@ -1,3 +1,5 @@
+from fastapi import Form
+from fastapi.responses import HTMLResponse
 import traceback
 from fastapi import HTTPException, APIRouter, Form, Request
 from fastapi.responses import JSONResponse
@@ -9,10 +11,10 @@ router = APIRouter()
 
 
 @router.post("/login")
-async def login_user(data: LoginInput, request: Request):
+async def login_user(email: str = Form(...), password: str = Form(...), request: Request = None):
     try:
         response = supabase.table("users").select(
-            "*").eq("email", data.email).execute()
+            "*").eq("email", email).execute()
         user_data = response.data
 
         if not user_data:
@@ -22,18 +24,34 @@ async def login_user(data: LoginInput, request: Request):
         user = user_data[0]
 
         # Cocokkan password hash
-        if not verify_password(data.password, user["password_hash"]):
+        if not verify_password(password, user["password_hash"]):
             raise HTTPException(
                 status_code=401, detail="Invalid email or password")
 
         # Simpan user ke session
-        request.session["user"] = {
-            "id": user["id"],
-            "email": user["email"],
-            "name": user.get("name", "")
-        }
+        if request:
+            request.session["user"] = {
+                "id": user["id"],
+                "email": user["email"],
+                "name": user.get("name", "")
+            }
 
-        return JSONResponse(content={"message": "Login successful"})
+        # Return HTMLResponse with script to set sessionStorage and redirect
+        return HTMLResponse(f"""
+        <html>
+            <head><title>Redirecting...</title></head>
+            <body>
+                <script>
+                    sessionStorage.setItem('user', JSON.stringify({{
+                        'id': '{user["id"]}',
+                        'email': '{user["email"]}',
+                        'name': '{user.get("name", "")}'
+                    }}));
+                    window.location.href = '/frontend/chatbot.html';
+                </script>
+            </body>
+        </html>
+        """)
 
     except HTTPException as http_exc:
         raise http_exc

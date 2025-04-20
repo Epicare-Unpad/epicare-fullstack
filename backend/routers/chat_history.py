@@ -126,3 +126,18 @@ async def delete_chat(chat_id: UUID):
         raise HTTPException(status_code=500, detail="Failed to delete chat")
 
     return {"message": "Chat deleted successfully"}
+
+class ChatUpdateRequest(BaseModel):
+    title: str
+
+@router.patch("/chats/{chat_id}", response_model=Chat)
+async def update_chat_title(chat_id: UUID, chat_update: ChatUpdateRequest):
+    response = supabase.from_("chats").update({
+        "title": chat_update.title
+    }).eq("id", str(chat_id)).execute()
+    status_code = getattr(response, 'status_code', None)
+    if status_code is not None and status_code != 200:
+        raise HTTPException(status_code=500, detail="Failed to update chat title")
+    if response.data is None or len(response.data) == 0:
+        raise HTTPException(status_code=500, detail="Failed to update chat title")
+    return response.data[0]

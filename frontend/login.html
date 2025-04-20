@@ -28,7 +28,7 @@
                 <h2 class="text-3xl lg:text-4xl font-bold mb-6 text-center">Welcome Back!</h2>
                 <p class="mb-6 text-sm lg:text-base text-center">Please enter your account details</p>
                 
-                <form id="loginForm" class="space-y-6 w-full max-w-md">
+                <form method="POST" action="/login" class="space-y-6 w-full max-w-md">
                     <!-- Email -->
                     <div class="text-left">
                         <label for="email" class="block mb-3 font-medium">Email</label>
@@ -127,8 +127,10 @@ if (!response.ok) {
     throw new Error(data.detail || 'Login failed');
 }
 
-alert('Login successful!');
-window.location.href = 'chatbot.html';
+                alert('Login successful!');
+                // Store user info in sessionStorage
+                sessionStorage.setItem('user', JSON.stringify(data.user));
+                window.location.href = 'chatbot.html';
 
 
             } catch (error) {
