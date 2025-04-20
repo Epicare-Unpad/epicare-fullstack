@@ -28,7 +28,7 @@
                 <h2 class="text-3xl lg:text-4xl font-bold mb-6 text-center">Welcome Back!</h2>
                 <p class="mb-6 text-sm lg:text-base text-center">Please enter your account details</p>
                 
-                <form method="POST" action="/login" class="space-y-6 w-full max-w-md">
+                <form id="loginForm" method="POST" class="space-y-6 w-full max-w-md">
                     <!-- Email -->
                     <div class="text-left">
                         <label for="email" class="block mb-3 font-medium">Email</label>
@@ -61,10 +61,13 @@
                             </span>
                         </div>
                     </div>
+
+                    <div id="error-message" class="text-red-500 text-sm mt-2 hidden"></div>
                 
                     <!-- Sign In Button -->
                     <button
-                        type="submit"
+                        type="button"
+                        id="loginButton"
                         class="bg-[#01BF81] hover:bg-[#00a86b] text-white font-semibold text-lg w-full py-3 rounded-lg shadow-md transition duration-300 ease-in-out"
                     >
                         Sign In
@@ -98,45 +101,61 @@
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('loginButton').addEventListener('click', async () => {
+                const emailInput = document.querySelector('input[name="email"]');
+                const passwordInput = document.querySelector('input[name="password"]');
+                const errorMessageDiv = document.getElementById('error-message');
 
-            const email = e.target.email.value.trim();
-            const password = e.target.password.value.trim();
+                const email = emailInput.value.trim();
+                const password = passwordInput.value.trim();
 
-            try {
-                const response = await fetch('http://127.0.0.1:8000/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email, password }),
-                });
+                try {
+                    const response = await fetch('http://127.0.0.1:8000/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email, password }),
+                    });
 
-                const cloned = response.clone();
-const rawText = await cloned.text();
-let data;
+                    const cloned = response.clone();
+                    const rawText = await cloned.text();
+                    let data;
 
-try {
-    data = JSON.parse(rawText);
-} catch (err) {
-    throw new Error("Invalid server response: not JSON");
-}
+                    try {
+                        data = JSON.parse(rawText);
+                    } catch (err) {
+                        throw new Error("Invalid server response: not JSON");
+                    }
 
-if (!response.ok) {
-    throw new Error(data.detail || 'Login failed');
-}
+                    if (!response.ok) {
+                        const errorMessage = data.detail || 'Login failed';
+                        errorMessageDiv.textContent = errorMessage;
+                        errorMessageDiv.classList.remove('hidden');
+                        return;
+                    }
 
-                alert('Login successful!');
-                // Store user info in sessionStorage
-                sessionStorage.setItem('user', JSON.stringify(data.user));
-                window.location.href = 'chatbot.html';
+                    // Clear any previous error message
+                    errorMessageDiv.textContent = '';
+                    errorMessageDiv.classList.add('hidden');
 
+                    if (!data.success) {
+                        errorMessageDiv.textContent = data.message || 'Login failed';
+                        errorMessageDiv.classList.remove('hidden');
+                        return;
+                    }
 
-            } catch (error) {
-                console.error('Login error:', error);
-                alert(error.message || 'Login failed. Please try again.');
-            }
+                    // Store user info in sessionStorage
+                    sessionStorage.setItem('user', JSON.stringify(data.user));
+                    window.location.href = 'chatbot.html';
+
+                } catch (error) {
+                    console.error('Login error:', error);
+                    errorMessageDiv.textContent = error.message || 'Login failed. Please try again.';
+                    errorMessageDiv.classList.remove('hidden');
+                }
+            });
         });
     </script>
 
