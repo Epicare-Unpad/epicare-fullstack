@@ -1,9 +1,16 @@
-from fastapi import FastAPI, Request, Depends
+from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.exception_handlers import RequestValidationError
+from fastapi.responses import JSONResponse
+from fastapi.requests import Request as FastAPIRequest
+from fastapi.exceptions import RequestValidationError
+from fastapi import status
+from fastapi.responses import Response
+from fastapi.exceptions import HTTPException as FastAPIHTTPException
 
 from routers.gemini_api import router as gemini_router
 from routers.analisis_gejala_api import router as gejala_router
@@ -45,8 +52,15 @@ app.include_router(chat_history_router)
 def get_current_user(request: Request):
     user = request.session.get("user")
     if not user:
-        return RedirectResponse(url="/frontend/login.html", status_code=302)
+        raise HTTPException(status_code=401, detail="Not authenticated")
     return user
+
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    if exc.status_code == 401:
+        return RedirectResponse(url="/frontend/login.html")
+    return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
 
 
 @app.get("/")
@@ -60,10 +74,32 @@ async def root(request: Request):
 @app.get("/logout")
 async def logout(request: Request):
     request.session.clear()
-    return RedirectResponse(url="/frontend/login.html")
+    response = RedirectResponse(url="/frontend/login.html")
+    response.delete_cookie(key="session")
+    return response
 
 
 # Contoh route yang diproteksi (misalnya chatbot)
 @app.get("/chatbot-protected")
 async def chatbot(request: Request, user: dict = Depends(get_current_user)):
     return RedirectResponse(url="/frontend/chatbot.html")
+
+
+@app.get("/chatbot")
+async def chatbot_page(request: Request, user: dict = Depends(get_current_user)):
+    return templates.TemplateResponse("chatbot.html", {"request": request})
+
+
+@app.get("/sistem_analisis")
+async def sistem_analisis_page(request: Request, user: dict = Depends(get_current_user)):
+    return templates.TemplateResponse("sistem_analisis.html", {"request": request})
+
+
+@app.get("/sistem_analisis_page2")
+async def sistem_analisis_page2(request: Request, user: dict = Depends(get_current_user)):
+    return templates.TemplateResponse("sistem_analisis_page2.html", {"request": request})
+
+
+@app.get("/beranda")
+async def beranda_page(request: Request, user: dict = Depends(get_current_user)):
+    return templates.TemplateResponse("beranda.html", {"request": request})

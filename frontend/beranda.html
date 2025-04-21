@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beranda - Epicare</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style/style.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #0a996a, #0e3f2c);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #f0fdf4;
+      scroll-behavior: smooth;
+    }
+
+    main {
+      flex-grow: 1;
+      max-width: 7xl;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+    }
+
+    .hero-banner {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(1, 191, 129, 0.25);
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-banner img {
+      max-width: 300px;
+      border-radius: 1rem;
+      box-shadow: 0 4px 15px rgba(1, 191, 129, 0.3);
+      flex: 1 1 300px;
+    }
+
+    .hero-text {
+      flex: 2 1 400px;
+      color: #d1e7d0;
+      font-size: 1.125rem;
+      line-height: 1.6;
+    }
+
+    .section-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+    }
+
+    .grid {
+      display: grid;
+      gap: 2rem;
+    }
+
+    /* Quick Tips: two columns */
+    .quick-tips-grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    /* Statistik Singkat: three columns */
+    .stats-grid {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    /* Fitur Cepat: three columns */
+    .features-grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 1.5rem;
+      padding: 1.5rem 2rem;
+      box-shadow: 0 8px 32px rgba(1, 191, 129, 0.25);
+      transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+      cursor: pointer;
+      color: #e6f4ea;
+    }
+
+    .card:hover {
+      background: rgba(1, 191, 129, 0.15);
+      box-shadow: 0 16px 48px rgba(1, 191, 129, 0.5);
+      transform: translateY(-8px);
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card p {
+      font-size: 1.125rem;
+      line-height: 1.6;
+      color: #d1e7d0;
+    }
+
+    .card a {
+      display: inline-block;
+      margin-top: 1rem;
+      color: #01bf81;
+      font-weight: 600;
+      text-decoration: underline;
+      transition: color 0.3s ease;
+    }
+
+    .card a:hover {
+      color: #019e6b;
+    }
+
+    .stats-card {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 1.5rem;
+      padding: 1.5rem 2rem;
+      box-shadow: 0 6px 24px rgba(1, 191, 129, 0.3);
+      text-align: center;
+      color: #d1e7d0;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .stats-card:hover {
+      box-shadow: 0 12px 36px rgba(1, 191, 129, 0.5);
+    }
+
+    .stats-card h3 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #01bf81;
+    }
+
+    .stats-card p {
+      font-size: 1.125rem;
+    }
+
+    footer {
+      background: linear-gradient(to right, #014d33, #0a996a);
+      color: #d1e7d0;
+      padding: 2rem 1.5rem;
+      margin-top: auto;
+      box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    footer h3 {
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    footer p,
+    footer a {
+      font-size: 0.9rem;
+      color: #d1e7d0;
+    }
+
+    footer a:hover {
+      color: #01bf81;
+      text-decoration: underline;
+    }
+
+    footer .social-icons a {
+      margin-right: 1rem;
+      font-size: 1.5rem;
+      transition: color 0.3s ease;
+    }
+
+    footer .social-icons a:hover {
+      color: #01bf81;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        flex-direction: row;
+      }
+
+      .left-column {
+        flex: 1;
+        margin-right: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+      }
+
+      .right-column {
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="navbar-placeholder" class="flex-shrink-0 h-16"></div>
+  <script>
+    fetch('./navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-placeholder').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading navbar:', error));
+  </script>
+
+  <main>
+    <div class="left-column">
+      <section class="hero-banner">
+        <img src="https://images.unsplash.com/photo-1588776814546-0a3a3a7a7a7a?auto=format&fit=crop&w=400&q=80" alt="Ilustrasi Kesehatan" />
+        <div class="hero-text">
+          <h1>Selamat datang, <span id="user-name">User</span></h1>
+          <p>Selamat datang di dashboard Epicare. Gunakan fitur-fitur di bawah ini untuk mengelola kesehatan Anda dengan mudah dan cepat.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="section-title">Quick Tips / Info Kesehatan Cepat</h2>
+        <div class="grid quick-tips-grid">
+          <div class="card">
+            <h2><i class="fas fa-tint mr-2"></i> Minum Air Putih</h2>
+            <p>Pastikan Anda minum air putih minimal 8 gelas sehari untuk menjaga kesehatan tubuh.</p>
+          </div>
+          <div class="card">
+            <h2><i class="fas fa-running mr-2"></i> Olahraga Ringan</h2>
+            <p>Lakukan olahraga ringan secara rutin untuk meningkatkan daya tahan tubuh.</p>
+          </div>
+          <div class="card">
+            <h2><i class="fas fa-bed mr-2"></i> Istirahat Cukup</h2>
+            <p>Pastikan Anda tidur cukup setiap malam untuk pemulihan tubuh yang optimal.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="right-column">
+      <section>
+        <h2 class="section-title">Statistik Singkat</h2>
+        <div class="grid stats-grid">
+          <div class="stats-card">
+            <h3><i class="fas fa-chart-line mr-2"></i> 123</h3>
+            <p>Jumlah Analisis Dilakukan</p>
+          </div>
+          <div class="stats-card">
+            <h3><i class="fas fa-users mr-2"></i> 456</h3>
+            <p>Total Pengguna</p>
+          </div>
+          <div class="stats-card">
+            <h3><i class="fas fa-newspaper mr-2"></i> 789</h3>
+            <p>Jumlah Artikel</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="section-title">Fitur Cepat</h2>
+        <div class="grid features-grid">
+          <div class="card">
+            <h2><i class="fas fa-stethoscope mr-2"></i> Analisis Gejala</h2>
+            <p>Gunakan fitur analisis gejala untuk mendeteksi kemungkinan TBC berdasarkan jawaban Anda terhadap pertanyaan gejala.</p>
+            <a href="./sistem_analisis.html">Mulai Analisis</a>
+          </div>
+          <div class="card">
+            <h2><i class="fas fa-comments mr-2"></i> Riwayat Chat</h2>
+            <p>Akses riwayat chat Anda dengan chatbot kesehatan kami untuk mendapatkan rekomendasi dan informasi yang telah Anda diskusikan sebelumnya.</p>
+            <a href="./chatbot.html">Lihat Riwayat Chat</a>
+          </div>
+          <div class="card">
+            <h2><i class="fas fa-newspaper mr-2"></i> Artikel Kesehatan</h2>
+            <p>Baca artikel kesehatan terbaru dan terpercaya yang kami sediakan untuk menambah wawasan dan menjaga kesehatan Anda.</p>
+            <a href="./article-list.html">Baca Artikel</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10">
+      <div>
+        <h3>Epicare</h3>
+        <p>Platform deteksi dini dan manajemen kesehatan berbasis gejala dengan teknologi Machine Learning.</p>
+        <p class="mt-6">© 2024 Epicare. All rights reserved.</p>
+      </div>
+      <div>
+        <h3>Kontak</h3>
+        <p>Email: support@epicare.com</p>
+        <p>Telepon: +62 123 4567 890</p>
+        <p>Alamat: Jl. Kesehatan No. 123, Jakarta</p>
+      </div>
+      <div>
+        <h3>Ikuti Kami</h3>
+        <div class="social-icons flex">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Placeholder for user name, replace with actual user data integration
+    document.getElementById('user-name').textContent = 'Andi';
+  </script>
+</body>
+
+</html>
