@@ -18,6 +18,7 @@ from routers.register.register import router as register_router
 from routers.register.login import router as login_router
 from routers.oauth.google import router as google_router
 from routers.chat_history import router as chat_history_router
+from routers.article import router as article_router
 
 app = FastAPI()
 
@@ -103,3 +104,7 @@ async def sistem_analisis_page2(request: Request, user: dict = Depends(get_curre
 @app.get("/beranda")
 async def beranda_page(request: Request, user: dict = Depends(get_current_user)):
     return templates.TemplateResponse("beranda.html", {"request": request})
+
+@app.get("/artikel")
+async def artikel_page(request: Request):
+    return templates.TemplateResponse("article-list.html", {"request": request})
