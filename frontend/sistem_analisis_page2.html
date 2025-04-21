@@ -105,7 +105,7 @@
           </div>
 
           <!-- Tombol Prev & Next -->
-          <div class="flex justify-center gap-4 mt-6">
+          <div class="flex justify-center gap-4 my-6">
             <a href="./sistem_analisis.html" class="bg-[#192824] hover:bg-[#0e3f2c] transition text-white px-8 py-2 rounded-xl shadow-md text-lg border-white border-2">Prev</a>
           </div>
         </div>
@@ -149,7 +149,7 @@
       </form>
 
       <!-- TARUH DI LUAR <form> ATAU SETELAH TAG </form> -->
-<div class="flex justify-center mt-6">
+<div class="flex justify-center my-6">
   <button type="button" onclick="resetAndBack()" class="bg-[#192824] hover:bg-[#0e3f2c] transition text-white px-6 py-2 rounded-xl shadow-md border-white border-2">
     🔁 Reset & Kembali ke Awal
   </button>
@@ -259,10 +259,23 @@
   function displayPredictionResult(result) {
     const predictionElement = document.getElementById('prediction-result');
     predictionElement.classList.remove('hidden'); // Tampilkan kotak hasil
+
+    let percentage = parseFloat(result.prediction);
+    let message = '';
+
+    if (percentage < 30) {
+  message = 'Risiko terdeteksi rendah. Tetap jaga pola hidup sehat dan kebersihan.';
+    } else if (percentage < 60) {
+      message = 'Risiko sedang terdeteksi. Sebaiknya lakukan pemeriksaan medis lebih lanjut.';
+    } else {
+      message = 'Risiko tinggi terdeteksi. Segera lakukan konsultasi dengan dokter atau fasilitas kesehatan terdekat.';
+    }
+
+
     predictionElement.innerHTML = `
       <p class="text-sm mb-2">🔍 <strong>Hasil Anda :</strong></p>
-      <p class="text-4xl font-bold mb-2">${result.prediction}</p>
-      <p class="text-base">Anda memiliki kemungkinan <strong>${result.prediction}</strong> terkena TBC. Segera cari pertolongan medis!</p>
+      <p class="text-4xl font-bold mb-2">${percentage}%</p>
+      <p class="text-base">${message}</p>
     `;
   }
 
