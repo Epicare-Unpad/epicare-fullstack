@@ -49,13 +49,13 @@
       </script>
 
         <!-- Main Content -->
-        <main class="flex-grow px-8 max-w-7xl mx-auto">
-          <section class="text-center mb-3 mt-6">
+        <main class="flex-grow px-8 mx-auto">
+          <section class="text-center mb-4 mt-6">
             <h1 class="text-3xl md:text-4xl font-bold tracking-wide">Analisis Gejala TBC</h1>
             <p class="text-base md:text-lg mt-1 text-gray-200">Sistem deteksi dini TBC berbasis gejala menggunakan Machine Learning</p>
           </section>
 
-          <form class="grid md:grid-cols-2 gap-4 text-center max-h-[calc(100vh-6rem)] overflow-auto">
+          <form class="grid md:grid-cols-2 gap-4 text-center overflow-auto">
             <!-- Card 1 -->
             <div class="glass p-4 rounded-2xl shadow-md space-y-4">
               <!-- Q1 -->
@@ -174,14 +174,77 @@
         </form>
 
         <!-- Submit -->
-        <div class="flex justify-center gap-4 mt-6">
+        <div class="flex justify-center gap-4 my-6">
           <a href="./sistem_analisis_page2.html" class="bg-[#192824] hover:bg-[#0e3f2c] transition text-white px-8 py-2 rounded-xl shadow-md text-lg border-white border-2">Next</a>
         </div>
       </main>
       
+      <style>
+        /* Popup overlay */
+        #popup-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: rgba(0, 0, 0, 0.5);
+          display: none;
+          justify-content: center;
+          align-items: center;
+          z-index: 1000;
+        }
+        /* Popup content */
+        #popup {
+          background: #192824;
+          padding: 20px 30px;
+          border-radius: 12px;
+          box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+          color: white;
+          max-width: 90%;
+          text-align: center;
+          font-size: 1.2rem;
+        }
+        #popup button {
+          margin-top: 15px;
+          background: #0a996a;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 8px;
+          color: white;
+          cursor: pointer;
+          font-weight: bold;
+          transition: background 0.3s ease;
+        }
+        #popup button:hover {
+          background: #0e3f2c;
+        }
+      </style>
+
+      <div id="popup-overlay">
+        <div id="popup">
+          Mohon isi semua pertanyaan sebelum melanjutkan.
+          <br />
+          <button id="popup-close-btn">Tutup</button>
+        </div>
+      </div>
+
       <script>
         // Ambil elemen form
         const form = document.querySelector("form");
+
+        // Restore saved selections from localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+          const savedData = JSON.parse(localStorage.getItem('formData')) || {};
+          Object.keys(savedData).forEach(key => {
+            const value = savedData[key];
+            if (value !== null) {
+              const radio = document.querySelector(`input[name="${key}"][value="${value}"]`);
+              if (radio) {
+                radio.checked = true;
+              }
+            }
+          });
+        });
       
         // Fungsi untuk mengumpulkan data yang dipilih
         function collectFormData() {
@@ -206,6 +269,14 @@
         function displayFormData() {
           const data = collectFormData();
           console.log("Form Data: ", data);
+
+          // Check if all questions are answered
+          const allAnswered = Object.values(data).every(value => value !== null);
+          if (!allAnswered) {
+            // Show popup
+            document.getElementById('popup-overlay').style.display = 'flex';
+            return;
+          }
           
           // Simpan data di localStorage
           localStorage.setItem('formData', JSON.stringify(data));
@@ -216,18 +287,21 @@
           }, 1000); // Delay 1 detik
         }
 
+        // Close popup button
+        document.getElementById('popup-close-btn').addEventListener('click', () => {
+          document.getElementById('popup-overlay').style.display = 'none';
+        });
       
         document.addEventListener('DOMContentLoaded', function () {
-        const nextButton = document.querySelector('a[href="./sistem_analisis_page2.html"]');
+          const nextButton = document.querySelector('a[href="./sistem_analisis_page2.html"]');
 
-        if (nextButton) {
-          nextButton.addEventListener('click', function (event) {
-            event.preventDefault(); // Mencegah halaman berpindah langsung
-            displayFormData();
-            window.location.href = event.target.href;
-          });
-        }
-      });
+          if (nextButton) {
+            nextButton.addEventListener('click', function (event) {
+              event.preventDefault(); // Mencegah halaman berpindah langsung
+              displayFormData();
+            });
+          }
+        });
 
       </script>
       

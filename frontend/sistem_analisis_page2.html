@@ -19,7 +19,7 @@
       }
     </style>
   </head>
-  <body class="text-white min-h-screen font-sans overflow-hidden">
+  <body class="text-white font-sans">
 
     <div id="navbar-placeholder"></div>
     <script>
@@ -49,7 +49,7 @@
     </script>
 
     <!-- Main Content -->
-    <main class="mt-40 px-8 max-w-7xl mx-auto overflow-hidden">
+    <main class="px-8 max-w-7xl mx-auto mt-24">
       <section class="text-center mb-5">
         <h1 class="text-4xl font-bold tracking-wide">Analisis Gejala TBC</h1>
         <p class="text-lg mt-2 text-gray-200">Sistem deteksi dini TBC berbasis gejala menggunakan Machine Learning</p>
@@ -146,83 +146,132 @@
           <div id="loading-spinner" class="mt-6 hidden justify-center">
             <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-white border-opacity-50"></div>
           </div>
-
-          <div class="flex justify-center mt-4">
-            <button onclick="resetAndBack()" class="bg-[#192824] hover:bg-[#0e3f2c] transition text-white px-6 py-2 rounded-xl shadow-md border-white border-2">
-              🔁 Reset & Kembali ke Awal
-            </button>
-          </div>
-
-        </div>
-
-        
       </form>
 
-      <!-- Catatan -->
-      <div class="fixed bottom-5 text-2xl left-1/2 -translate-x-1/2 flex text-center text-sm text-gray-200 blue">
-        ⚠️ Hasil prediksi bukan diagnosis medis resmi. Konsultasikan dengan tenaga medis untuk validasi lebih lanjut.
-      </div>      
-    </main>
+      <!-- TARUH DI LUAR <form> ATAU SETELAH TAG </form> -->
+<div class="flex justify-center mt-6">
+  <button type="button" onclick="resetAndBack()" class="bg-[#192824] hover:bg-[#0e3f2c] transition text-white px-6 py-2 rounded-xl shadow-md border-white border-2">
+    🔁 Reset & Kembali ke Awal
+  </button>
+</div>
 
-    <script>
-      const formDataPage1 = JSON.parse(localStorage.getItem('formData')) || {};
-      function collectFormDataPage2() {
-        const formData = {};
-        formData.q11 = document.querySelector('input[name="q11"]:checked')?.value || null;
-        formData.q12 = document.querySelector('input[name="q12"]:checked')?.value || null;
-        formData.q13 = document.querySelector('input[name="q13"]:checked')?.value || null;
-        formData.q14 = document.querySelector('input[name="q14"]:checked')?.value || null;
-        formData.q15 = document.querySelector('input[name="q15"]:checked')?.value || null;
-        formData.q16 = document.querySelector('input[name="q16"]:checked')?.value || null;
-        return formData;
-      }
+</main>
 
-      async function sendDataToAPI() {
-  const finalData = { ...formDataPage1, ...collectFormDataPage2() };
+<!-- Popup for validation -->
+<div id="popup-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+  <div id="popup" class="bg-[#192824] p-6 rounded-xl shadow-lg text-white max-w-sm text-center">
+    Mohon isi semua pertanyaan sebelum melanjutkan.
+    <br />
+    <button id="popup-close-btn" class="mt-4 bg-[#0a996a] hover:bg-[#0e3f2c] px-4 py-2 rounded-lg font-semibold">Tutup</button>
+  </div>
+</div>
 
-  const dataToSend = [
-    finalData.q1, finalData.q2, finalData.q3, finalData.q4,
-    finalData.q5, finalData.q6, finalData.q7, finalData.q8,
-    finalData.q9, finalData.q10, finalData.q11, finalData.q12,
-    finalData.q13, finalData.q14, finalData.q15, finalData.q16
-  ];
-
-  const numericData = dataToSend.map(value => parseInt(value, 10));
-  console.log("Data yang dikirim ke API:", numericData);
-
-  const spinner = document.getElementById('loading-spinner');
-  const predictionElement = document.getElementById('prediction-result');
-  spinner.classList.remove('hidden');
-  predictionElement.innerHTML = ""; // Kosongkan sementara
-
-  try {
-    const response = await fetch('http://127.0.0.1:8000/predict/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(dataToSend)
-    });
-
-    const result = await response.json();
-    console.log("Response from API:", result);
-    displayPredictionResult(result);
-  } catch (error) {
-    console.error("Error sending data to API:", error);
-    predictionElement.innerHTML = `<p class="text-red-500">❌ Terjadi kesalahan. Silakan coba lagi.</p>`;
-  } finally {
-    spinner.classList.add('hidden'); // Sembunyikan spinner apapun hasilnya
+<script>
+  function resetAndBack() {
+    localStorage.clear(); // Bersihkan semua data lokal
+    window.location.href = './sistem_analisis.html'; // Redirect ke page pertama
   }
-}
 
-      function displayPredictionResult(result) {
-        const predictionElement = document.getElementById('prediction-result');
-        predictionElement.classList.remove('hidden'); // Tampilkan kotak hasil
-        predictionElement.innerHTML = `
-          <p class="text-sm mb-2">🔍 <strong>Hasil Anda :</strong></p>
-          <p class="text-4xl font-bold mb-2">${result.prediction}</p>
-          <p class="text-base">Anda memiliki kemungkinan <strong>${result.prediction}</strong> terkena TBC. Segera cari pertolongan medis!</p>
-        `;
+  const formDataPage1 = JSON.parse(localStorage.getItem('formData')) || {};
+
+  // Restore saved selections from localStorage on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedData = JSON.parse(localStorage.getItem('formDataPage2')) || {};
+    Object.keys(savedData).forEach(key => {
+      const value = savedData[key];
+      if (value !== null) {
+        const radio = document.querySelector(`input[name="${key}"][value="${value}"]`);
+        if (radio) {
+          radio.checked = true;
+        }
       }
-      document.getElementById('predict-btn').addEventListener('click', sendDataToAPI);
-    </script>
+    });
+  });
+
+  // Save form data to localStorage on change
+  const inputs = document.querySelectorAll('input[type="radio"]');
+  inputs.forEach(input => {
+    input.addEventListener('change', () => {
+      const formData = {};
+      ['q11', 'q12', 'q13', 'q14', 'q15', 'q16'].forEach(q => {
+        formData[q] = document.querySelector(`input[name="${q}"]:checked`)?.value || null;
+      });
+      localStorage.setItem('formDataPage2', JSON.stringify(formData));
+    });
+  });
+
+  function collectFormDataPage2() {
+    const formData = {};
+    formData.q11 = document.querySelector('input[name="q11"]:checked')?.value || null;
+    formData.q12 = document.querySelector('input[name="q12"]:checked')?.value || null;
+    formData.q13 = document.querySelector('input[name="q13"]:checked')?.value || null;
+    formData.q14 = document.querySelector('input[name="q14"]:checked')?.value || null;
+    formData.q15 = document.querySelector('input[name="q15"]:checked')?.value || null;
+    formData.q16 = document.querySelector('input[name="q16"]:checked')?.value || null;
+    return formData;
+  }
+
+  async function sendDataToAPI() {
+    // Validate all questions answered
+    const formData = collectFormDataPage2();
+    const allAnswered = Object.values(formData).every(value => value !== null);
+    if (!allAnswered) {
+      // Show popup
+      document.getElementById('popup-overlay').classList.remove('hidden');
+      return;
+    }
+
+    const finalData = { ...formDataPage1, ...formData };
+
+    const dataToSend = [
+      finalData.q1, finalData.q2, finalData.q3, finalData.q4,
+      finalData.q5, finalData.q6, finalData.q7, finalData.q8,
+      finalData.q9, finalData.q10, finalData.q11, finalData.q12,
+      finalData.q13, finalData.q14, finalData.q15, finalData.q16
+    ];
+
+    const numericData = dataToSend.map(value => parseInt(value, 10));
+    console.log("Data yang dikirim ke API:", numericData);
+
+    const spinner = document.getElementById('loading-spinner');
+    const predictionElement = document.getElementById('prediction-result');
+    spinner.classList.remove('hidden');
+    predictionElement.innerHTML = ""; // Kosongkan sementara
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/predict/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dataToSend)
+      });
+
+      const result = await response.json();
+      console.log("Response from API:", result);
+      displayPredictionResult(result);
+    } catch (error) {
+      console.error("Error sending data to API:", error);
+      predictionElement.innerHTML = `<p class="text-red-500">❌ Terjadi kesalahan. Silakan coba lagi.</p>`;
+    } finally {
+      spinner.classList.add('hidden'); // Sembunyikan spinner apapun hasilnya
+    }
+  }
+
+  function displayPredictionResult(result) {
+    const predictionElement = document.getElementById('prediction-result');
+    predictionElement.classList.remove('hidden'); // Tampilkan kotak hasil
+    predictionElement.innerHTML = `
+      <p class="text-sm mb-2">🔍 <strong>Hasil Anda :</strong></p>
+      <p class="text-4xl font-bold mb-2">${result.prediction}</p>
+      <p class="text-base">Anda memiliki kemungkinan <strong>${result.prediction}</strong> terkena TBC. Segera cari pertolongan medis!</p>
+    `;
+  }
+
+  document.getElementById('predict-btn').addEventListener('click', sendDataToAPI);
+
+  // Close popup button
+  document.getElementById('popup-close-btn').addEventListener('click', () => {
+    document.getElementById('popup-overlay').classList.add('hidden');
+  });
+</script>
   </body>
 </html>

@@ -1,44 +1,291 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Articles</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Landing Page - Epicare</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style/style.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #0a996a, #0e3f2c);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #f0fdf4;
+      scroll-behavior: smooth;
+    }
+
+    main {
+      flex-grow: 1;
+      max-width: 7xl;
+      margin: 0 auto;
+      padding: 3rem 2rem 4rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+    }
+
+    p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      color: #d1e7d0;
+    }
+
+    .btn-login {
+      background: #01bf81;
+      color: white;
+      font-weight: 600;
+      padding: 1rem 3rem;
+      border-radius: 9999px;
+      font-size: 1.25rem;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(1, 191, 129, 0.4);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      display: block;
+      margin: 2rem auto 0 auto;
+      max-width: max-content;
+    }
+
+    .btn-login:hover {
+      background: #019e6b;
+      box-shadow: 0 12px 36px rgba(1, 191, 129, 0.6);
+    }
+  </style>
 </head>
 
-<body class="bg-gradient-to-br from-[#00885C] to-[#003539] min-h-screen text-white font-sans">
-    <aside
-        class="fixed top-5 bottom-5 left-5 h-auto w-16 flex flex-col items-center py-6 bg-white bg-opacity-10 backdrop-blur-md z-50 shadow-lg rounded-xl">
-        <a href="#">
-            <img src="./img/epicare-logo.png" alt="Logo" class="w-8 h-8 mb-8">
-        </a>
-        <div class="flex-grow"></div>
-        <a href="#" class="w-10 h-10 rounded-full overflow-hidden border-2 border-white hover:scale-105 transition">
-            <img src="./img/profile.png" alt="Profile" class="w-full h-full object-cover">
-        </a>
-    </aside>
+<body class="flex flex-col">
+  <div id="navbar-placeholder" class="flex-shrink-0 h-16"></div>
+  <!-- <script>
+    fetch('./navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-placeholder').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading navbar:', error));
+  </script> -->
 
-    <div class="ml-24 p-8">
-        <div class="space-y-6">
-            <div class="bg-white text-gray-900 p-6 rounded-lg shadow-lg">
-                <h2 class="text-2xl font-bold mb-2">Article 1</h2>
-                <p class="text-sm mb-4">This is a short summary of Article 1. Click to read more.</p>
-                <a href="article1.html" class="text-[#01BF81] underline">Read More</a>
-            </div>
-            <div class="bg-white text-gray-900 p-6 rounded-lg shadow-lg">
-                <h2 class="text-2xl font-bold mb-2">Article 2</h2>
-                <p class="text-sm mb-4">This is a short summary of Article 2. Click to read more.</p>
-                <a href="article2.html" class="text-[#01BF81] underline">Read More</a>
-            </div>
-            <div class="bg-white text-gray-900 p-6 rounded-lg shadow-lg">
-                <h2 class="text-2xl font-bold mb-2">Article 3</h2>
-                <p class="text-sm mb-4">This is a short summary of Article 3. Click to read more.</p>
-                <a href="article3.html" class="text-[#01BF81] underline">Read More</a>
-            </div>
-        </div>
+<main>
+  <section class="mb-3 text-center">
+    <h1 class="text-5xl font-extrabold mb-6">Selamat Datang di Epicare</h1>
+    <p class="text-xl text-gray-300 max-w-4xl mx-auto">
+      Platform deteksi dini dan manajemen kesehatan berbasis gejala dengan teknologi Machine Learning.
+      Epicare membantu Anda mengenali gejala TBC dan mendapatkan informasi kesehatan yang relevan.
+    </p>
+    <!-- Intro edukatif -->
+    <div class="flex justify-center px-6 pt-4 mt-5">
+      <a href="./login.html" class="inline-block bg-gradient-to-r from-[#01BF81] to-[#019e6b] hover:from-[#019e6b] hover:to-[#017f58] text-white font-bold px-6 py-2 rounded-full shadow-lg transform hover:scale-105 transition duration-300">
+        Login Sekarang
+      </a>
     </div>
+    <div class="glass p-8 rounded-3xl shadow-md mt-8 max-w-4xl mx-auto text-left text-gray-200">
+      <h2 class="text-3xl font-semibold mb-5">Tentang Tuberkulosis (TBC)</h2>
+      <div class="grid md:grid-cols-2 gap-6 items-center">
+          <div>
+            <p class="mb-4">
+              Tuberkulosis (TBC) adalah penyakit infeksi yang disebabkan oleh bakteri Mycobacterium tuberculosis yang menyerang paru-paru dan organ lainnya.
+              Deteksi dini TBC sangat penting untuk mencegah penyebaran dan komplikasi serius.
+            </p>
+            <p class="mb-4">
+              TBC merupakan salah satu penyebab kematian utama di dunia, terutama di negara berkembang. Penanganan yang cepat dan tepat dapat meningkatkan angka kesembuhan dan mengurangi dampak sosial ekonomi.
+            </p>
+            <p class="mb-4">
+              Gejala umum TBC meliputi batuk berkepanjangan, demam, penurunan berat badan, dan keringat malam. Jika Anda mengalami gejala ini, segera lakukan pemeriksaan.
+            </p>
+          </div>
+          <div class="img-placeholder">
+            <i class="fa-solid fa-virus-covid-slash"></i> Gambar TBC
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Statistik global TBC -->
+    <section class="grid md:grid-cols-3 gap-10 mb-16 text-center">
+      <div class="glass p-8 rounded-3xl shadow-md space-y-5">
+        <h3 class="text-4xl font-bold text-[#01BF81]">10.4 Juta</h3>
+        <p class="text-gray-300 text-lg">Kasus TBC Baru per Tahun</p>
+        <div class="img-placeholder mt-4">
+          <i class="fa-solid fa-chart-line"></i> Grafik Kasus
+        </div>
+      </div>
+      <div class="glass p-8 rounded-3xl shadow-md space-y-5">
+        <h3 class="text-4xl font-bold text-[#01BF81]">1.5 Juta</h3>
+        <p class="text-gray-300 text-lg">Kematian akibat TBC per Tahun</p>
+        <div class="img-placeholder mt-4">
+          <i class="fa-solid fa-heartbeat"></i> Grafik Kematian
+        </div>
+      </div>
+      <div class="glass p-8 rounded-3xl shadow-md space-y-5">
+        <h3 class="text-4xl font-bold text-[#01BF81]">85%</h3>
+        <p class="text-gray-300 text-lg">Angka Kesembuhan Global</p>
+        <div class="img-placeholder mt-4">
+          <i class="fa-solid fa-thumbs-up"></i> Grafik Kesembuhan
+        </div>
+      </div>
+    </section>
+
+    <!-- Additional Information Section -->
+    <section class="mb-16 max-w-6xl mx-auto space-y-10">
+      <div class="glass p-8 rounded-3xl shadow-md text-gray-200">
+        <h2 class="text-3xl font-semibold mb-6 text-center">Tips Menjaga Kesehatan Paru-Paru</h2>
+        <div class="grid md:grid-cols-2 gap-6 items-center">
+          <ul class="list-disc list-inside space-y-3 text-lg max-w-3xl mx-auto">
+            <li>Hindari merokok dan paparan asap rokok.</li>
+            <li>Jaga kebersihan lingkungan dan ventilasi rumah.</li>
+            <li>Konsumsi makanan bergizi dan seimbang.</li>
+            <li>Rutin berolahraga untuk meningkatkan daya tahan tubuh.</li>
+            <li>Segera periksakan diri jika mengalami gejala TBC.</li>
+          </ul>
+          <div class="img-placeholder">
+            <i class="fa-solid fa-lungs-virus"></i> Gambar Tips Kesehatan
+          </div>
+        </div>
+      </div>
+
+      <div class="glass p-8 rounded-3xl shadow-md text-gray-200">
+        <h2 class="text-3xl font-semibold mb-6 text-center">Testimoni Pengguna</h2>
+        <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <blockquote class="italic border-l-4 border-[#01BF81] pl-6">
+            "Epicare membantu saya mengenali gejala TBC sejak dini dan mendapatkan penanganan yang tepat. Sangat bermanfaat!"
+            <footer class="mt-2 text-right font-semibold">- Andi, 34 tahun</footer>
+          </blockquote>
+          <div class="img-placeholder">
+            <i class="fa-solid fa-user-check"></i> Foto Andi
+          </div>
+          <blockquote class="italic border-l-4 border-[#01BF81] pl-6">
+            "Fitur analisis gejala sangat akurat dan mudah digunakan. Saya merasa lebih tenang setelah menggunakan Epicare."
+            <footer class="mt-2 text-right font-semibold">- Sari, 28 tahun</footer>
+          </blockquote>
+          <div class="img-placeholder">
+            <i class="fa-solid fa-user-check"></i> Foto Sari
+          </div>
+        </div>
+      </div>
+
+      <div class="glass p-8 rounded-3xl shadow-md text-gray-200">
+        <h2 class="text-3xl font-semibold mb-6 text-center">Pertanyaan yang Sering Diajukan (FAQ)</h2>
+        <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <dl class="space-y-4 text-lg">
+            <div>
+              <dt class="font-semibold">Apa itu Tuberkulosis (TBC)?</dt>
+              <dd class="ml-4">TBC adalah penyakit infeksi yang menyerang paru-paru dan organ lainnya, disebabkan oleh bakteri Mycobacterium tuberculosis.</dd>
+            </div>
+            <div>
+              <dt class="font-semibold">Bagaimana cara penularan TBC?</dt>
+              <dd class="ml-4">TBC menular melalui udara saat penderita batuk atau bersin.</dd>
+            </div>
+          </dl>
+          <div class="img-placeholder">
+            <i class="fa-solid fa-question"></i> Gambar FAQ
+          </div>
+          <dl class="space-y-4 text-lg">
+            <div>
+              <dt class="font-semibold">Apakah TBC bisa disembuhkan?</dt>
+              <dd class="ml-4">Ya, dengan pengobatan yang tepat dan teratur, TBC dapat disembuhkan.</dd>
+            </div>
+            <div>
+              <dt class="font-semibold">Kapan saya harus melakukan pemeriksaan?</dt>
+              <dd class="ml-4">Segera lakukan pemeriksaan jika mengalami gejala seperti batuk berkepanjangan, demam, dan penurunan berat badan.</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature Cards Section -->
+    <section class="grid md:grid-cols-3 gap-10 mb-16 max-w-7xl mx-auto">
+      <div class="glass p-8 rounded-3xl shadow-md space-y-8 card cursor-pointer">
+        <div class="img-placeholder">
+          <i class="fa-solid fa-stethoscope mr-3"></i> Analisis Gejala
+        </div>
+        <h2 class="text-3xl font-semibold">Analisis Gejala</h2>
+        <p class="text-gray-300 text-base leading-relaxed">
+          Gunakan fitur analisis gejala untuk mendeteksi kemungkinan TBC berdasarkan jawaban Anda terhadap pertanyaan gejala.
+          Sistem kami menggunakan Machine Learning untuk memberikan hasil yang akurat dan cepat.
+        </p>
+        <a href="./sistem_analisis.html" class="inline-block mt-5 text-[#01BF81] hover:underline font-semibold">Mulai Analisis</a>
+      </div>
+      <div class="glass p-8 rounded-3xl shadow-md space-y-8 card cursor-pointer">
+        <div class="img-placeholder">
+          <i class="fa-solid fa-comments mr-3"></i> Riwayat Chat
+        </div>
+        <h2 class="text-3xl font-semibold">Riwayat Chat</h2>
+        <p class="text-gray-300 text-base leading-relaxed">
+          Akses riwayat chat Anda dengan chatbot kesehatan kami untuk mendapatkan rekomendasi dan informasi yang telah Anda diskusikan sebelumnya.
+        </p>
+        <a href="./chatbot.html" class="inline-block mt-5 text-[#01BF81] hover:underline font-semibold">Lihat Riwayat Chat</a>
+      </div>
+      <div class="glass p-8 rounded-3xl shadow-md space-y-8 card cursor-pointer">
+        <div class="img-placeholder">
+          <i class="fa-solid fa-newspaper mr-3"></i> Artikel Kesehatan
+        </div>
+        <h2 class="text-3xl font-semibold">Artikel Kesehatan</h2>
+        <p class="text-gray-300 text-base leading-relaxed">
+          Baca artikel kesehatan terbaru dan terpercaya yang kami sediakan untuk menambah wawasan dan menjaga kesehatan Anda.
+        </p>
+        <a href="./article-list.html" class="inline-block mt-5 text-[#01BF81] hover:underline font-semibold">Baca Artikel</a>
+      </div>
+    </section>
+
+    <!-- Ajakan bertindak (CTA) -->
+    <section class="glass p-10 rounded-3xl shadow-md max-w-5xl mx-auto text-center">
+      <h2 class="text-3xl font-semibold mb-8">Mulai Pemeriksaan Gejala Sekarang</h2>
+      <p class="text-gray-300 mb-8 leading-relaxed">
+        Jangan tunggu sampai terlambat. Deteksi dini TBC dapat menyelamatkan nyawa Anda dan orang-orang di sekitar Anda.
+      </p>
+      <a href="./sistem_analisis.html" class="inline-block bg-[#01BF81] hover:bg-[#019e6b] text-white font-semibold px-10 py-4 rounded-xl shadow-md transition duration-300 ease-in-out">
+        Mulai Sekarang
+      </a>
+    </section>
+  </main>
+    <!-- Footer -->
+    <footer class="bg-[#014d33] text-gray-300 py-8 px-16 w-full">
+      <div class=" mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div>
+          <h3 class="text-xl font-semibold mb-4">Epicare</h3>
+          <p>Platform deteksi dini dan manajemen kesehatan berbasis gejala dengan teknologi Machine Learning.</p>
+          <p class="mt-4">© 2024 Epicare. All rights reserved.</p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-4">Kontak</h3>
+          <p>Email: support@epicare.com</p>
+          <p>Telepon: +62 123 4567 890</p>
+          <p>Alamat: Jl. Kesehatan No. 123, Jakarta</p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-4">Ikuti Kami</h3>
+          <div class="flex space-x-4 text-2xl">
+            <a href="#" aria-label="Facebook" class="hover:text-[#01BF81]"><i class="fab fa-facebook"></i></a>
+            <a href="#" aria-label="Twitter" class="hover:text-[#01BF81]"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="Instagram" class="hover:text-[#01BF81]"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  <!-- ScrollReveal.js CDN -->
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <script>
+    // Initialize ScrollReveal
+    ScrollReveal().reveal('.glass, .card', {
+      origin: 'bottom',
+      distance: '50px',
+      duration: 800,
+      easing: 'ease-in-out',
+      interval: 100,
+      cleanup: true,
+      reset: false
+    });
+  </script>
 </body>
 
 </html>

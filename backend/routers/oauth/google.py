@@ -52,7 +52,7 @@ async def auth_google_callback(request: Request):
         # Tentukan redirect URL berdasarkan ada/tidaknya data user
         if existing.data:
             user_id = existing.data[0]['id']
-            redirect_url = "/frontend/chatbot.html"  # Sudah terdaftar → langsung ke app
+            redirect_url = "/frontend/beranda.html"  # Sudah terdaftar → langsung ke app
         else:
             user_id = None
             # Belum terdaftar → lengkapi data
