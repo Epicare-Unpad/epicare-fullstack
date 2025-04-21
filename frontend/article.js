@@ -17,7 +17,7 @@ function renderArticles(filteredArticles) {
       <div class="bg-white rounded-2xl shadow-md p-5 hover:shadow-lg transition duration-300">
         <h2 class="text-xl font-semibold mb-2 text-green-800">${article.title}</h2>
         <p class="text-sm text-gray-700 mb-4">${article.description}</p>
-        <a href="${article.link}" target="_blank" class="inline-block bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700 text-sm">Baca Selengkapnya</a>
+        <a href="article-detail.html?id=${article.id}" class="inline-block bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700 text-sm">Baca Selengkapnya</a>
       </div>
     `;
   });

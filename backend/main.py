@@ -44,7 +44,7 @@ app.include_router(gejala_router)
 app.include_router(register_router)
 app.include_router(login_router)
 app.include_router(google_router)
-
+app.include_router(article_router)
 app.include_router(chat_history_router)
 
 # Dependency untuk cek login session
