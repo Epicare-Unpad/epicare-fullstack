@@ -23,3 +23,17 @@ async def get_articles():
         return JSONResponse(content=data)
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
+
+@router.get("/api/articles/{article_id}")
+async def get_article_detail(article_id: str):  # Ubah dari int ke str
+    try:
+        print(f"Mencari artikel dengan ID: {article_id}")  # Debugging
+        response = supabase.table("articles").select("*").eq("id", article_id).execute()
+        print(f"Response dari Supabase: {response.data}")  # Debugging
+        data = response.data
+        if not data:
+            return JSONResponse(status_code=404, content={"error": "Artikel tidak ditemukan"})
+        return JSONResponse(content=data[0])
+    except Exception as e:
+        print(f"Error: {str(e)}")  # Debugging
+        return JSONResponse(status_code=500, content={"error": str(e)})
