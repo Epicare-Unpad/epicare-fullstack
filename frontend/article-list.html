@@ -8,86 +8,98 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style/style.css">
+  <style>
+        body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #0a996a, #0e3f2c);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #f0fdf4;
+      scroll-behavior: smooth;
+    }
+  </style>
 </head>
 
-<body class="bg-green-50 text-gray-900 font-sans">
+<body class="bg-green-50 text-white font-sans">
+  <div id="navbar-placeholder"></div>
+  <script>
+    fetch('./navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-placeholder').innerHTML = data;
 
-  <aside class="fixed top-5 bottom-5 bg-[#01BF81] left-5 w-16 flex flex-col items-center py-6 glass z-50 shadow-lg rounded-3xl">
-    <div class="flex flex-col justify-between h-full items-center w-full">
+        // Tambahkan event listener setelah navbar dimuat
+        const profileIcon = document.getElementById('profile-icon');
+        const dropdownMenu = document.getElementById('dropdown-menu');
 
-      <!-- Logo -->
-      <a href="#">
-        <img src="./img/epicare-logo.png" alt="Logo" class="w-8 h-8" />
-      </a>
+        if (profileIcon && dropdownMenu) {
+          profileIcon.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('hidden');
+          });
 
-      <!-- Tabs Tengah -->
-      <div class="flex flex-col items-center space-y-6">
-        
-        <!-- Tab: Analisis Gejala -->
-        <div class="relative group">
-          <a href="./article-list.html"
-            class="w-10 h-10 flex items-center justify-center rounded-full border-2 border-white text-white text-xl hover:scale-110 transition-all"
-            title="Artikel Kesehatan">
-            <i class="fas fa-notes-medical"></i>
-          </a>
-          <!-- Tooltip -->
-          <div class="absolute left-12 top-1/2 transform -translate-y-1/2 bg-white text-[#01BF81] text-xs font-semibold px-3 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50">
-            Artikel Kesehatan
-          </div>
-        </div>
-        <!-- Tab: Analisis Gejala -->
-        <div class="relative group">
-          <a href="./sistem_analisis.html"
-            class="w-10 h-10 flex items-center justify-center rounded-full border-2 border-white text-white text-xl hover:scale-110 transition-all"
-            title="Sistem Analisis Gejala">
-            <i class="fas fa-stethoscope"></i>
-          </a>
-          <!-- Tooltip -->
-          <div class="absolute left-12 top-1/2 transform -translate-y-1/2 bg-white text-[#01BF81] text-xs font-semibold px-3 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50">
-            Sistem Analisis Gejala
-          </div>
-        </div>
+          // Optional: tutup dropdown saat klik di luar
+          document.addEventListener('click', (e) => {
+            if (!profileIcon.contains(e.target) && !dropdownMenu.contains(e.target)) {
+              dropdownMenu.classList.add('hidden');
+            }
+          });
+        }
+      })
+      .catch(error => console.error('Error loading navbar:', error));
+  </script>
 
-        <!-- Tab: Chatbot -->
-        <div class="relative group">
-          <a href="./chatbot.html"
-            class="w-10 h-10 flex items-center justify-center rounded-full border-2 border-white text-white text-xl hover:scale-110 transition-all"
-            title="Chatbot">
-            <i class="fas fa-robot"></i>
-          </a>
-          <!-- Tooltip -->
-          <div class="absolute left-12 top-1/2 transform -translate-y-1/2 bg-white text-[#01BF81] text-xs font-semibold px-3 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50">
-            Chatbot
-          </div>
-        </div>
+  <div class="flex min-h-screen">
 
+    <main class="flex-grow p-8 max-w-7xl mx-auto">
+      <h1 class="text-4xl font-bold text-center text-white mb-10">Artikel Kesehatan</h1>
+
+      <!-- Search artikel -->
+      <div class="flex justify-center mb-6">
+        <input type="text" id="search" placeholder="Cari artikel..." class="w-80 px-4 py-2 rounded-full border border-gray-300" />
       </div>
 
-      <!-- Profile -->
-      <a href="#"
-        class="w-10 h-10 rounded-full overflow-hidden border-2 border-white hover:scale-105 transition">
-        <img src="./img/profile.png" alt="Profile" class="w-full h-full object-cover" />
-      </a>
+      <!-- List Artikel -->
+      <div id="article-list" class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Artikel dari JS -->
+      </div>
+    </main>
 
-    </div>
-  </aside>
+    <button id="toggle-theme" class="fixed top-5 right-5 hidden bg-green-700 text-white px-4 py-2 rounded-full hover:bg-green-800 z-50 shadow-lg">
+      Ganti Tema
+    </button>
 
-  <div class="container mx-auto px-4 py-8">
-    <h1 class="text-4xl font-bold text-center text-green-700 mb-10">Artikel Kesehatan</h1>
+    <script>
+      // Load navbar.html content into aside
+      fetch('/frontend/navbar.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('navbar-placeholder').innerHTML = data;
 
-    <!-- Search artikel -->
-    <input type="text" id="search" placeholder="Cari artikel..." class="block mx-auto mb-6 px-4 py-2 rounded-full border border-gray-300 w-80" />
+          // Tambahkan event listener setelah navbar dimuat
+          const profileIcon = document.getElementById('profile-icon');
+          const dropdownMenu = document.getElementById('dropdown-menu');
 
-    <!-- List Artikel -->
-    <div id="article-list" class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <!-- Artikel dari JS -->
-    </div>
+          if (profileIcon && dropdownMenu) {
+            profileIcon.addEventListener('click', () => {
+              dropdownMenu.classList.toggle('hidden');
+            });
+
+            // Optional: tutup dropdown saat klik di luar
+            document.addEventListener('click', (e) => {
+              if (!profileIcon.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                dropdownMenu.classList.add('hidden');
+              }
+            });
+          }
+        })
+        .catch(error => console.error('Error loading navbar:', error));
+    </script>
+
+    <script src="article.js"></script>
   </div>
-
-  <button id="toggle-theme" class="fixed top-5 right-5 bg-green-700 text-white px-4 py-2 rounded-full hover:bg-green-800">
-    Ganti Tema
-  </button>
-
-  <script src="article.js"></script>
 </body>
 </html>

@@ -23,7 +23,7 @@
 
       <div id="navbar-placeholder" class="flex-shrink-0 h-16"></div>
       <script>
-        fetch('./navbar.html')
+        fetch('/frontend/navbar.html')
           .then(response => response.text())
           .then(data => {
             document.getElementById('navbar-placeholder').innerHTML = data;
@@ -71,7 +71,7 @@
 
             <!-- Q2 -->
             <div>
-              <label class="block font-semibold mb-1 text-lg text-white">Q2. Apakah Anda mengalami demam?</label>
+              <label class="block font-semibold mb-1 text-lg text-white texle">Q2. Apakah Anda sering berkeringat di malam hari?</label>
               <div class="flex gap-6 text-base justify-center">
                 <label><input type="radio" name="q2" value="0" class="mr-1 accent-[#0a996a]" /> Tidak/Ringan</label>
                 <label><input type="radio" name="q2" value="1" class="mr-1 accent-[#0a996a]" /> Sedang</label>
@@ -82,7 +82,7 @@
 
             <!-- Q3 -->
             <div>
-              <label class="block font-semibold mb-1 text-lg text-white">Q3. Apakah Anda merasa mudah lelah?</label>
+              <label class="block font-semibold mb-1 text-lg text-white">Q3. Apakah Anda mengalami kesulitan bernapas?</label>
               <div class="flex gap-6 text-base justify-center">
                 <label><input type="radio" name="q3" value="0" class="mr-1 accent-[#0a996a]" /> Tidak/Ringan</label>
                 <label><input type="radio" name="q3" value="1" class="mr-1 accent-[#0a996a]" /> Sedang</label>
@@ -93,7 +93,7 @@
 
             <!-- Q4 -->
             <div>
-              <label class="block font-semibold mb-1 text-lg text-white">Q4. Apakah Anda mengalami keringat malam?</label>
+              <label class="block font-semibold mb-1 text-lg text-white">Q4. Apakah Anda mengalami demam?</label>
               <div class="flex gap-6 text-base justify-center">
                 <label><input type="radio" name="q4" value="0" class="mr-1 accent-[#0a996a]" /> Tidak/Ringan</label>
                 <label><input type="radio" name="q4" value="1" class="mr-1 accent-[#0a996a]" /> Sedang</label>
@@ -104,7 +104,7 @@
 
             <!-- Q5 -->
             <div>
-              <label class="block font-semibold mb-1 text-lg text-white">Q5. Apakah Anda mengalami nyeri dada?</label>
+              <label class="block font-semibold mb-1 text-lg text-white">Q5. Apakah Anda merasakan nyeri dada?</label>
               <div class="flex gap-6 text-base justify-center">
                 <label><input type="radio" name="q5" value="0" class="mr-1 accent-[#0a996a]" /> Tidak/Ringan</label>
                 <label><input type="radio" name="q5" value="1" class="mr-1 accent-[#0a996a]" /> Sedang</label>
@@ -118,18 +118,18 @@
           <div class="glass p-6 rounded-2xl shadow-md space-y-5">
             <!-- Q6 -->
             <div>
-              <label class="block font-semibold mb-1 text-lg text-white">Q6. Apakah Anda kehilangan nafsu makan?</label>
+              <label class="block font-semibold mb-1 text-lg text-white">Q6. Bagaimana warna dahak Anda?</label>
               <div class="flex gap-6 text-base justify-center">
-                <label><input type="radio" name="q6" value="0" class="mr-1 accent-[#0a996a]" /> Tidak/Ringan</label>
-                <label><input type="radio" name="q6" value="1" class="mr-1 accent-[#0a996a]" /> Sedang</label>
-                <label><input type="radio" name="q6" value="2" class="mr-1 accent-[#0a996a]" /> Parah</label>
+                <label><input type="radio" name="q6" value="0" class="mr-1 accent-[#0a996a]" /> Berdarah</label>
+                <label><input type="radio" name="q6" value="1" class="mr-1 accent-[#0a996a]" /> Tidak berwarna</label>
+                <label><input type="radio" name="q6" value="2" class="mr-1 accent-[#0a996a]" /> Hijau atau kekuningan</label>
               </div>
               <hr class="border-gray-400 mt-3" />
             </div>
 
             <!-- Q7 -->
             <div>
-              <label class="block font-semibold mb-1 text-lg text-white">Q7. Apakah Anda merasa menggigil?</label>
+              <label class="block font-semibold mb-1 text-lg text-white">Q7. Apakah Anda memiliki gangguan sistem imun (misalnya HIV/AIDS, diabetes, dll)?</label>
               <div class="flex gap-6 text-base justify-center">
                 <label><input type="radio" name="q7" value="0" class="mr-1 accent-[#0a996a]" /> Tidak/Ringan</label>
                 <label><input type="radio" name="q7" value="1" class="mr-1 accent-[#0a996a]" /> Sedang</label>
@@ -140,7 +140,7 @@
 
             <!-- Q8 -->
             <div>
-              <label class="block font-semibold mb-1 text-lg text-white">Q8. Apakah Anda mengalami gangguan konsentrasi?</label>
+              <label class="block font-semibold mb-1 text-lg text-white">Q8. Apakah Anda kehilangan minat pada hal-hal yang biasa disukai?</label>
               <div class="flex gap-6 text-base justify-center">
                 <label><input type="radio" name="q8" value="0" class="mr-1 accent-[#0a996a]" /> Tidak/Ringan</label>
                 <label><input type="radio" name="q8" value="1" class="mr-1 accent-[#0a996a]" /> Sedang</label>
@@ -151,7 +151,7 @@
 
             <!-- Q9 -->
             <div>
-              <label class="block font-semibold mb-1 text-lg text-white">Q9. Apakah Anda mengalami pembesaran kelenjar getah bening?</label>
+              <label class="block font-semibold mb-1 text-lg text-white">Q9. Apakah Anda sering merasa menggigil?</label>
               <div class="flex gap-6 text-base justify-center">
                 <label><input type="radio" name="q9" value="0" class="mr-1 accent-[#0a996a]" /> Tidak/Ringan</label>
                 <label><input type="radio" name="q9" value="1" class="mr-1 accent-[#0a996a]" /> Sedang</label>
@@ -162,7 +162,7 @@
 
             <!-- Q10 -->
             <div>
-              <label class="block font-semibold mb-1 text-lg text-white">Q10. Apakah Anda mengalami sesak napas?</label>
+              <label class="block font-semibold mb-1 text-lg text-white">Q10. Apakah Anda kesulitan berkonsentrasi?</label>
               <div class="flex gap-6 text-base justify-center">
                 <label><input type="radio" name="q10" value="0" class="mr-1 accent-[#0a996a]" /> Tidak/Ringan</label>
                 <label><input type="radio" name="q10" value="1" class="mr-1 accent-[#0a996a]" /> Sedang</label>

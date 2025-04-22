@@ -146,8 +146,10 @@
                         return;
                     }
 
+                    console.log('Login response data:', data);
                     // Store user info in sessionStorage
                     sessionStorage.setItem('user', JSON.stringify(data.user));
+                    // Redirect to beranda.html instead of /beranda
                     window.location.href = 'beranda.html';
 
                 } catch (error) {

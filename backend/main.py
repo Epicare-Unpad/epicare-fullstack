@@ -19,7 +19,6 @@ from routers.register.login import router as login_router
 from routers.oauth.google import router as google_router
 from routers.chat_history import router as chat_history_router
 from routers.article import router as article_router
-
 app = FastAPI()
 
 # Path ke frontend HTML
@@ -44,7 +43,7 @@ app.include_router(gejala_router)
 app.include_router(register_router)
 app.include_router(login_router)
 app.include_router(google_router)
-
+app.include_router(article_router)
 app.include_router(chat_history_router)
 
 # Dependency untuk cek login session
@@ -68,8 +67,8 @@ async def http_exception_handler(request: Request, exc: HTTPException):
 async def root(request: Request):
     user = request.session.get("user")
     if user:
-        return RedirectResponse(url="/frontend/chatbot.html")
-    return RedirectResponse(url="/frontend/login.html")
+        return RedirectResponse(url="/frontend/beranda.html")
+    return RedirectResponse(url="/frontend/index.html")
 
 
 @app.get("/logout")
@@ -103,8 +102,14 @@ async def sistem_analisis_page2(request: Request, user: dict = Depends(get_curre
 
 @app.get("/beranda")
 async def beranda_page(request: Request, user: dict = Depends(get_current_user)):
-    return templates.TemplateResponse("beranda.html", {"request": request})
+    return RedirectResponse(url="/frontend/beranda.html")
+
 
 @app.get("/artikel")
 async def artikel_page(request: Request):
     return templates.TemplateResponse("article-list.html", {"request": request})
+
+
+@app.get("/api/user")
+async def get_user(user: dict = Depends(get_current_user)):
+    return user
