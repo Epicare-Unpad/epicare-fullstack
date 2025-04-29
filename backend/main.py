@@ -1,3 +1,10 @@
+from routers.article import router as article_router
+from routers.chat_history import router as chat_history_router
+from routers.oauth.google import router as google_router
+from routers.register.login import router as login_router
+from routers.register.register import router as register_router
+from routers.analisis_gejala_api import router as gejala_router
+from routers.gemini_api import router as gemini_router
 from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
@@ -12,13 +19,10 @@ from fastapi import status
 from fastapi.responses import Response
 from fastapi.exceptions import HTTPException as FastAPIHTTPException
 
-from routers.gemini_api import router as gemini_router
-from routers.analisis_gejala_api import router as gejala_router
-from routers.register.register import router as register_router
-from routers.register.login import router as login_router
-from routers.oauth.google import router as google_router
-from routers.chat_history import router as chat_history_router
-from routers.article import router as article_router
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+
 app = FastAPI()
 
 # Path ke frontend HTML

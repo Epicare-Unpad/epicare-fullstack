@@ -29,6 +29,10 @@ async def login_user(login_input: LoginInput, request: Request = None):
         if not verify_password(password, user["password_hash"]):
             return JSONResponse(status_code=status.HTTP_200_OK, content={"success": False, "message": "Invalid email or password"})
 
+        # Check if user is verified
+        if not user.get("verified", False):
+            return JSONResponse(status_code=status.HTTP_200_OK, content={"success": False, "message": "Please verify your email before logging in."})
+
         # Simpan user ke session
         if request:
             request.session["user"] = {

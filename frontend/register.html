@@ -146,12 +146,14 @@
           body: JSON.stringify(data),
         });
 
+        const responseData = await res.json();
+        console.log("Register response message:", responseData.message);
+
         if (!res.ok) {
-          const error = await res.json();
-          showPopup(`Error: ${error.detail}`);
+          showPopup(`Error: ${responseData.detail || 'Unknown error'}`);
           return;
         }
-        showPopup("Akun berhasil dibuat!", () => {
+        showPopup(responseData.message, () => {
           window.location.href = "login.html";
         });
       } catch (err) {
