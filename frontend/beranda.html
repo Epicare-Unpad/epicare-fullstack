@@ -202,6 +202,24 @@
             }
           });
         }
+
+        // Add hamburger menu toggle after navbar is loaded
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const navLinks = document.getElementById('nav-links');
+
+        if (hamburgerBtn && navLinks) {
+          hamburgerBtn.addEventListener('click', () => {
+            if (navLinks.classList.contains('hidden')) {
+              navLinks.classList.remove('hidden');
+              navLinks.classList.add('flex', 'flex-col', 'absolute', 'top-full', 'left-0', 'w-full', 'bg-[#01BF81]/90', 'backdrop-blur-md', 'border-t', 'border-white/20', 'lg:border-none', 'lg:bg-transparent', 'lg:static', 'lg:flex-row', 'lg:space-x-8', 'z-50', 'lg:z-auto', 'lg:relative');
+              hamburgerBtn.setAttribute('aria-expanded', 'true');
+            } else {
+              navLinks.classList.add('hidden');
+              navLinks.classList.remove('flex', 'flex-col', 'absolute', 'top-full', 'left-0', 'w-full', 'bg-[#01BF81]/90', 'backdrop-blur-md', 'border-t', 'border-white/20', 'lg:border-none', 'lg:bg-transparent', 'lg:static', 'lg:flex-row', 'lg:space-x-8', 'z-50', 'lg:z-auto', 'lg:relative');
+              hamburgerBtn.setAttribute('aria-expanded', 'false');
+            }
+          });
+        }
       })
       .catch(error => console.error('Error loading navbar:', error));
   </script>

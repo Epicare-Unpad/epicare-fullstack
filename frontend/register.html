@@ -153,7 +153,7 @@
           showPopup(`Error: ${responseData.detail || 'Unknown error'}`);
           return;
         }
-        showPopup(responseData.message, () => {
+        showPopup(responseData.message || "Akun berhasil dibuat!", () => {
           window.location.href = "login.html";
         });
       } catch (err) {

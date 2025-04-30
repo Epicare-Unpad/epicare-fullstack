@@ -1,55 +1,72 @@
 <nav class="fixed w-full top-0 z-50 bg-[#01BF81]/80 backdrop-blur-md border-b border-white/20 shadow-lg">
-  <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+  <div class="max-w-7xl mx-auto px-2 flex items-center justify-between h-16">
     <!-- Logo -->
     <a href="./beranda.html" class="flex items-center space-x-3">
       <img src="./img/epicare-logo.png" alt="Logo" class="w-10 h-10" />
       <span class="text-2xl font-bold text-white">Epicare</span>
     </a>
 
-    <!-- Navigation Links -->
-    <div class="flex items-center space-x-8">
-      <a href="./article-list.html" class="nav-link">Artikel Kesehatan</a>
-      <a href="./sistem_analisis.html" class="nav-link">Sistem Analisis Gejala</a>
-      <a href="./chatbot.html" class="nav-link">Chatbot</a>
-      <!-- <a href="#" class="nav-link">Cek TBC (Rontgen)</a> -->
-    </div>
+    <!-- Hamburger Menu Button (Mobile) -->
+    <button id="hamburger-btn" class="md:hidden text-white focus:outline-none" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mobile-nav-links">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="18" x2="21" y2="18" />
+      </svg>
+    </button>
 
-    <!-- Profile Dropdown -->
-    <div class="relative">
-      <button id="profile-icon" class="w-10 h-10 rounded-full overflow-hidden border-2 border-white hover:scale-105 transition duration-300">
-        <img src="./img/profile.png" alt="Profile" class="object-cover w-full h-full" />
-      </button>
-      <div id="dropdown-menu" class="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg hidden transition-opacity duration-300 z-50">
-        <!-- Ensure frontend is accessed via backend server URL for this logout link to work -->
-        <a href="./login.html" id="logout-btn" class="block px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md cursor-pointer">Logout</a>
+    <!-- Desktop Navigation Links -->
+    <div id="nav-links" class="hidden md:flex items-center space-x-8 text-white font-medium">
+      <a href="./article-list.html" class="nav-link hover:underline">Artikel Kesehatan</a>
+      <a href="./sistem_analisis.html" class="nav-link hover:underline">Sistem Analisis Gejala</a>
+      <a href="./chatbot.html" class="nav-link hover:underline">Chatbot</a>
 
-        <script>
-          document.addEventListener('DOMContentLoaded', () => {
-            const logoutBtn = document.getElementById('logout-btn');
-            if (!logoutBtn) {
-              console.error('Logout button not found');
-              return;
-            }
-            logoutBtn.addEventListener('click', async (e) => {
-              e.preventDefault();
-              console.log('Logout button clicked');
-              try {
-                const response = await fetch('/logout', { method: 'GET', credentials: 'include' });
-                console.log('Logout response:', response);
-                if (response.redirected) {
-                  window.location.href = response.url;
-                } else {
-                  window.location.href = '/frontend/login.html';
-                }
-              } catch (error) {
-                console.error('Logout failed:', error);
-                window.location.href = '/frontend/login.html';
-              }
-            });
-          });
-        </script>
-        <!-- Tambahkan item lain jika perlu -->
+      <!-- Profile Dropdown -->
+      <div class="relative">
+        <button id="profile-icon" class="w-10 h-10 rounded-full overflow-hidden border-2 border-white hover:scale-105 transition duration-300">
+          <img src="./img/profile.png" alt="Profile" class="object-cover w-full h-full" />
+        </button>
+        <div id="dropdown-menu" class="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg hidden transition-opacity duration-300 z-50">
+          <a href="./login.html" id="logout-btn" class="block px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md cursor-pointer">Logout</a>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- Mobile Nav Links -->
+  <div id="mobile-nav-links" class="md:hidden hidden flex-col bg-[#01BF81]/90 backdrop-blur-md px-6 py-4 space-y-4 text-white font-medium">
+    <a href="./article-list.html" class="block py-2 border-b border-white/20">Artikel Kesehatan</a>
+    <a href="./sistem_analisis.html" class="block py-2 border-b border-white/20">Sistem Analisis Gejala</a>
+    <a href="./chatbot.html" class="block py-2 border-b border-white/20">Chatbot</a>
+    <a href="./login.html" class="block py-2">Logout</a>
+  </div>
+
+  <!-- Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const hamburgerBtn = document.getElementById('hamburger-btn');
+      const mobileNav = document.getElementById('mobile-nav-links');
+      const profileIcon = document.getElementById('profile-icon');
+      const dropdownMenu = document.getElementById('dropdown-menu');
+
+      // Hamburger toggle
+      hamburgerBtn.addEventListener('click', () => {
+        const isHidden = mobileNav.classList.contains('hidden');
+        mobileNav.classList.toggle('hidden');
+        hamburgerBtn.setAttribute('aria-expanded', !isHidden);
+      });
+
+      // Profile dropdown toggle (desktop)
+      profileIcon?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('hidden');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!dropdownMenu.classList.contains('hidden')) {
+          dropdownMenu.classList.add('hidden');
+        }
+      });
+    });
+  </script>
 </nav>

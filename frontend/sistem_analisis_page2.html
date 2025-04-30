@@ -44,6 +44,30 @@
               }
             });
           }
+
+          // Add hamburger menu toggle event listener
+          const hamburgerBtn = document.getElementById('hamburger-btn');
+          const navLinks = document.getElementById('nav-links');
+
+          if (hamburgerBtn && navLinks) {
+            hamburgerBtn.addEventListener('click', () => {
+              if (navLinks.classList.contains('hidden')) {
+                navLinks.classList.remove('hidden');
+                navLinks.classList.add('flex', 'flex-col', 'absolute', 'top-full', 'left-0', 'w-full',
+                  'bg-[#01BF81]/90', 'backdrop-blur-md', 'border-t', 'border-white/20',
+                  'sm:border-none', 'sm:bg-transparent', 'sm:static', 'sm:flex-row', 'sm:space-x-8',
+                  'z-50', 'sm:z-auto', 'sm:relative');
+                hamburgerBtn.setAttribute('aria-expanded', 'true');
+              } else {
+                navLinks.classList.add('hidden');
+                navLinks.classList.remove('flex', 'flex-col', 'absolute', 'top-full', 'left-0', 'w-full',
+                  'bg-[#01BF81]/90', 'backdrop-blur-md', 'border-t', 'border-white/20',
+                  'sm:border-none', 'sm:bg-transparent', 'sm:static', 'sm:flex-row', 'sm:space-x-8',
+                  'z-50', 'sm:z-auto', 'sm:relative');
+                hamburgerBtn.setAttribute('aria-expanded', 'false');
+              }
+            });
+          }
         })
         .catch(error => console.error('Error loading navbar:', error));
     </script>

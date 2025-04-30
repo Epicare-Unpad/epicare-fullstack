@@ -133,6 +133,21 @@
           transform: translateY(-8px);
         }
       }
+
+      /* Sidebar Hidden */
+      .sidebar-hidden {
+        transform: translateX(-100%);
+      }
+
+      .sidebar-visible {
+        transform: translateX(0);
+      }
+
+      /* Transition */
+      #sidebar {
+        transition: transform 0.3s ease-in-out;
+      }
+
     </style>
   </head>
   <body class="text-white min-h-screen font-sans overflow-hidden">
@@ -159,25 +174,94 @@
               }
             });
           }
+
+          // Add hamburger menu toggle event listener
+          const hamburgerBtn = document.getElementById('hamburger-btn');
+          const navLinks = document.getElementById('nav-links');
+
+          if (hamburgerBtn && navLinks) {
+            hamburgerBtn.addEventListener('click', () => {
+              if (navLinks.classList.contains('hidden')) {
+                navLinks.classList.remove('hidden');
+                navLinks.classList.add('flex', 'flex-col', 'absolute', 'top-full', 'left-0', 'w-full',
+                  'bg-[#01BF81]/90', 'backdrop-blur-md', 'border-t', 'border-white/20',
+                  'sm:border-none', 'sm:bg-transparent', 'sm:static', 'sm:flex-row', 'sm:space-x-8',
+                  'z-50', 'sm:z-auto', 'sm:relative');
+                hamburgerBtn.setAttribute('aria-expanded', 'true');
+              } else {
+                navLinks.classList.add('hidden');
+                navLinks.classList.remove('flex', 'flex-col', 'absolute', 'top-full', 'left-0', 'w-full',
+                  'bg-[#01BF81]/90', 'backdrop-blur-md', 'border-t', 'border-white/20',
+                  'sm:border-none', 'sm:bg-transparent', 'sm:static', 'sm:flex-row', 'sm:space-x-8',
+                  'z-50', 'sm:z-auto', 'sm:relative');
+                hamburgerBtn.setAttribute('aria-expanded', 'false');
+              }
+            });
+          }
         })
         .catch(error => console.error('Error loading navbar:', error));
+
+      // Sidebar toggle functionality
+      document.addEventListener('DOMContentLoaded', function () {
+        const toggleSidebarBtn = document.getElementById('toggle-sidebar-btn');
+        const showSidebarBtn = document.getElementById('show-sidebar-btn');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+
+        toggleSidebarBtn.addEventListener('click', function () {
+          sidebar.classList.toggle('sidebar-hidden');  // Toggle visibility of sidebar
+          sidebar.classList.toggle('sidebar-visible');
+
+          if (sidebar.classList.contains('sidebar-hidden')) {
+            mainContent.classList.remove('ml-64');
+            mainContent.classList.add('ml-6');
+          } else {
+            mainContent.classList.remove('ml-6');
+            mainContent.classList.add('ml-64');
+          }
+        });
+
+        // Tombol untuk memunculkan sidebar
+        showSidebarBtn.addEventListener('click', function () {
+          sidebar.classList.remove('sidebar-hidden');
+          sidebar.classList.add('sidebar-visible');
+          showSidebarBtn.classList.add('hidden'); // Menyembunyikan tombol show setelah sidebar muncul
+          mainContent.classList.remove('ml-6');
+          mainContent.classList.add('ml-64');
+        });
+
+        // Tombol untuk menyembunyikan sidebar
+        sidebar.addEventListener('transitionend', function() {
+          if (sidebar.classList.contains('sidebar-hidden')) {
+            showSidebarBtn.classList.remove('hidden'); // Menampilkan tombol show jika sidebar tertutup
+          }
+        });
+      });
     </script>
 
     <!-- SIDEBAR -->
-    <div class="fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-[#003f2b] border-r border-white/10 shadow-lg z-40 flex flex-col">
-      <div class="p-6 border-b border-white/10">
+    <div id="sidebar" class="fixed top-20 left-0 w-64 h-[calc(100vh-4rem)] bg-[#003f2b] border-r border-white/10 shadow-lg z-40 flex flex-col sidebar-visible">
+      <div class="p-6 border-b border-white/10 flex items-center justify-between">
         <h2 class="text-xl font-bold text-white">Riwayat Chat</h2>
-        <button id="new-chat-btn" class="mt-4 bg-emerald-500 hover:bg-emerald-600 text-white py-2 px-4 rounded-md w-full">
-          + Chat Baru
+        <button id="toggle-sidebar-btn" class="text-white focus:outline-none" aria-label="Toggle Sidebar">
+          <i class="fa-solid fa-bars"></i>
         </button>
       </div>
+      <button id="new-chat-btn" class="m-6 bg-emerald-500 hover:bg-emerald-600 text-white py-2 px-4 rounded-md w-auto">
+        + Chat Baru
+      </button>
       <div id="chat-history" class="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-2">
         <!-- Chat history akan ditambahkan di sini -->
       </div>
     </div>
 
+    <!-- BUTTON UNTUK MEMUNCULKAN SIDEBAR -->
+    <button id="show-sidebar-btn" class="text-white focus:outline-none p-4 fixed left-0 top-24 z-50 hidden">
+      <i class="fa-solid fa-bars"></i> 
+    </button>
+
     <!-- MAIN -->
-    <div class="content ml-64 mr-6 flex flex-col h-screen p-6 space-y-6 mt-10">
+    <div id="main-content" class="content ml-64 mr-6 flex flex-col h-screen p-6 space-y-6">
       <!-- HEADER -->
       <div class="sticky top-20 bg-[#0e3f2c] z-20 p-2 rounded-xl border border-white/20 shadow-inner" style="margin-bottom: 10px;">
         <div class="flex items-center justify-between">
@@ -204,16 +288,17 @@
       <div class="fixed bottom-6 bottom-11 left-64 max-w-[calc(100%-16rem-1.5rem)] w-[calc(100%-16rem-1.5rem)] z-40" style="box-sizing: border-box; padding-right: 1.5rem;">
         <div class="flex items-center gap-4 justify-center">
           <input 
+            id="chat-input"
             type="text" 
             placeholder="Ketik pertanyaanmu di sini..." 
-            class="flex-grow max-w-[70%] px-4 py-3 rounded-md bg-white text-[#00885C] placeholder-[#00885C] focus:outline-none focus:ring-2 focus:ring-emerald-400 transition" 
+            class="flex-grow max-w-[70%] px-4 py-3 rounded-md bg-white text-[#00885C] placeholder-[#00885C] shadow-lg shadow-black/20 focus:outline-none focus:ring focus:ring-emerald-400 focus:ring-opacity-50"
           />
-          <button class="bg-emerald-500 hover:bg-emerald-600 w-14 h-14 rounded-full flex items-center justify-center transition">
-            <i class="fa-solid fa-paper-plane text-2xl text-white"></i>
+          <button id="send-button" class="bg-emerald-500 hover:bg-emerald-600 text-white p-3 rounded-md">
+            Kirim
           </button>
         </div>
       </div>
     </div>
-    <script src="script/chatbot.js"></script>
+    <script src="./script/chatbot.js"></script>
   </body>
 </html>

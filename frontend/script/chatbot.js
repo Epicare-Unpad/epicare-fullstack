@@ -1,8 +1,9 @@
-const inputField = document.querySelector('input[type="text"]');
-const sendButton = document.querySelector('button');
+const inputField = document.getElementById('chat-input');
+const sendButton = document.getElementById('send-button');
 const chatContainer = document.getElementById('chat-scroll-container');
 
 function addChatBubble(text, from = 'user') {
+  console.log("Adding chat bubble:", text, "from:", from);
   const bubble = document.createElement('div');
   bubble.className = `flex justify-${from === 'user' ? 'end' : 'start'} mt-4`;
 
@@ -23,10 +24,14 @@ function addChatBubble(text, from = 'user') {
   }
 
   bubble.appendChild(innerBubble);
-  chatContainer.appendChild(bubble);
-  setTimeout(() => {
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-  }, 100);
+  if (!chatContainer) {
+    console.error("chatContainer is null or undefined");
+  } else {
+    chatContainer.appendChild(bubble);
+    setTimeout(() => {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }, 100);
+  }
 }
 
 function showLoading() {
@@ -50,8 +55,12 @@ function showLoading() {
 }
 
 async function sendMessage() {
+  console.log("sendMessage called");
   const userInput = inputField.value.trim();
   if (!userInput) return;
+
+  console.log("User ID:", userId);
+  console.log("Current Chat ID:", currentChatId);
 
   addChatBubble(userInput, 'user');
   inputField.value = '';
