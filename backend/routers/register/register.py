@@ -53,7 +53,7 @@ async def register_user(request: Request):
         raise HTTPException(status_code=500, detail="Gagal mendaftarkan user")
 
     # Send verification email
-    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:8000")
+    frontend_url = os.getenv("FRONTEND_URL", "http://127.0.0.1:8000")
     verification_link = f"{frontend_url}/verify-email?token={verification_token}"
     try:
         send_verification_email(data.email, verification_link)
@@ -95,7 +95,7 @@ async def request_password_reset(request: Request):
             return JSONResponse(status_code=500, content={"detail": "Failed to set reset token"})
 
         frontend_url = os.getenv(
-            "FRONTEND_URL", "http://localhost:8000/frontend")
+            "FRONTEND_URL", "http://127.0.0.1:8000/frontend")
         reset_link = f"{frontend_url}/reset-password.html?token={reset_token}"
 
         try:

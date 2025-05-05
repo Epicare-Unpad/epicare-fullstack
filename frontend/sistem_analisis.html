@@ -4,22 +4,53 @@
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>Analisis Gejala TBC - Epicare</title>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
       <script src="https://cdn.tailwindcss.com"></script>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-      <link rel="stylesheet" href="./style/style.css">
-
+      <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+      <link rel="stylesheet" href="./style/style.css" />
+      <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  
       <style>
         body {
           background: linear-gradient(to right, #0a996a, #0e3f2c);
+
+          margin: 0;
+          padding: 0;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          /* font-size: 11px; */
+          color: #1a1a1a;
         }
-        .glass {
-          backdrop-filter: blur(12px);
-          background: rgba(255, 255, 255, 0.1);
-          border: 1px solid rgba(255, 255, 255, 0.2);
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #f0f0f0;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background-color: #cbd5e0;
+          border-radius: 4px;
+        }
+        #chat-scroll-container {
+          height: calc(76vh - 12rem);
+          overflow-y: auto;
+        }
+        #chat-scroll-container::-webkit-scrollbar {
+          display: none;
+        }
+        .sidebar-hidden {
+          transform: translateX(-100%);
+          transition: transform 0.3s ease-in-out;
+        }
+        .sidebar-visible {
+          transform: translateX(0);
+          transition: transform 0.3s ease-in-out;
+        }
+        #input-wrapper {
+          transition: all 0.3s ease-in-out;
         }
       </style>
     </head>
-      <body class="text-white font-sans h-screen flex flex-col">
+      <body class="text-white h-screen flex flex-col">
 
       <div id="navbar-placeholder" class="flex-shrink-0 h-16"></div>
       <script>

@@ -4,29 +4,52 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Analisis Rontgen Dada</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style/style.css" />
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <style>
       body {
         background-color: #f9fdfb;
         margin: 0;
         padding: 0;
         font-family: 'Plus Jakarta Sans', sans-serif;
+        /* font-size: 11px; */
         color: #1a1a1a;
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f0f0f0;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: #cbd5e0;
+        border-radius: 4px;
+      }
+      #chat-scroll-container {
+        height: calc(76vh - 12rem);
+        overflow-y: auto;
+      }
+      #chat-scroll-container::-webkit-scrollbar {
+        display: none;
+      }
+      .sidebar-hidden {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+      }
+      .sidebar-visible {
+        transform: translateX(0);
+        transition: transform 0.3s ease-in-out;
+      }
+      #input-wrapper {
+        transition: all 0.3s ease-in-out;
       }
     </style>
   </head>
-  <body class="bg-gray-50 text-gray-800 font-sans">
+  <body class="bg-gray-50">
     <!-- Navbar Placeholder -->
     <div id="navbar-placeholder"></div>
     <script>
