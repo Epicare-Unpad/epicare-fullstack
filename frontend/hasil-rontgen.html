@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analisis Rontgen Dada</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-800 font-sans">
+  <div id="navbar-placeholder"></div>
+  <script>
+    fetch('./navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-placeholder').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading navbar:', error));
+  </script>
+
+  <div class="w-full px-20 py-10 bg-white">
+    <!-- Title Section -->
+    <div class="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto mb-10">
+      <div class="text-center md:text-left">
+        <h1 class="text-5xl font-bold leading-tight mb-2">Analisis Rontgen Dada</h1>
+        <p class="text-2xl text-gray-700">Pasien menunjukkan tanda-tanda terinfeksi TBC</p>
+      </div>
+      <div class="mt-6 md:mt-0">
+        <img src="./img/4.png" alt="dokter" class="w-72 h-72" />
+      </div>
+    </div>
+
+    <!-- Image and Diagnosis -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center max-w-6xl mx-auto mb-10">
+      <div class="bg-gray-100 p-4 rounded-xl">
+        <img src="./img/5.png" alt="X-Ray" class="w-full h-auto rounded-lg">
+      </div>
+      <div class="flex flex-col gap-4">
+        <div>
+          <p class="text-gray-600">Keyakinan</p>
+          <p class="text-xl font-semibold">Model yakin dengan diagnosis ini</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500 mb-1">Profisien</p>
+          <div class="flex items-center gap-4">
+            <span class="text-3xl font-bold text-green-600">96%</span>
+            <span class="text-xl">TBC</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary and Next Steps -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+      <!-- Ringkasan Hasil -->
+      <div class="flex items-start gap-4 p-5 border border-gray-200 rounded-xl bg-white shadow-sm">
+        <img src="./img/6.png" alt="Konsultasi dokter" class="w-12 h-12 rounded-full object-cover" />
+        <div>
+          <h2 class="font-semibold text-xl mb-1">Ringkasan Hasil</h2>
+          <p class="text-sm text-gray-800">Hasil analisis menunjukkan adanya indikasi infeksi TBC.</p>
+          <p class="text-sm text-gray-700 mt-2">Format file yang didukung: JPG, JPEG, atau PNG.</p>
+        </div>
+      </div>
+
+      <!-- Tindak Lanjut -->
+      <div class="p-5 rounded-xl bg-white shadow-sm border border-gray-200">
+        <h2 class="font-semibold text-xl mb-4">Tindak Lanjut</h2>
+        <div class="flex items-start gap-3 mb-4">
+          <img src="./img/7.png" alt="Konsultasi dokter" class="w-10 h-10 rounded-full object-cover" />
+          <p class="text-sm text-gray-800">Konsultasi dengan dokter untuk diagnosis lebih lanjut.</p>
+        </div>
+        <div class="flex items-start gap-3">
+          <img src="./img/8.png" alt="Tes laboratorium" class="w-10 h-10 rounded-full object-cover" />
+          <p class="text-sm text-gray-800">Lakukan tes laboratorium sesuai anjuran dokter.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
