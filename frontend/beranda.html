@@ -1,305 +1,160 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Beranda - Epicare</title>
+  <title>Epicare Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./style/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to right, #0a996a, #0e3f2c);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      color: #f0fdf4;
-      scroll-behavior: smooth;
+      font-family: 'Plus Jakarta Sans', sans-serif;
     }
-
-    main {
-      flex-grow: 1;
-      max-width: 7xl;
-      margin: 0 auto;
-      padding: 2rem 1.5rem 3rem;
-      display: flex;
-      flex-direction: column;
-      gap: 3rem;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
-    }
-
-    .hero-banner {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 1.5rem;
-      padding: 2rem;
-      box-shadow: 0 8px 32px rgba(1, 191, 129, 0.25);
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .hero-banner img {
-      max-width: 300px;
-      border-radius: 1rem;
-      box-shadow: 0 4px 15px rgba(1, 191, 129, 0.3);
-      flex: 1 1 300px;
-    }
-
-    .hero-text {
-      flex: 2 1 400px;
-      color: #d1e7d0;
-      font-size: 1.125rem;
-      line-height: 1.6;
-    }
-
-    .section-title {
-      font-size: 1.75rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
-    }
-
-    .grid {
-      display: grid;
-      gap: 2rem;
-    }
-
-    .quick-tips-grid {
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    }
-
-    .features-grid {
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    }
-
     .card {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 1.5rem;
-      padding: 1.5rem 2rem;
-      box-shadow: 0 8px 32px rgba(1, 191, 129, 0.25);
-      transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-      cursor: pointer;
-      color: #e6f4ea;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-
     .card:hover {
-      background: rgba(1, 191, 129, 0.15);
-      box-shadow: 0 16px 48px rgba(1, 191, 129, 0.5);
-      transform: translateY(-8px);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0, 128, 0, 0.1);
     }
-
-    .card h2 {
-      font-size: 1.5rem;
-      margin-bottom: 0.75rem;
+    .fade-in {
+      animation: fadeInUp 0.8s ease forwards;
+      opacity: 0;
+      transform: translateY(20px);
     }
-
-    .card p {
-      font-size: 1.125rem;
-      line-height: 1.6;
-      color: #d1e7d0;
-    }
-
-    .card a {
-      display: inline-block;
-      margin-top: 1rem;
-      color: #01bf81;
-      font-weight: 600;
-      text-decoration: underline;
-      transition: color 0.3s ease;
-    }
-
-    .card a:hover {
-      color: #019e6b;
-    }
-
-    footer {
-      background: linear-gradient(to right, #014d33, #0a996a);
-      color: #d1e7d0;
-      padding: 2rem 1.5rem;
-      height: auto;
-      margin-top: auto;
-      box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.3);
-    }
-
-    footer h3 {
-      font-weight: 700;
-      margin-bottom: 1rem;
-    }
-
-    footer p,
-    footer a {
-      font-size: 0.9rem;
-      color: #d1e7d0;
-    }
-
-    footer a:hover {
-      color: #01bf81;
-      text-decoration: underline;
-    }
-
-    footer .social-icons a {
-      margin-right: 1rem;
-      font-size: 1.5rem;
-      transition: color 0.3s ease;
-    }
-
-    footer .social-icons a:hover {
-      color: #01bf81;
-    }
-
-    @media (min-width: 768px) {
-      main {
-        flex-direction: row;
-      }
-
-      .left-column {
-        flex: 1;
-        margin-right: 2rem;
-        display: flex;
-        flex-direction: column;
-        gap: 3rem;
-      }
-
-      .right-column {
-        flex: 2;
-        display: flex;
-        flex-direction: column;
-        gap: 3rem;
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
   </style>
 </head>
+<body class="bg-gradient-to-br from-green-50 to-white text-gray-800">
+  <!-- Navbar -->
+  <!-- Navbar is now modularized in navbar.html -->
+  <div id="navbar-placeholder"></div>
 
-<body>
-  <div id="navbar-placeholder" class="flex-shrink-0 h-16"></div>
+  <!-- Main Section -->
+  <main class="px-6 md:px-10 py-12 space-y-16">
+    <!-- Hero Section -->
+    <section class="flex flex-col md:flex-row items-center gap-10 fade-in py-11">
+      <img src="./img/hero-illustration.png" alt="Hero" class="w-2/6" />
+      <div>
+        <h1 class="text-4xl font-bold text-gray-800">Halo, John Doe</h1>
+        <p class="text-gray-500 mt-2">
+          Anda telah melakukan <span class="font-semibold text-green-600">3 chat</span> minggu ini
+        </p>
+        <div class="flex flex-wrap gap-3 mt-6">
+          <a href="./sistem_analisis.html" class="bg-green-600 text-white px-5 py-2 rounded-full font-medium shadow hover:bg-green-700 transition">🧬 Analisis Gejala</a>
+
+          <a href= "./chatbot.html"class="bg-white border border-gray-300 text-gray-700 px-5 py-2 rounded-full font-medium hover:border-green-500 hover:text-green-600 transition">
+            💬 Chatbot
+          </a>
+          <a href="./article-list.html" class="bg-white border border-gray-300 text-gray-700 px-5 py-2 rounded-full font-medium hover:border-green-500 hover:text-green-600 transition">
+            📄 Artikel
+          </a >
+        </div>
+      </div>
+    </section>
+
+    <!-- Card Grid -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Artikel Terbaru -->
+      <div class="bg-white rounded-xl shadow-md p-5 card fade-in h-auto">
+        <h3 class="font-semibold text-lg mb-3 text-green-700">Artikel Terbaru</h3>
+        <img src="./img/artikel-terbaru.png" alt="Artikel" class="w-3/4 rounded-lg mb-3" />
+        <p class="font-semibold">Judul Artikel Terbaru</p>
+        <p class="text-sm text-gray-600 mt-1 mb-4">
+          Temukan informasi terbaru dan terpercaya tentang kesehatan di sini.
+        </p>
+        <button class="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition">
+          Baca Selengkapnya
+        </button>
+      </div>
+
+      <!-- Tips Sehat 1 -->
+      <div class="bg-white rounded-xl shadow-md p-5 card fade-in h-auto">
+        <h3 class="font-semibold text-lg mb-3 text-green-700">Tips Sehat</h3>
+        <div class="space-y-4">
+          <div class="flex items-start gap-3">
+            <i class="fas fa-tint text-green-600 text-xl"></i>
+            <div>
+              <p class="font-medium">Minum Air Putih</p>
+              <p class="text-sm text-gray-600">Pastikan Anda minum air putih yang cukup setiap hari.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <i class="fas fa-bed text-green-600 text-xl"></i>
+            <div>
+              <p class="font-medium">Istirahat Cukup</p>
+              <p class="text-sm text-gray-600">Tidur cukup membantu tubuh pulih dan menjaga daya tahan.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips Sehat 2 -->
+      <div class="bg-white rounded-xl shadow-md p-5 card fade-in h-auto">
+        <h3 class="font-semibold text-lg mb-3 text-green-700">Tips Sehat</h3>
+        <div class="space-y-4">
+          <div class="flex items-start gap-3">
+            <i class="fas fa-running text-green-600 text-xl"></i>
+            <div>
+              <p class="font-medium">Olahraga Teratur</p>
+              <p class="text-sm text-gray-600">Rutin berolahraga menjaga kebugaran dan kesehatan jantung.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <i class="fas fa-apple-alt text-green-600 text-xl"></i>
+            <div>
+              <p class="font-medium">Makan Seimbang</p>
+              <p class="text-sm text-gray-600">Konsumsi makanan bergizi seimbang setiap hari.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tahukah Kamu -->
+      <div class="bg-white rounded-xl shadow-md p-5 flex flex-col items-center text-center card fade-in">
+        <h3 class="font-semibold text-lg mb-2 text-green-700">Tahukah Kamu?</h3>
+        <img src="./img/icon-lamp.png" class="w-20 mb-3" alt="" />
+        <p class="text-sm text-gray-600 mb-4">Fakta menarik seputar kesehatan yang mungkin belum kamu ketahui.</p>
+        <button class="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition">Lihat Artikel</button>
+      </div>
+
+      <!-- Artikel Kesehatan -->
+      <div class="bg-white rounded-xl shadow-md p-5 card fade-in h-auto">
+        <h3 class="font-semibold text-lg mb-3 text-green-700">Artikel Kesehatan</h3>
+        <p class="text-sm text-gray-600 mb-4">Temukan berbagai artikel bermanfaat untuk kualitas hidup Anda.</p>
+        <button class="bg-green-500 text-white px-4 py-2 rounded-full w-full hover:bg-green-600 transition">Lihat Artikel</button>
+      </div>
+    </section>
+  </main>
+  <!-- Footer -->
+  <footer class="bg-white border-t border-gray-200 mt-12 py-6 px-6 md:px-10 text-sm text-gray-600 text-center">
+    <div class="max-w-screen-xl mx-auto space-y-4">
+      <p>&copy; 2025 <span class="font-semibold text-green-600">Epicare</span>. Semua hak dilindungi.</p>
+      <div class="flex justify-center flex-wrap gap-4">
+        <a href="#" class="hover:text-green-600 transition">Kebijakan Privasi</a>
+        <a href="#" class="hover:text-green-600 transition">Syarat & Ketentuan</a>
+        <a href="#" class="hover:text-green-600 transition">Kontak</a>
+      </div>
+    </div>
+  </footer>
   <script>
-    fetch('/frontend/navbar.html')
+    // Load navbar.html content into the placeholder div
+    fetch('navbar.html')
       .then(response => response.text())
       .then(data => {
         document.getElementById('navbar-placeholder').innerHTML = data;
-
-        const profileIcon = document.getElementById('profile-icon');
-        const dropdownMenu = document.getElementById('dropdown-menu');
-
-        if (profileIcon && dropdownMenu) {
-          profileIcon.addEventListener('click', () => {
-            dropdownMenu.classList.toggle('hidden');
-          });
-
-          document.addEventListener('click', (e) => {
-            if (!profileIcon.contains(e.target) && !dropdownMenu.contains(e.target)) {
-              dropdownMenu.classList.add('hidden');
-            }
-          });
-        }
-
-        // Add hamburger menu toggle after navbar is loaded
-        const hamburgerBtn = document.getElementById('hamburger-btn');
-        const navLinks = document.getElementById('nav-links');
-
-        if (hamburgerBtn && navLinks) {
-          hamburgerBtn.addEventListener('click', () => {
-            if (navLinks.classList.contains('hidden')) {
-              navLinks.classList.remove('hidden');
-              navLinks.classList.add('flex', 'flex-col', 'absolute', 'top-full', 'left-0', 'w-full', 'bg-[#01BF81]/90', 'backdrop-blur-md', 'border-t', 'border-white/20', 'lg:border-none', 'lg:bg-transparent', 'lg:static', 'lg:flex-row', 'lg:space-x-8', 'z-50', 'lg:z-auto', 'lg:relative');
-              hamburgerBtn.setAttribute('aria-expanded', 'true');
-            } else {
-              navLinks.classList.add('hidden');
-              navLinks.classList.remove('flex', 'flex-col', 'absolute', 'top-full', 'left-0', 'w-full', 'bg-[#01BF81]/90', 'backdrop-blur-md', 'border-t', 'border-white/20', 'lg:border-none', 'lg:bg-transparent', 'lg:static', 'lg:flex-row', 'lg:space-x-8', 'z-50', 'lg:z-auto', 'lg:relative');
-              hamburgerBtn.setAttribute('aria-expanded', 'false');
-            }
-          });
-        }
-      })
-      .catch(error => console.error('Error loading navbar:', error));
+        // Reattach menu toggle event listener after loading navbar
+        document.getElementById('menu-toggle').addEventListener('click', function () {
+          const mobileMenu = document.getElementById('mobile-menu');
+          mobileMenu.classList.toggle('hidden');
+        });
+      });
   </script>
-
-  <main>
-    <div class="left-column">
-      <section class="hero-banner">
-        <img src="./img/beranda.png" alt="Ilustrasi Kesehatan" />
-        <div class="hero-text">
-          <h1>Selamat datang<span id="user-name">!</span></h1>
-          <p>Selamat datang di dashboard Epicare.</p>
-        </div>
-      </section>
-
-    </div>
-    
-    <div class="right-column">
-      <section>
-        <h2 class="section-title text-center">Quick Tips</h2>
-        <div class="grid quick-tips-grid">
-          <div class="card">
-            <h2><i class="fas fa-tint mr-2"></i> Minum Air Putih</h2>
-            <p>Pastikan Anda minum air putih minimal 8 gelas sehari untuk menjaga kesehatan tubuh.</p>
-          </div>
-          <div class="card">
-            <h2><i class="fas fa-running mr-2"></i> Olahraga Ringan</h2>
-            <p>Lakukan olahraga ringan secara rutin untuk meningkatkan daya tahan tubuh.</p>
-          </div>
-          <div class="card">
-            <h2><i class="fas fa-bed mr-2"></i> Istirahat Cukup</h2>
-            <p>Pastikan Anda tidur cukup setiap malam untuk pemulihan tubuh yang optimal.</p>
-          </div>
-        </div>
-      </section>
-    </div>
-  </main>
-  <sectio class="mb-10">
-    <h2 class="section-title text-center">Fitur</h2>
-    <div class="grid features-grid mb-16">
-      <div class="card">
-        <h2><i class="fas fa-stethoscope mr-2"></i> Analisis Gejala</h2>
-        <p>Gunakan fitur analisis gejala untuk mendeteksi kemungkinan TBC berdasarkan jawaban Anda terhadap pertanyaan gejala.</p>
-        <a href="./sistem_analisis.html">Mulai Analisis</a>
-      </div>
-      <div class="card">
-        <h2><i class="fas fa-comments mr-2"></i> Riwayat Chat</h2>
-        <p>Akses riwayat chat Anda dengan chatbot kesehatan kami untuk mendapatkan rekomendasi dan informasi yang telah Anda diskusikan sebelumnya.</p>
-        <a href="./chatbot.html">Lihat Riwayat Chat</a>
-      </div>
-      <div class="card">
-        <h2><i class="fas fa-newspaper mr-2"></i> Artikel Kesehatan</h2>
-        <p>Baca artikel kesehatan terbaru dan terpercaya yang kami sediakan untuk menambah wawasan dan menjaga kesehatan Anda.</p>
-        <a href="./article-list.html">Baca Artikel</a>
-      </div>
-    </div>
-  </section>
-  
-    <!-- Footer -->
-    <footer class="bg-[#014d33] text-gray-300 py-8 px-16 w-full">
-      <div class=" mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div>
-          <h3 class="text-xl font-semibold mb-4">Epicare</h3>
-          <p class="mt-4">© 2025 Epicare. All rights reserved.</p>
-        </div>
-        <div>
-          <h3 class="text-xl font-semibold mb-4">Kontak</h3>
-          <p>Email: support@epicare.com</p>
-          <p>Telepon: +62 123 4567 890</p>
-          <p>Alamat: Jl. Kesehatan No. 123, Jakarta</p>
-        </div>
-        <div>
-          <h3 class="text-xl font-semibold mb-4">Ikuti Kami</h3>
-          <div class="flex space-x-4 text-2xl">
-            <a href="#" aria-label="Facebook" class="hover:text-[#01BF81]"><i class="fab fa-facebook"></i></a>
-            <a href="#" aria-label="Twitter" class="hover:text-[#01BF81]"><i class="fab fa-twitter"></i></a>
-            <a href="#" aria-label="Instagram" class="hover:text-[#01BF81]"><i class="fab fa-instagram"></i></a>
-          </div>
-        </div>
-      </div>
-    </footer>
 </body>
-
 </html>

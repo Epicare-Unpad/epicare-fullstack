@@ -4,161 +4,60 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chatbot - Epicare</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style/style.css" />
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link rel="stylesheet" href="./style/style.css">
+
     <style>
       body {
-        background: linear-gradient(to right, #0a996a, #0e3f2c);
+        background-color: #f9fdfb;
         margin: 0;
         padding: 0;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        /* font-size: 11px; */
+        color: #1a1a1a;
       }
-
-      .glass {
-        backdrop-filter: blur(12px);
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-      }
-
-      /* Scrollbar Styling */
       .custom-scrollbar::-webkit-scrollbar {
-        width: 8px;
+        width: 6px;
       }
       .custom-scrollbar::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 10px;
+        background: #f0f0f0;
       }
       .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: rgba(255, 255, 255, 0.3);
-        border-radius: 10px;
-        border: 2px solid transparent;
-        background-clip: content-box;
+        background-color: #cbd5e0;
+        border-radius: 4px;
       }
-
       #chat-scroll-container {
-        height: calc(76vh - 12rem); /* Sesuaikan tinggi chat area untuk memberi ruang pada input sticky */
+        height: calc(76vh - 12rem);
         overflow-y: auto;
       }
       #chat-scroll-container::-webkit-scrollbar {
-        display: none; /* Chrome, Safari */
+        display: none;
       }
-
-      .content {
-        margin-left: 272px; /* Menyesuaikan sidebar width (64px + padding) */
-        margin-right: 24px;
-        margin-top: 80px; /* Reduced margin-top to bring content closer below navbar */
-        position: relative;
-        z-index: 10;
-      }
-
-      .prose-invert a {
-        color: #a5f3fc;
-        text-decoration: underline;
-      }
-      .prose-invert strong {
-        color: white;
-        font-weight: 600;
-      }
-      .prose-invert em {
-        color: #d1fae5;
-        font-style: italic;
-      }
-      .prose-invert code {
-        background: rgba(0,0,0,0.2);
-        padding: 0.2em 0.4em;
-        border-radius: 0.25em;
-        font-family: monospace;
-      }
-      .prose-invert pre {
-        background: rgba(0,0,0,0.3);
-        padding: 1em;
-        border-radius: 0.5em;
-        overflow-x: auto;
-      }
-      .prose-invert ul {
-        list-style-type: disc;
-        padding-left: 1.5em;
-      }
-      .prose-invert ol {
-        list-style-type: decimal;
-        padding-left: 1.5em;
-      }
-      .prose-invert blockquote {
-        border-left: 3px solid #10b981;
-        padding-left: 1em;
-        margin-left: 0;
-        color: #d1fae5;
-      }
-      .prose-invert h1, 
-      .prose-invert h2, 
-      .prose-invert h3 {
-        color: white;
-        font-weight: 600;
-        margin-top: 1em;
-        margin-bottom: 0.5em;
-      }
-
-      /* Typing Animation */
-      .dot-typing {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 8px;
-        height: 24px;
-        padding: 10px 0;
-      }
-      .dot-typing span {
-        width: 8px;
-        height: 8px;
-        background-color: white;
-        border-radius: 50%;
-        display: inline-block;
-        animation: dotBounce 1.2s infinite ease-in-out;
-      }
-      .dot-typing span:nth-child(1) {
-        animation-delay: 0s;
-      }
-      .dot-typing span:nth-child(2) {
-        animation-delay: 0.2s;
-      }
-      .dot-typing span:nth-child(3) {
-        animation-delay: 0.4s;
-      }
-      @keyframes dotBounce {
-        0%, 80%, 100% {
-          transform: translateY(0);
-        }
-        40% {
-          transform: translateY(-8px);
-        }
-      }
-
-      /* Sidebar Hidden */
       .sidebar-hidden {
         transform: translateX(-100%);
-      }
-
-      .sidebar-visible {
-        transform: translateX(0);
-      }
-
-      /* Transition */
-      #sidebar {
         transition: transform 0.3s ease-in-out;
       }
-
+      .sidebar-visible {
+        transform: translateX(0);
+        transition: transform 0.3s ease-in-out;
+      }
+      #input-wrapper {
+        transition: all 0.3s ease-in-out;
+      }
     </style>
   </head>
-  <body class="text-white min-h-screen font-sans overflow-hidden">
+  <body class="bg-[#f5fefb] min-h-screen">
     <div id="navbar-placeholder"></div>
+
     <script>
       fetch('./navbar.html')
         .then(response => response.text())
         .then(data => {
           document.getElementById('navbar-placeholder').innerHTML = data;
 
-          // Tambahkan event listener setelah navbar dimuat
           const profileIcon = document.getElementById('profile-icon');
           const dropdownMenu = document.getElementById('dropdown-menu');
 
@@ -166,8 +65,6 @@
             profileIcon.addEventListener('click', () => {
               dropdownMenu.classList.toggle('hidden');
             });
-
-            // Optional: tutup dropdown saat klik di luar
             document.addEventListener('click', (e) => {
               if (!profileIcon.contains(e.target) && !dropdownMenu.contains(e.target)) {
                 dropdownMenu.classList.add('hidden');
@@ -175,130 +72,106 @@
             });
           }
 
-          // Add hamburger menu toggle event listener
           const hamburgerBtn = document.getElementById('hamburger-btn');
           const navLinks = document.getElementById('nav-links');
 
           if (hamburgerBtn && navLinks) {
             hamburgerBtn.addEventListener('click', () => {
-              if (navLinks.classList.contains('hidden')) {
-                navLinks.classList.remove('hidden');
-                navLinks.classList.add('flex', 'flex-col', 'absolute', 'top-full', 'left-0', 'w-full',
-                  'bg-[#01BF81]/90', 'backdrop-blur-md', 'border-t', 'border-white/20',
-                  'sm:border-none', 'sm:bg-transparent', 'sm:static', 'sm:flex-row', 'sm:space-x-8',
-                  'z-50', 'sm:z-auto', 'sm:relative');
-                hamburgerBtn.setAttribute('aria-expanded', 'true');
-              } else {
-                navLinks.classList.add('hidden');
-                navLinks.classList.remove('flex', 'flex-col', 'absolute', 'top-full', 'left-0', 'w-full',
-                  'bg-[#01BF81]/90', 'backdrop-blur-md', 'border-t', 'border-white/20',
-                  'sm:border-none', 'sm:bg-transparent', 'sm:static', 'sm:flex-row', 'sm:space-x-8',
-                  'z-50', 'sm:z-auto', 'sm:relative');
-                hamburgerBtn.setAttribute('aria-expanded', 'false');
-              }
+              const expanded = hamburgerBtn.getAttribute('aria-expanded') === 'true';
+              navLinks.classList.toggle('hidden', expanded);
+              hamburgerBtn.setAttribute('aria-expanded', !expanded);
             });
           }
         })
         .catch(error => console.error('Error loading navbar:', error));
 
-      // Sidebar toggle functionality
       document.addEventListener('DOMContentLoaded', function () {
         const toggleSidebarBtn = document.getElementById('toggle-sidebar-btn');
         const showSidebarBtn = document.getElementById('show-sidebar-btn');
         const sidebar = document.getElementById('sidebar');
         const mainContent = document.getElementById('main-content');
+        const inputWrapper = document.getElementById('input-wrapper');
 
         toggleSidebarBtn.addEventListener('click', function () {
-          sidebar.classList.toggle('sidebar-hidden');  // Toggle visibility of sidebar
+          sidebar.classList.toggle('sidebar-hidden');
           sidebar.classList.toggle('sidebar-visible');
 
           if (sidebar.classList.contains('sidebar-hidden')) {
             mainContent.classList.remove('ml-64');
             mainContent.classList.add('ml-6');
-          } else {
-            mainContent.classList.remove('ml-6');
-            mainContent.classList.add('ml-64');
           }
         });
 
-        // Tombol untuk memunculkan sidebar
         showSidebarBtn.addEventListener('click', function () {
           sidebar.classList.remove('sidebar-hidden');
           sidebar.classList.add('sidebar-visible');
-          showSidebarBtn.classList.add('hidden'); // Menyembunyikan tombol show setelah sidebar muncul
+          showSidebarBtn.classList.add('hidden');
           mainContent.classList.remove('ml-6');
           mainContent.classList.add('ml-64');
         });
 
-        // Tombol untuk menyembunyikan sidebar
         sidebar.addEventListener('transitionend', function() {
           if (sidebar.classList.contains('sidebar-hidden')) {
-            showSidebarBtn.classList.remove('hidden'); // Menampilkan tombol show jika sidebar tertutup
+            showSidebarBtn.classList.remove('hidden');
           }
         });
       });
     </script>
 
     <!-- SIDEBAR -->
-    <div id="sidebar" class="fixed top-20 left-0 w-64 h-[calc(100vh-4rem)] bg-[#003f2b] border-r border-white/10 shadow-lg z-40 flex flex-col sidebar-visible">
-      <div class="p-6 border-b border-white/10 flex items-center justify-between">
-        <h2 class="text-xl font-bold text-white">Riwayat Chat</h2>
-        <button id="toggle-sidebar-btn" class="text-white focus:outline-none" aria-label="Toggle Sidebar">
+    <div id="sidebar" class="fixed top-20 left-0 w-64 h-[calc(100vh-5rem)] bg-white border-r border-gray-200 shadow z-40 flex flex-col sidebar-visible">
+      <div class="p-6 border-b border-gray-200 flex items-center justify-between">
+        <h2 class="text-xl font-semibold text-gray-800">Riwayat Chat</h2>
+        <button id="toggle-sidebar-btn" class="text-gray-600 focus:outline-none" aria-label="Toggle Sidebar">
           <i class="fa-solid fa-bars"></i>
         </button>
       </div>
-      <button id="new-chat-btn" class="m-6 bg-emerald-500 hover:bg-emerald-600 text-white py-2 px-4 rounded-md w-auto">
+      <button id="new-chat-btn" class="mx-6 my-4 bg-emerald-500 hover:bg-emerald-600 text-white py-2 px-4 rounded-md">
         + Chat Baru
       </button>
-      <div id="chat-history" class="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-2">
-        <!-- Chat history akan ditambahkan di sini -->
+      <div id="chat-history" class="flex-1 overflow-y-auto custom-scrollbar px-4 space-y-2 pb-4">
+        <!-- Chat history -->
       </div>
     </div>
 
-    <!-- BUTTON UNTUK MEMUNCULKAN SIDEBAR -->
-    <button id="show-sidebar-btn" class="text-white focus:outline-none p-4 fixed left-0 top-24 z-50 hidden">
+    <button id="show-sidebar-btn" class="text-gray-600 focus:outline-none p-4 fixed left-0 top-24 z-50 hidden">
       <i class="fa-solid fa-bars"></i> 
     </button>
 
     <!-- MAIN -->
-    <div id="main-content" class="content ml-64 mr-6 flex flex-col h-screen p-6 space-y-6">
-      <!-- HEADER -->
-      <div class="sticky top-20 bg-[#0e3f2c] z-20 p-2 rounded-xl border border-white/20 shadow-inner" style="margin-bottom: 10px;">
-        <div class="flex items-center justify-between">
-          <h1 class="text-2xl font-bold">Chatbot Epicare</h1>
-          <span class="bg-white/10 border border-white/20 px-3 py-1 text-sm rounded-full font-medium shadow-inner">Versi Beta</span>
-        </div>
-        <p class="text-white/80 mt-2">
+    <div id="main-content" class="ml-64 mr-6 flex flex-col p-4 ransition-all duration-300">
+      <div class="bg-white rounded-xl shadow-md p-6 border border-gray-200">
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">Chatbot Epicare</h1>
+        <p class="text-gray-600">
           Asisten virtual yang siap bantu kamu memahami gejala TBC dan penyakit pernapasan sejenis, secara cepat dan informatif.
         </p>
-        <div class="mt-4 bg-white/10 p-4 rounded-3xl border border-white/20 shadow-inner">
+        <div class="mt-4 bg-[#e6f5f0] text-[#064e3b] p-4 rounded-lg border border-emerald-200">
           <p class="text-sm">
-            <i class="fa-solid fa-circle-info mr-2 text-emerald-300"></i>
+            <i class="fa-solid fa-circle-info mr-2 text-emerald-600"></i>
             Informasi yang diberikan bersifat edukatif dan tidak menggantikan diagnosis langsung dari tenaga medis profesional.
           </p>
         </div>
       </div>
 
-      <!-- CHAT AREA -->
       <div class="flex-grow relative">
-        <div class="space-y-6 -mt-5 pr-2 scroll-smooth" id="chat-scroll-container"></div>
+        <div class="space-y-6 pr-2" id="chat-scroll-container"></div>
       </div>
 
-      <!-- INPUT STICKY -->
-      <div class="fixed bottom-6 bottom-11 left-64 max-w-[calc(100%-16rem-1.5rem)] w-[calc(100%-16rem-1.5rem)] z-40" style="box-sizing: border-box; padding-right: 1.5rem;">
-        <div class="flex items-center gap-4 justify-center">
+      <div id="input-wrapper" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 w-[80%] max-w-3xl z-40">
+        <div class="flex items-center gap-4">
           <input 
             id="chat-input"
             type="text" 
-            placeholder="Ketik pertanyaanmu di sini..." 
-            class="flex-grow max-w-[70%] px-4 py-3 rounded-md bg-white text-[#00885C] placeholder-[#00885C] shadow-lg shadow-black/20 focus:outline-none focus:ring focus:ring-emerald-400 focus:ring-opacity-50"
+            placeholder="Ketik pertanyaan di sini..." 
+            class="flex-grow px-4 py-3 rounded-md border border-gray-300 text-gray-800 bg-white placeholder-gray-400 shadow focus:outline-none focus:ring-2 focus:ring-emerald-400"
           />
-          <button id="send-button" class="bg-emerald-500 hover:bg-emerald-600 text-white p-3 rounded-md">
+          <button id="send-button" class="bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-3 rounded-md shadow">
             Kirim
           </button>
         </div>
       </div>
-    </div>
+      
+
     <script src="./script/chatbot.js"></script>
   </body>
 </html>

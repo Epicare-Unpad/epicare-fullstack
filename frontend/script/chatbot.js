@@ -4,43 +4,49 @@ const chatContainer = document.getElementById('chat-scroll-container');
 
 function addChatBubble(text, from = 'user') {
   console.log("Adding chat bubble:", text, "from:", from);
+
   const bubble = document.createElement('div');
   bubble.className = `flex justify-${from === 'user' ? 'end' : 'start'} mt-4`;
 
   const innerBubble = document.createElement('div');
-  innerBubble.className = `max-w-[70%] ${
-    from === 'user'
-      ? 'bg-[#DBFFEF] text-[#00885C] border border-emerald-300/30 rounded-br-none'
-      : 'bg-[#01BF81] border border-white/20 text-white rounded-bl-none'
-  } p-4 rounded-3xl text-[16px] font-semibold shadow-md`;
 
+  // Warna dan alignment yang serasi tapi dibedakan
+  const baseClass = "max-w-[70%] p-4 rounded-3xl text-[15px] font-normal shadow-md border";
+  const botStyle = "bg-[#F0FDF4] text-[#0F5132] border-emerald-200 rounded-bl-none";
+  const userStyle = "bg-[#DBFFEF] text-[#00885C] border-emerald-300/30 rounded-br-none";
+
+  innerBubble.className = `${baseClass} ${from === 'user' ? userStyle : botStyle}`;
+
+  // Isi markdown atau teks polos
   if (from === 'bot') {
     const markdownContainer = document.createElement('div');
-    markdownContainer.className = 'prose prose-sm prose-invert max-w-none';
-    markdownContainer.innerHTML = marked.parse(text);
+    markdownContainer.className = 'prose prose-sm max-w-none';
+    try {
+      markdownContainer.innerHTML = marked.parse(text);
+    } catch (e) {
+      console.error("Error parsing markdown:", e);
+      markdownContainer.textContent = text;
+    }
     innerBubble.appendChild(markdownContainer);
   } else {
     innerBubble.innerHTML = `<p>${text}</p>`;
   }
 
   bubble.appendChild(innerBubble);
-  if (!chatContainer) {
-    console.error("chatContainer is null or undefined");
-  } else {
-    chatContainer.appendChild(bubble);
-    setTimeout(() => {
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }, 100);
-  }
+  chatContainer.appendChild(bubble);
+  setTimeout(() => {
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }, 100);
 }
+
 
 function showLoading() {
   const loadingBubble = document.createElement('div');
-  loadingBubble.className = 'flex justify-start mt-4';
+  loadingBubble.className = 'flex justify-start mt-2';
   loadingBubble.id = 'loading-bubble';
 
   const bubbleContent = document.createElement('div');
-  bubbleContent.className = 'max-w-[70%] bg-[#01BF81] border border-white/20 p-4 rounded-3xl rounded-bl-none text-[16px] font-semibold shadow-md text-white';
+  bubbleContent.className = 'max-w-[70%] border border-white/20 p-4 rounded-3xl rounded-bl-none text-[16px] font-semibold shadow-md' ;
   
   const dotWrapper = document.createElement('div');
   dotWrapper.className = 'dot-typing';
@@ -67,7 +73,6 @@ async function sendMessage() {
   showLoading();
 
   try {
-    // If no current chat, create a new chat first
     if (!currentChatId) {
       const chatTitle = userInput.length > 20 ? userInput.substring(0, 20) + "..." : userInput;
       const createChatRes = await fetch('http://localhost:8000/chat_history/chats', {
@@ -81,10 +86,9 @@ async function sendMessage() {
       if (!createChatRes.ok) throw new Error("Failed to create chat");
       const newChat = await createChatRes.json();
       currentChatId = newChat.id;
-      fetchChatList(); // Refresh chat list sidebar
+      fetchChatList();
     }
 
-    // Send user message to backend to save
     console.log("currentChatId before saving user message:", currentChatId);
     const saveUserMsgRes = await fetch('http://localhost:8000/chat_history/messages', {
       method: 'POST',
@@ -97,7 +101,6 @@ async function sendMessage() {
     });
     if (!saveUserMsgRes.ok) throw new Error("Failed to save user message");
 
-    // Send user input to chatbot API
     const res = await fetch('http://localhost:8000/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -106,18 +109,26 @@ async function sendMessage() {
       })
     });
 
-    const data = await res.json();
-    document.getElementById('loading-bubble')?.remove();
-    addChatBubble(data.reply, 'bot');
+    if (!res.ok) {
+      throw new Error("Chatbot API response not OK");
+    }
 
-    // Save chatbot response message
+    const data = await res.json();
+    console.log("Chatbot response data:", data);
+    document.getElementById('loading-bubble')?.remove();
+    if (data.reply) {
+      addChatBubble(data.reply, 'bot');
+    } else {
+      addChatBubble('⚠️ Respon chatbot kosong.', 'bot');
+    }
+
     const saveBotMsgRes = await fetch('http://localhost:8000/chat_history/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         chat_id: currentChatId,
         sender: 'bot',
-        content: data.reply
+        content: data.reply || ''
       })
     });
     if (!saveBotMsgRes.ok) console.error("Failed to save bot message");
@@ -140,7 +151,6 @@ function addGreetingMessage() {
 
 let currentChatId = null;
 
-// Fetch actual user ID from session or authentication context
 function getUserIdFromSession() {
   const userStr = sessionStorage.getItem('user');
   if (!userStr) return null;
@@ -158,7 +168,7 @@ async function fetchChatList() {
     console.log("Fetching chat list for userId:", userId);
     if (!userId) {
       console.error("User ID not found in sessionStorage.");
-      document.getElementById('chat-history').innerHTML = '<p class="text-white p-4">User not logged in. Please login again.</p>';
+      document.getElementById('chat-history').innerHTML = '<p class="p-4">User not logged in. Please login again.</p>';
       return;
     }
     const res = await fetch(`http://localhost:8000/chat_history/chats/${userId}`);
@@ -184,15 +194,13 @@ function renderChatList(chats) {
       chat.id === currentChatId ? 'border border-emerald-400' : ''
     }`;
 
-    // Create title container with editable functionality
     const titleContainer = document.createElement('div');
     titleContainer.className = 'flex items-center flex-grow cursor-pointer space-x-2';
 
     const titleText = document.createElement('div');
-    titleText.className = 'text-white font-semibold mb-1';
+    titleText.className = 'text-gray-800 font-semibold mb-1';
     titleText.style.flex = '1 1 auto';
-    titleText.style.fontSize = '14px'; // reduce font size by 1-2px
-    // Truncate title if longer than 10 characters
+    titleText.style.fontSize = '14px';
     const maxTitleLength = 10;
     if (chat.title.length > maxTitleLength) {
       titleText.textContent = chat.title.substring(0, maxTitleLength) + '...';
@@ -200,7 +208,6 @@ function renderChatList(chats) {
       titleText.textContent = chat.title;
     }
 
-    // Create input for editing title, hidden by default
     const titleInput = document.createElement('input');
     titleInput.type = 'text';
     titleInput.value = chat.title;
@@ -209,30 +216,25 @@ function renderChatList(chats) {
     titleContainer.appendChild(titleText);
     titleContainer.appendChild(titleInput);
 
-    // Created at element
     const createdAt = document.createElement('div');
-    createdAt.className = 'text-sm text-white/60';
+    createdAt.className = 'text-sm 60';
     createdAt.textContent = new Date(chat.created_at).toLocaleDateString();
 
-    // Edit button/icon
     const editButton = document.createElement('button');
     editButton.className = 'text-yellow-400 hover:text-yellow-600 ml-4';
     editButton.title = 'Edit judul percakapan';
     editButton.innerHTML = '<i class="fa-solid fa-pen-to-square"></i>';
 
-    // Delete button
     const deleteButton = document.createElement('button');
     deleteButton.className = 'text-red-500 hover:text-red-700 ml-4';
     deleteButton.title = 'Hapus percakapan';
     deleteButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
 
-    // Append elements to item
     item.appendChild(titleContainer);
     item.appendChild(createdAt);
     item.appendChild(editButton);
     item.appendChild(deleteButton);
 
-    // Event: click edit button to toggle input visibility
     editButton.addEventListener('click', (e) => {
       e.stopPropagation();
       titleText.classList.add('hidden');
@@ -240,7 +242,6 @@ function renderChatList(chats) {
       titleInput.focus();
     });
 
-    // Function to save title update
     async function saveTitleUpdate() {
       const newTitle = titleInput.value.trim();
       if (newTitle === '') {
@@ -251,7 +252,6 @@ function renderChatList(chats) {
         return;
       }
       if (newTitle === chat.title) {
-        // No change
         titleInput.classList.add('hidden');
         titleText.classList.remove('hidden');
         return;
@@ -265,8 +265,6 @@ function renderChatList(chats) {
         if (!res.ok) throw new Error('Gagal memperbarui judul');
         const updatedChat = await res.json();
         chat.title = updatedChat.title;
-        // Truncate updated title if longer than 10 characters
-        const maxTitleLength = 10;
         if (updatedChat.title.length > maxTitleLength) {
           titleText.textContent = updatedChat.title.substring(0, maxTitleLength) + '...';
         } else {
@@ -282,10 +280,7 @@ function renderChatList(chats) {
       }
     }
 
-    // Event: blur on input to save
     titleInput.addEventListener('blur', saveTitleUpdate);
-
-    // Event: enter key on input to save
     titleInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -293,7 +288,6 @@ function renderChatList(chats) {
       }
     });
 
-    // Delete button event
     deleteButton.addEventListener('click', async (e) => {
       e.stopPropagation();
       if (!confirm('Apakah Anda yakin ingin menghapus percakapan ini?')) return;
@@ -313,7 +307,6 @@ function renderChatList(chats) {
       }
     });
 
-    // Clicking on item loads chat
     item.onclick = () => loadChat(chat.id);
 
     container.appendChild(item);
@@ -323,8 +316,6 @@ function renderChatList(chats) {
 async function loadChat(chatId) {
   currentChatId = chatId;
 
-  
-  // Clear current chat
   chatContainer.innerHTML = '';
 
   try {
@@ -337,16 +328,14 @@ async function loadChat(chatId) {
     addChatBubble("⚠️ Gagal memuat pesan chat.", "bot");
   }
 
-  fetchChatList(); // Re-render sidebar to highlight current
+  fetchChatList();
 }
 
-// Handle "New Chat"
 document.getElementById('new-chat-btn').addEventListener('click', () => {
-  currentChatId = null; // Reset current chat ID
-  chatContainer.innerHTML = ''; // Clear chat area
-  fetchChatList(); // Refresh chat list sidebar
+  currentChatId = null;
+  chatContainer.innerHTML = '';
+  fetchChatList();
 });
 
-// Load on first run
 fetchChatList();
 addGreetingMessage();

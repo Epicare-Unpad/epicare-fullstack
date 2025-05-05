@@ -1,72 +1,55 @@
-<nav class="fixed w-full top-0 z-50 bg-[#01BF81]/80 backdrop-blur-md border-b border-white/20 shadow-lg">
-  <div class="max-w-7xl mx-auto px-2 flex items-center justify-between h-16">
-    <!-- Logo -->
-    <a href="./beranda.html" class="flex items-center space-x-3">
-      <img src="./img/epicare-logo.png" alt="Logo" class="w-10 h-10" />
-      <span class="text-2xl font-bold text-white">Epicare</span>
-    </a>
-
-    <!-- Hamburger Menu Button (Mobile) -->
-    <button id="hamburger-btn" class="md:hidden text-white focus:outline-none" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mobile-nav-links">
-      <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="3" y1="6" x2="21" y2="6" />
-        <line x1="3" y1="12" x2="21" y2="12" />
-        <line x1="3" y1="18" x2="21" y2="18" />
-      </svg>
-    </button>
-
-    <!-- Desktop Navigation Links -->
-    <div id="nav-links" class="hidden md:flex items-center space-x-8 text-white font-medium">
-      <a href="./article-list.html" class="nav-link hover:underline">Artikel Kesehatan</a>
-      <a href="./sistem_analisis.html" class="nav-link hover:underline">Sistem Analisis Gejala</a>
-      <a href="./chatbot.html" class="nav-link hover:underline">Chatbot</a>
-
-      <!-- Profile Dropdown -->
-      <div class="relative">
-        <button id="profile-icon" class="w-10 h-10 rounded-full overflow-hidden border-2 border-white hover:scale-105 transition duration-300">
-          <img src="./img/profile.png" alt="Profile" class="object-cover w-full h-full" />
-        </button>
-        <div id="dropdown-menu" class="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg hidden transition-opacity duration-300 z-50">
-          <a href="./login.html" id="logout-btn" class="block px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md cursor-pointer">Logout</a>
-        </div>
-      </div>
+<nav class="bg-white/80 backdrop-blur-md shadow-md px-6 py-3 sticky top-0 z-50 border-b border-gray-200">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center justify-center gap-3">
+      <a href="./beranda.html" class="flex-row flex justify-center items-center">
+        <img src="./img/epicare-logo.png" alt="Logo" class="w-9 h-9 rounded-md shadow-sm mr-3" />
+        <span class="font-bold text-xl text-green-700 tracking-wide">Epicare</span>
+      </a>
     </div>
+    
+    <!-- Hamburger -->
+    <div class="md:hidden">
+      <button id="menu-toggle" class="text-green-700 focus:outline-none">
+        <i class="fas fa-bars text-xl"></i>
+      </button>
+    </div>
+
+    <!-- Menu Desktop -->
+    <ul id="menu" class="hidden md:flex gap-6 items-center text-sm font-medium text-gray-700">
+      <li><a href="./article-list.html" class="px-3 py-2 rounded-md hover:bg-green-50 hover:text-green-700 transition">Artikel</a></li>
+      <li><a href="./sistem_analisis.html" class="px-3 py-2 rounded-md hover:bg-green-50 hover:text-green-700 transition">Analisis Gejala</a></li>
+      <li><a href="./chatbot.html" class="px-3 py-2 rounded-md hover:bg-green-50 hover:text-green-700 transition">Chatbot</a></li>
+      
+      <!-- Profil Dropdown -->
+      <li class="relative group">
+        <div class="w-9 h-9 bg-green-100 rounded-full flex items-center justify-center text-green-700 text-sm font-semibold shadow-inner hover:scale-105 transition-transform cursor-pointer">
+          JD
+        </div>
+        <!-- Dropdown muncul saat group di-hover -->
+        <div class="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+          <ul class="py-2 text-sm text-gray-700">
+            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100">Profil</a></li>
+            <li><a href="./index.html" class="block px-4 py-2 hover:bg-gray-100">Keluar</a></li>
+          </ul>
+        </div>
+      </li>
+    </ul>
   </div>
 
-  <!-- Mobile Nav Links -->
-  <div id="mobile-nav-links" class="md:hidden hidden flex-col bg-[#01BF81]/90 backdrop-blur-md px-6 py-4 space-y-4 text-white font-medium">
-    <a href="./article-list.html" class="block py-2 border-b border-white/20">Artikel Kesehatan</a>
-    <a href="./sistem_analisis.html" class="block py-2 border-b border-white/20">Sistem Analisis Gejala</a>
-    <a href="./chatbot.html" class="block py-2 border-b border-white/20">Chatbot</a>
-    <a href="./login.html" class="block py-2">Logout</a>
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="md:hidden hidden mt-4">
+    <ul class="flex flex-col gap-2 text-sm font-medium text-gray-700">
+      <li><a href="./article-list.html" class="block px-4 py-2 rounded-md hover:bg-green-50 hover:text-green-700 transition">Artikel</a></li>
+      <li><a href="./sistem_analisis.html" class="block px-4 py-2 rounded-md hover:bg-green-50 hover:text-green-700 transition">Analisis Gejala</a></li>
+      <li><a href="./chatbot.html" class="block px-4 py-2 rounded-md hover:bg-green-50 hover:text-green-700 transition">Chatbot</a></li>
+    </ul>
   </div>
-
-  <!-- Script -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const hamburgerBtn = document.getElementById('hamburger-btn');
-      const mobileNav = document.getElementById('mobile-nav-links');
-      const profileIcon = document.getElementById('profile-icon');
-      const dropdownMenu = document.getElementById('dropdown-menu');
-
-      // Hamburger toggle
-      hamburgerBtn.addEventListener('click', () => {
-        const isHidden = mobileNav.classList.contains('hidden');
-        mobileNav.classList.toggle('hidden');
-        hamburgerBtn.setAttribute('aria-expanded', !isHidden);
-      });
-
-      // Profile dropdown toggle (desktop)
-      profileIcon?.addEventListener('click', (e) => {
-        e.stopPropagation();
-        dropdownMenu.classList.toggle('hidden');
-      });
-
-      document.addEventListener('click', (e) => {
-        if (!dropdownMenu.classList.contains('hidden')) {
-          dropdownMenu.classList.add('hidden');
-        }
-      });
-    });
-  </script>
 </nav>
+
+<!-- Toggle Script -->
+<script>
+  document.getElementById('menu-toggle').addEventListener('click', function () {
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenu.classList.toggle('hidden');
+  });
+</script>
