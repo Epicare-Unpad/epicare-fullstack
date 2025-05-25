@@ -2,151 +2,11 @@ const inputField = document.getElementById('chat-input');
 const sendButton = document.getElementById('send-button');
 const chatContainer = document.getElementById('chat-scroll-container');
 
-function addChatBubble(text, from = 'user') {
-  console.log("Adding chat bubble:", text, "from:", from);
-
-  const bubble = document.createElement('div');
-  bubble.className = `flex justify-${from === 'user' ? 'end' : 'start'} mt-4`;
-
-  const innerBubble = document.createElement('div');
-
-  // Warna dan alignment yang serasi tapi dibedakan
-  const baseClass = "max-w-[70%] p-4 rounded-3xl text-[15px] font-normal shadow-md border";
-  const botStyle = "bg-[#F0FDF4] text-[#0F5132] border-emerald-200 rounded-bl-none";
-  const userStyle = "bg-[#DBFFEF] text-[#00885C] border-emerald-300/30 rounded-br-none";
-
-  innerBubble.className = `${baseClass} ${from === 'user' ? userStyle : botStyle}`;
-
-  // Isi markdown atau teks polos
-  if (from === 'bot') {
-    const markdownContainer = document.createElement('div');
-    markdownContainer.className = 'prose prose-sm max-w-none';
-    try {
-      markdownContainer.innerHTML = marked.parse(text);
-    } catch (e) {
-      console.error("Error parsing markdown:", e);
-      markdownContainer.textContent = text;
-    }
-    innerBubble.appendChild(markdownContainer);
-  } else {
-    innerBubble.innerHTML = `<p>${text}</p>`;
-  }
-
-  bubble.appendChild(innerBubble);
-  chatContainer.appendChild(bubble);
-  setTimeout(() => {
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-  }, 100);
-}
-
-
-function showLoading() {
-  const loadingBubble = document.createElement('div');
-  loadingBubble.className = 'flex justify-start mt-2';
-  loadingBubble.id = 'loading-bubble';
-
-  const bubbleContent = document.createElement('div');
-  bubbleContent.className = 'max-w-[70%] border border-white/20 p-4 rounded-3xl rounded-bl-none text-[16px] font-semibold shadow-md' ;
-  
-  const dotWrapper = document.createElement('div');
-  dotWrapper.className = 'dot-typing';
-  dotWrapper.innerHTML = '<span></span><span></span><span></span>';
-
-  bubbleContent.appendChild(dotWrapper);
-  loadingBubble.appendChild(bubbleContent);
-  chatContainer.appendChild(loadingBubble);
-  setTimeout(() => {
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-  }, 100);
-}
-
-async function sendMessage() {
-  console.log("sendMessage called");
-  const userInput = inputField.value.trim();
-  if (!userInput) return;
-
-  console.log("User ID:", userId);
-  console.log("Current Chat ID:", currentChatId);
-
-  addChatBubble(userInput, 'user');
-  inputField.value = '';
-  showLoading();
-
-  try {
-    if (!currentChatId) {
-      const chatTitle = userInput.length > 20 ? userInput.substring(0, 20) + "..." : userInput;
-      const createChatRes = await fetch('http://localhost:8000/chat_history/chats', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: userId,
-          title: chatTitle
-        })
-      });
-      if (!createChatRes.ok) throw new Error("Failed to create chat");
-      const newChat = await createChatRes.json();
-      currentChatId = newChat.id;
-      fetchChatList();
-    }
-
-    console.log("currentChatId before saving user message:", currentChatId);
-    const saveUserMsgRes = await fetch('http://localhost:8000/chat_history/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: currentChatId,
-        sender: 'user',
-        content: userInput
-      })
-    });
-    if (!saveUserMsgRes.ok) throw new Error("Failed to save user message");
-
-    const res = await fetch('http://localhost:8000/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        user_input: `Kamu adalah chatbot medis yang hanya dapat memberikan informasi tentang Tuberkulosis (TBC) dan penyakit serupa. Jika pertanyaan tidak terkait dengan TBC atau penyakit terkait, tetapi masih lingkup penyakit, jawab saja. Jika tidak, beri tahu pengguna bahwa kamu hanya dapat memberikan informasi tentang topik tersebut. Pertanyaan: ${userInput}`
-      })
-    });
-
-    if (!res.ok) {
-      throw new Error("Chatbot API response not OK");
-    }
-
-    const data = await res.json();
-    console.log("Chatbot response data:", data);
-    document.getElementById('loading-bubble')?.remove();
-    if (data.reply) {
-      addChatBubble(data.reply, 'bot');
-    } else {
-      addChatBubble('⚠️ Respon chatbot kosong.', 'bot');
-    }
-
-    const saveBotMsgRes = await fetch('http://localhost:8000/chat_history/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: currentChatId,
-        sender: 'bot',
-        content: data.reply || ''
-      })
-    });
-    if (!saveBotMsgRes.ok) console.error("Failed to save bot message");
-
-  } catch (err) {
-    document.getElementById('loading-bubble')?.remove();
-    addChatBubble('⚠️ Gagal menghubungi chatbot.', 'bot');
-    console.error(err);
-  }
-}
-
-sendButton.addEventListener('click', sendMessage);
-inputField.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') sendMessage();
-});
-
-function addGreetingMessage() {
-  addChatBubble("Hai! Saya Epicare, asisten virtual kamu. Aku di sini buat bantu kamu memahami gejala TBC dan kasih arahan. Gimana kabarmu hari ini?", 'bot');
+function scrollToBottom() {
+  window.scrollTo({
+    top: document.body.scrollHeight,
+    behavior: 'smooth'
+  });
 }
 
 let currentChatId = null;
@@ -162,6 +22,142 @@ function getUserIdFromSession() {
   }
 }
 const userId = getUserIdFromSession();
+
+function addChatBubble(text, from = 'user') {
+  const bubble = document.createElement('div');
+  bubble.className = `flex justify-${from === 'user' ? 'end' : 'start'} mt-4`;
+
+  const innerBubble = document.createElement('div');
+  const baseClass = "max-w-[70%] p-4 rounded-3xl text-[15px] font-normal shadow-md border";
+  const botStyle = "bg-[#F0FDF4] text-[#0F5132] border-emerald-200 rounded-bl-none";
+  const userStyle = "bg-[#DBFFEF] text-[#00885C] border-emerald-300/30 rounded-br-none";
+  innerBubble.className = `${baseClass} ${from === 'user' ? userStyle : botStyle}`;
+
+  if (from === 'bot') {
+    const markdownContainer = document.createElement('div');
+    markdownContainer.className = 'prose prose-sm max-w-none';
+  try {
+    markdownContainer.innerHTML = marked.parse(text);
+  } catch (e) {
+    markdownContainer.textContent = text;
+  }
+
+    innerBubble.appendChild(markdownContainer);
+  } else {
+    innerBubble.innerHTML = `<p>${text}</p>`;
+  }
+
+  bubble.appendChild(innerBubble);
+  chatContainer.appendChild(bubble);
+  // Panggil scrollToBottom setiap kali bubble baru ditambahkan
+  scrollToBottom();
+}
+
+
+function showLoading() {
+  const loadingBubble = document.createElement('div');
+  loadingBubble.className = 'flex justify-start mt-2';
+  loadingBubble.id = 'loading-bubble';
+  const bubbleContent = document.createElement('div');
+  bubbleContent.className = 'max-w-[70%] border border-white/20 p-4 rounded-3xl rounded-bl-none text-[16px] font-semibold shadow-md';
+  bubbleContent.innerHTML = '<span class="dot-typing"><span></span><span></span><span></span></span>';
+  loadingBubble.appendChild(bubbleContent);
+  chatContainer.appendChild(loadingBubble);
+  // Panggil scrollToBottom saat loading bubble muncul
+  scrollToBottom();
+}
+
+async function sendMessage() {
+  const userInput = inputField.value.trim();
+  if (!userInput) return;
+
+  addChatBubble(userInput, 'user');
+  inputField.value = '';
+  showLoading();
+
+  try {
+    // 1. Buat chat baru jika belum ada
+    if (!currentChatId) {
+      const chatTitle = userInput.length > 20 ? userInput.substring(0, 20) + "..." : userInput;
+      const res = await fetch('http://localhost:8000/chat_history/chats', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: userId, title: chatTitle })
+      });
+      const newChat = await res.json();
+      currentChatId = newChat.id;
+      fetchChatList();
+    }
+
+    // 2. Simpan pesan user ke backend
+    await fetch('http://localhost:8000/chat_history/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: currentChatId, sender: 'user', content: userInput })
+    });
+
+    // 3. Ambil 3-4 pesan terakhir sebagai konteks
+    const historyRes = await fetch(`http://localhost:8000/chat_history/messages/${currentChatId}`);
+    const historyData = await historyRes.json();
+    const lastMessages = historyData.slice(-4).map(msg => `${msg.sender === 'user' ? 'Pengguna' : 'Bot'}: ${msg.content}`);
+
+const prompt = `
+Kamu adalah Epicare, chatbot medis virtual yang bertugas memberikan informasi seputar Tuberkulosis (TBC) dan penyakit pernapasan serupa (misalnya pneumonia, PPOK, bronkiektasis, dan lainnya).
+
+- Fokus hanya pada topik TBC dan penyakit terkait.
+- Gunakan nada ramah, sopan, dan mudah dipahami, terutama untuk awam atau anak-anak.
+- Jika menjawab dalam bentuk daftar, gejala, langkah, atau poin-poin, tolong gunakan format Markdown:
+  - Gunakan tanda - atau * untuk membuat list
+  - Gunakan **teks tebal** dengan tanda bintang dua
+  - Gunakan heading dengan tanda ## untuk subjudul bila diperlukan
+- Jangan gunakan HTML.
+- Jangan terlalu kaku jika pengguna mengulang pertanyaan, tetap jawab saja seperti biasa seolah pengguna belum pernah menanyakan itu
+- Jika pertanyaan tidak berkaitan dengan TBC atau penyakit serupa, jawab dengan sopan bahwa kamu hanya bisa membahas topik tersebut.
+`;
+
+
+    lastMessages.unshift(prompt);
+    lastMessages.push(`Pengguna: ${userInput}`);
+
+    // 4. Kirim ke Gemini
+    const res = await fetch('http://localhost:8000/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: lastMessages })
+    });
+    const data = await res.json();
+    document.getElementById('loading-bubble')?.remove();
+    addChatBubble(data.reply || '⚠️ Respon kosong', 'bot');
+
+    // 5. Simpan balasan bot
+    await fetch('http://localhost:8000/chat_history/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: currentChatId, sender: 'bot', content: data.reply || '' })
+    });
+
+  } catch (err) {
+    document.getElementById('loading-bubble')?.remove();
+    addChatBubble('⚠️ Gagal menghubungi chatbot.', 'bot');
+    console.error(err);
+  }
+}
+
+sendButton.addEventListener('click', sendMessage);
+inputField.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') sendMessage();
+});
+
+function addGreetingMessage() {
+  addChatBubble("Hai! Saya Epicare. Saya bisa bantu menjelaskan gejala TBC dan penyakit pernapasan sejenis. Silakan tanya ya!", 'bot');
+}
+
+document.getElementById('new-chat-btn').addEventListener('click', () => {
+  currentChatId = null;
+  chatContainer.innerHTML = '';
+  fetchChatList();
+  addGreetingMessage();
+});
 
 async function fetchChatList() {
   try {
@@ -334,8 +330,51 @@ async function loadChat(chatId) {
 document.getElementById('new-chat-btn').addEventListener('click', () => {
   currentChatId = null;
   chatContainer.innerHTML = '';
-  fetchChatList();
+  addGreetingMessage();
+
+  // Hindari mengambil chat lama setelah reset
+  if (typeof fetchChatList === 'function') {
+    fetchChatList(); // hanya update daftar riwayat di sidebar
+  }
+
+  // Bersihkan local cache chat dari sesi sebelumnya (opsional)
+  sessionStorage.removeItem('lastMessages');
 });
 
 fetchChatList();
 addGreetingMessage();
+
+function formatPlainTextToHTML(text) {
+  const lines = text.split('\n');
+  let html = '';
+  let inList = false;
+
+  for (let line of lines) {
+    const trimmed = line.trim();
+    if (trimmed === '') {
+      if (inList) {
+        html += '</ul>';
+        inList = false;
+      }
+      html += '<br>';
+      continue;
+    }
+
+    if (/^[-*•]\s+/.test(trimmed)) {
+      if (!inList) {
+        html += '<ul class="list-disc pl-6">';
+        inList = true;
+      }
+      html += `<li>${trimmed.replace(/^[-*•]\s+/, '')}</li>`;
+    } else {
+      if (inList) {
+        html += '</ul>';
+        inList = false;
+      }
+      html += `<p>${trimmed}</p>`;
+    }
+  }
+
+  if (inList) html += '</ul>';
+  return html;
+}
