@@ -16,7 +16,6 @@
         margin: 0;
         padding: 0;
         font-family: 'Plus Jakarta Sans', sans-serif;
-        /* font-size: 11px; */
         color: #1a1a1a;
       }
       .custom-scrollbar::-webkit-scrollbar {
@@ -47,10 +46,22 @@
       #input-wrapper {
         transition: all 0.3s ease-in-out;
       }
+      /* Styles for drag and drop area */
+      #drop-area {
+        border: 2px dashed #a7f3d0; /* green-200 */
+        background-color: #ecfdf5; /* green-50 */
+        transition: all 0.3s ease-in-out;
+      }
+      #drop-area.highlight {
+        border-color: #10b981; /* green-500 */
+        background-color: #d1fae5; /* green-100 */
+      }
+      #image-preview-container {
+        display: none; /* Hidden by default */
+      }
     </style>
   </head>
-  <body class="bg-gray-50">
-    <!-- Navbar Placeholder -->
+  <body class="bg-gray-50 min-h-screen flex flex-col">
     <div id="navbar-placeholder"></div>
     <script>
       fetch('./navbar.html')
@@ -61,37 +72,38 @@
         .catch(error => console.error('Error loading navbar:', error));
     </script>
 
-    <!-- Full Width Container -->
-    <div class="w-full px-20 py-10 bg-white shadow-inner">
-      <!-- Header Section -->
+    <div class="w-full px-4 sm:px-6 md:px-10 lg:px-20 py-10 bg-white shadow-inner flex-grow">
       <div class="flex flex-col-reverse md:flex-row items-center justify-between gap-8 max-w-7xl mx-auto">
         <div class="text-center md:text-left">
-          <h1 class="text-5xl font-bold leading-tight mb-4">Analisis Rontgen Dada</h1>
-          <p class="text-xl text-gray-600">Unggah hasil rontgen dada untuk memulai proses analisis.</p>
+          <h1 class="text-4xl sm:text-5xl font-bold leading-tight mb-4">Analisis Rontgen Dada</h1>
+          <p class="text-lg text-gray-600">Unggah hasil rontgen dada untuk memulai proses analisis.</p>
         </div>
         <div>
-          <img src="./img/1.png" alt="Ilustrasi Dokter" class="w-64 h-64" />
+          <img src="./img/1.png" alt="Ilustrasi Dokter" class="w-48 h-48 sm:w-64 sm:h-64 object-contain" />
         </div>
       </div>
 
-      <!-- Upload Section -->
-      <div class="border-2 border-dashed border-green-400 rounded-lg p-8 mt-10 bg-green-50 text-center max-w-4xl mx-auto">
-        <div class="text-green-600 text-6xl mb-4">
-          <i class="fas fa-upload"></i>
+      <div id="drop-area" class="border-2 border-dashed border-green-400 rounded-lg p-8 mt-10 bg-green-50 text-center max-w-4xl mx-auto cursor-pointer">
+        <input type="file" id="fileInput" accept="image/jpeg, image/png, image/jpg" class="hidden" />
+        <label for="fileInput" class="block w-full h-full">
+          <div class="text-green-600 text-6xl mb-4">
+            <i class="fas fa-cloud-upload-alt"></i>
+          </div>
+          <p class="mb-4 text-lg text-gray-800 font-medium">Tarik dan letakkan file di sini atau <span class="text-green-700 font-semibold underline">Pilih File</span></p>
+        </label>
+
+        <div id="image-preview-container" class="mt-6">
+          <img id="image-preview" src="#" alt="Pratinjau Gambar" class="max-w-full h-auto rounded-lg shadow-md mx-auto" />
         </div>
-        <p class="mb-4 text-lg text-gray-800 font-medium">Tarik dan letakkan file di sini</p>
-        <a href="./hasil-rontgen.html">
-          <button class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded text-base font-semibold">
-            Pilih File
-          </button>
-        </a>
+
+        <button id="predictButton" class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded text-base font-semibold mt-6 hidden">
+          Prediksi
+        </button>
       </div>
 
-      <!-- Info Section -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto mt-12">
-        <!-- Petunjuk Penting -->
         <div>
-          <h2 class="font-semibold text-2xl mb-4">Petunjuk Penting</h2>
+          <h2 class="font-semibold text-2xl mb-4 text-gray-800">Petunjuk Penting</h2>
           <div class="flex items-start gap-4 bg-white p-5 border rounded-2xl shadow-sm">
             <img
               src="./img/2.png"
@@ -105,9 +117,8 @@
           </div>
         </div>
 
-        <!-- Cara Kerja -->
         <div>
-          <h2 class="font-semibold text-2xl mb-4">Bagaimana Cara Kerjanya?</h2>
+          <h2 class="font-semibold text-2xl mb-4 text-gray-800">Bagaimana Cara Kerjanya?</h2>
           <div class="flex items-start gap-4 bg-white p-5 border rounded-2xl shadow-sm">
             <img
               src="./img/3.png"
@@ -122,5 +133,87 @@
         </div>
       </div>
     </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const dropArea = document.getElementById('drop-area');
+        const fileInput = document.getElementById('fileInput');
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+        const imagePreview = document.getElementById('image-preview');
+        const predictButton = document.getElementById('predictButton'); // New: Get predict button
+
+        // Prevent default drag behaviors
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+          dropArea.addEventListener(eventName, preventDefaults, false);
+          document.body.addEventListener(eventName, preventDefaults, false); // Prevent default for entire body
+        });
+
+        // Highlight drop area when dragging over it
+        ['dragenter', 'dragover'].forEach(eventName => {
+          dropArea.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+          dropArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        // Handle dropped files
+        dropArea.addEventListener('drop', handleDrop, false);
+
+        // Handle file input change
+        fileInput.addEventListener('change', () => {
+          handleFiles(fileInput.files);
+        });
+
+        // Handle predict button click
+        predictButton.addEventListener('click', () => {
+          // Placeholder for prediction logic
+          console.log('Tombol Prediksi diklik! Di sini akan memicu proses analisis gambar.');
+          // You would typically send the image data to a server for actual prediction here.
+          // For now, it just logs to the console.
+        });
+
+        function preventDefaults(e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+
+        function highlight() {
+          dropArea.classList.add('highlight');
+        }
+
+        function unhighlight() {
+          dropArea.classList.remove('highlight');
+        }
+
+        function handleDrop(e) {
+          const dt = e.dataTransfer;
+          const files = dt.files;
+          handleFiles(files);
+        }
+
+        function handleFiles(files) {
+          if (files.length === 0) {
+            console.log('Tidak ada file yang dipilih.');
+            return;
+          }
+
+          const file = files[0];
+          if (!file.type.startsWith('image/')) {
+            alert('Harap unggah file gambar (JPG, JPEG, PNG).'); // Using alert as per instructions, but generally a custom modal is preferred.
+            return;
+          }
+
+          // Show image preview
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            imagePreview.src = e.target.result;
+            imagePreviewContainer.style.display = 'block';
+            predictButton.classList.remove('hidden'); // Show predict button when image is loaded
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    </script>
   </body>
 </html>
