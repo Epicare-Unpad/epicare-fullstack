@@ -29,7 +29,8 @@ async def register_user(request: Request):
     # Cek apakah email sudah dipakai
     existing = supabase.table("users").select(
         "id").eq("email", data.email).execute()
-    if existing.data:
+    logging.info(f"Existing data for email {data.email}: {existing.data}")
+    if existing.data and len(existing.data) > 0:
         raise HTTPException(
             status_code=400, detail="Email already registered.")
 

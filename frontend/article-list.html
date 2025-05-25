@@ -5,52 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Epicare - Artikel Kesehatan</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./style/style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-    <style>
-      body {
-        background-color: #f9fdfb;
-        margin: 0;
-        padding: 0;
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        /* font-size: 11px; */
-        color: #1a1a1a;
-      }
-      .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
-      }
-      .custom-scrollbar::-webkit-scrollbar-track {
-        background: #f0f0f0;
-      }
-      .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: #cbd5e0;
-        border-radius: 4px;
-      }
-      #chat-scroll-container {
-        height: calc(76vh - 12rem);
-        overflow-y: auto;
-      }
-      #chat-scroll-container::-webkit-scrollbar {
-        display: none;
-      }
-      .sidebar-hidden {
-        transform: translateX(-100%);
-        transition: transform 0.3s ease-in-out;
-      }
-      .sidebar-visible {
-        transform: translateX(0);
-        transition: transform 0.3s ease-in-out;
-      }
-      #input-wrapper {
-        transition: all 0.3s ease-in-out;
-      }
-    </style>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    /* Custom styles for a more refined look */
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #1a1a1a; /* Default text color */
+    }
+    /* Custom scrollbar styles */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f0f0f0;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #cbd5e0;
+      border-radius: 4px;
+    }
+    /* Hide scrollbar for specific containers if needed, though not directly used here */
+    #chat-scroll-container { /* This ID is not present in the provided HTML for this page */
+      height: calc(76vh - 12rem);
+      overflow-y: auto;
+    }
+    #chat-scroll-container::-webkit-scrollbar {
+      display: none;
+    }
+    /* Sidebar and input transition styles (not directly used on this page, but kept from original) */
+    .sidebar-hidden {
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+    }
+    .sidebar-visible {
+      transform: translateX(0);
+      transition: transform 0.3s ease-in-out;
+    }
+    #input-wrapper { /* This ID is not present in the provided HTML for this page */
+      transition: all 0.3s ease-in-out;
+    }
+  </style>
 </head>
 
-<body class="">
+<body class="text-gray-800 bg-gradient-to-br from-green-100 via-blue-50 to-purple-50 min-h-screen flex flex-col">
   <div id="navbar-placeholder"></div>
   <script>
     fetch('./navbar.html')
@@ -76,83 +76,28 @@
       .catch(error => console.error('Error loading navbar:', error));
   </script>
 
-<body class="text-black font-sans bg-gradient-to-br from-green-50 to-white">
-
-
-  <main class="bg-gradient-to-br from-green-50 to-white flex-grow p-6 max-w-7xl mx-auto">
-    <div class="text-center mb-10">
-      <h1 class="text-4xl font-bold mb-2">Artikel Kesehatan</h1>
-      <p class="text-lg">Dapatkan wawasan terpercaya dan terkini seputar kesehatan pernapasan</p>
+  <main class="flex-grow max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h1 class="text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-600 mb-4 leading-tight drop-shadow-lg">Artikel Kesehatan</h1>
+      <p class="text-xl text-gray-700 max-w-2xl mx-auto">Dapatkan wawasan terpercaya dan terkini seputar kesehatan pernapasan dari para ahli.</p>
     </div>
 
-    <!-- Search & Filter -->
-    <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-10">
-      <input type="text" id="search" placeholder="Cari artikel..." class="w-72 px-4 py-2 rounded-full border border-gray-300 text-black" />
-      <select id="category" class="w-60 px-4 py-2 rounded-full border border-gray-300 text-black">
-        <option>Semua Kategori</option>
-        <option>TBC</option>
-        <option>Rontgen</option>
-        <option>Batuk</option>
-        <option>Anak</option>
-        <option>Dewasa</option>
+    <div class="bg-white rounded-2xl shadow-xl p-8 mb-16 flex flex-col md:flex-row items-center justify-center gap-6 border border-gray-100">
+      <input type="text" id="search" placeholder="Cari artikel..." class="w-full md:w-80 px-5 py-3 rounded-full border border-gray-200 focus:ring-4 focus:ring-green-400 focus:border-transparent text-gray-800 placeholder-gray-400 shadow-md transition-all duration-300 drop-shadow-sm" />
+      <select id="category" class="w-full md:w-64 px-5 py-3 rounded-full border border-gray-200 focus:ring-4 focus:ring-green-400 focus:border-transparent text-gray-800 shadow-md transition-all duration-300">
+        <option value="">Semua Kategori</option>
+        <option value="TBC">TBC</option>
+        <option value="Rontgen">Rontgen</option>
+        <option value="Batuk">Batuk</option>
+        <option value="Anak">Anak</option>
+        <option value="Dewasa">Dewasa</option>
       </select>
     </div>
 
-    <!-- Featured Article -->
-    <section class="mb-10">
-      <h2 class="text-2xl font-semibold mb-4">⭐ Unggulan</h2>
-      <div class="bg-white text-black p-6 rounded-xl">
-        <h3 class="text-xl font-bold">Cara Mencegah Penularan TBC</h3>
-        <p class="mt-2">Langkah-langkah efektif untuk menghindari penyebaran tuberkulosis di lingkungan sekitar.</p>
-        <a href="./article-detail1.html" class="inline-block mt-4 px-4 py-2 bg-green-700 text-white rounded-full hover:bg-green-800">
-          Gejala
-        </a>
-        
-      </div>
-    </section>
-
-    <!-- Artikel Lainnya -->
-    <section class="bg-white py-10">
-  <div class="max-w-7xl mx-auto px-4">
-    <h2 class="text-2xl font-bold mb-6 text-center text-[#01BF81]">Artikel Kesehatan</h2>
-    <div class="flex">
-      
-      <!-- Kartu Artikel -->
-       <a href="./article-detail1.html">
-
-         <div class="bg-white rounded-2xl shadow p-5">
-           <img src="./img/faq.png" alt="Icon" class="h-20 mx-auto mb-4" />
-           <h3 class="text-lg font-semibold mb-2">Kenali Gejala Awal TBC</h3>
-           <p class="text-gray-600 mb-3">Pahami tanda-tanda awal tuberkulosis sebelum terlambat.</p>
-           <a href="./article-detail2.html" class="inline-block bg-[#01BF81] text-white px-3 py-1 text-sm rounded hover:bg-[#019b6b] transition duration-300 ease-in-out z-50">Gejala</a>
-          </div>
-        </a>
-
-        <a href="./article-detail2.html">
-          
-          <div class="bg-white rounded-2xl shadow p-5">
-            <img src="./img/4.png" alt="Icon" class="h-20 mx-auto mb-4" />
-            <h3 class="text-lg font-semibold mb-2">Pentingnya Pemeriksaan Rontgen</h3>
-            <p class="text-gray-600 mb-3">Rontgen paru membantu diagnosis TBC secara akurat.</p>
-            <a href="./article-detail3.html"class="inline-block bg-green-200 text-green-800 px-3 py-1 text-sm rounded hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-600">Diagnosis
-            </a>
-            
-          </div>
-          
-        </a>
-        <a href="./article-detail3.html">
-
-          <div class="bg-white rounded-2xl shadow p-5">
-            <img src="./img/8.png" alt="Icon" class="h-20 mx-auto mb-4" />
-            <h3 class="text-lg font-semibold mb-2">Nutrisi Penting Selama Perawatan TBC</h3>
-            <p class="text-gray-600 mb-3">Panduan pola makan sehat untuk mendukung proses penyembuhan.</p>
-            <button class="inline-block bg-purple-200 text-purple-800 px-3 py-1 text-sm rounded hover:bg-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-600">
-              Pengobatan
-            </button>        
-          </div>
-        </a>
-      <!-- Tambahkan lebih banyak kartu sesuai kebutuhan -->
-      </div>
+    <section class="bg-white rounded-2xl shadow-xl p-8 md:p-10 mb-12 border border-gray-100">
+      <h2 class="text-3xl font-extrabold mb-10 text-center text-green-700">Artikel Pilihan</h2>
+      <div id="articles-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        </div>
     </section>
   </main>
 
@@ -160,6 +105,49 @@
     Ganti Tema
   </button>
 
-  <script src="article.js"></script>
+  <script>
+    async function fetchArticles() {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/articles');
+        if (!response.ok) {
+          throw new Error('Gagal memuat artikel');
+        }
+        const articles = await response.json();
+
+        const container = document.getElementById('articles-container');
+        container.innerHTML = '';
+
+        articles.forEach(article => {
+          const articleCard = document.createElement('a');
+          articleCard.href = `./article-detail.html?id=${article.id}`;
+          articleCard.className = 'group block bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 border border-gray-100';
+
+          const img = document.createElement('img');
+          img.src = article.url_to_image || './img/faq.png';
+          img.alt = article.title;
+          img.className = 'h-48 w-full object-cover rounded-xl mb-5 shadow-md transform group-hover:scale-105 transition-transform duration-300';
+          articleCard.appendChild(img);
+
+          const title = document.createElement('h3');
+          title.textContent = article.title;
+          title.className = 'text-xl font-bold text-gray-900 mb-2 leading-snug';
+          articleCard.appendChild(title);
+
+          const description = document.createElement('p');
+          description.textContent = article.description;
+          description.className = 'text-gray-600 text-sm line-clamp-3'; // Limits description to 3 lines
+          articleCard.appendChild(description);
+
+          container.appendChild(articleCard);
+        });
+      } catch (error) {
+        console.error(error);
+        const container = document.getElementById('articles-container');
+        container.innerHTML = '<p class="text-center text-red-500">Gagal memuat artikel.</p>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchArticles);
+  </script>
 </body>
 </html>

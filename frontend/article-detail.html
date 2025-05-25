@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Epicare - Detail Artikel</title>
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Tailwind + Typography plugin -->
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+
+  <!-- Fonts & Style -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .prose {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    @media (max-width: 768px) {
+      .main-container {
+        padding: 1rem;
+        margin-top: 1rem;
+      }
+      #article-title {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body class="text-gray-800 bg-gradient-to-br from-green-100 via-blue-50 to-purple-50 min-h-screen flex flex-col">
+
+  <!-- Navbar Placeholder -->
+  <div id="navbar-placeholder"></div>
+  <script>
+    fetch('./navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-placeholder').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading navbar:', error));
+  </script>
+
+  <!-- Main Content -->
+  <main class="main-container flex-grow max-w-3xl mx-auto p-6 bg-white rounded-2xl shadow-lg mt-8 mb-8 transition-all duration-300 hover:scale-[1.005]">
+
+    <!-- Judul Artikel -->
+    <h1 id="article-title" class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3 leading-tight"></h1>
+
+    <!-- Meta Info -->
+    <p class="text-sm text-gray-500 mb-6 flex flex-wrap items-center space-x-3">
+      <i class="far fa-calendar-alt text-gray-400"></i>
+      <span id="publish-date">Tanggal tidak tersedia</span>
+
+      <span class="text-gray-400">•</span>
+
+      <i class="far fa-user text-gray-400"></i>
+      <span id="article-author">Penulis Tidak Diketahui</span>
+
+      <span class="text-gray-400">•</span>
+
+      <i class="far fa-clock text-gray-400"></i>
+      <span id="reading-time">~5 min baca</span>
+    </p>
+
+    <!-- Gambar Artikel -->
+    <img id="article-image" src="" alt="Gambar Artikel" class="w-full h-auto object-cover rounded-xl mb-6 shadow-md hidden" />
+
+    <!-- Konten Artikel -->
+    <div id="article-content" class="prose prose-base max-w-none text-gray-700 leading-relaxed"></div>
+
+    <!-- Sumber Artikel -->
+    <div id="article-source" class="mt-8 text-sm text-gray-600 border-t pt-4 flex items-center space-x-2">
+      <span class="font-semibold">Sumber asli:</span>
+      <a href="#" id="article-url" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline break-all flex items-center space-x-1">
+        <i class="fas fa-external-link-alt text-blue-500"></i>
+        <span id="article-url-text">Tautan tidak tersedia</span>
+      </a>
+    </div>
+
+  </main>
+
+  <!-- JS Logic -->
+  <script src="./article-detail.js"></script>
+</body>
+</html>

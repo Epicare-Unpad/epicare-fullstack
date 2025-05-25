@@ -1,3 +1,4 @@
+from utils.load_env import load_environment
 from routers.article import router as article_router
 from routers.chat_history import router as chat_history_router
 from routers.oauth.google import router as google_router
@@ -22,6 +23,8 @@ from fastapi.exceptions import HTTPException as FastAPIHTTPException
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+
+load_environment()
 
 app = FastAPI()
 
