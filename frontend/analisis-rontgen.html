@@ -59,6 +59,10 @@
       #image-preview-container {
         display: none; /* Hidden by default */
       }
+      /* New style for loading indicator */
+      #loading-indicator {
+        display: none; /* Hidden by default */
+      }
     </style>
   </head>
   <body class="bg-gray-50 min-h-screen flex flex-col">
@@ -99,6 +103,11 @@
         <button id="predictButton" class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded text-base font-semibold mt-6 hidden">
           Prediksi
         </button>
+
+        <div id="loading-indicator" class="mt-6 flex items-center justify-center text-green-600 hidden">
+          <i class="fas fa-spinner fa-spin text-2xl mr-2"></i>
+          <span>Memproses prediksi...</span>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto mt-12">
@@ -140,7 +149,10 @@
         const fileInput = document.getElementById('fileInput');
         const imagePreviewContainer = document.getElementById('image-preview-container');
         const imagePreview = document.getElementById('image-preview');
-        const predictButton = document.getElementById('predictButton'); // New: Get predict button
+        const predictButton = document.getElementById('predictButton');
+        const loadingIndicator = document.getElementById('loading-indicator'); // New: Get loading indicator
+
+        let uploadedFile = null; // Variable to store the uploaded file
 
         // Prevent default drag behaviors
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -162,15 +174,52 @@
 
         // Handle file input change
         fileInput.addEventListener('change', () => {
+          if (fileInput.files.length > 0) {
+            uploadedFile = fileInput.files[0];
+          }
           handleFiles(fileInput.files);
         });
 
         // Handle predict button click
         predictButton.addEventListener('click', () => {
-          // Placeholder for prediction logic
-          console.log('Tombol Prediksi diklik! Di sini akan memicu proses analisis gambar.');
-          // You would typically send the image data to a server for actual prediction here.
-          // For now, it just logs to the console.
+          if (!uploadedFile) {
+            alert("Silakan unggah gambar terlebih dahulu.");
+            return;
+          }
+
+          // Show loading indicator and hide predict button
+          predictButton.classList.add('hidden');
+          loadingIndicator.classList.remove('hidden');
+
+          const formData = new FormData();
+          formData.append("file", uploadedFile);
+
+          fetch("http://127.0.0.1:8000/predict-rontgen/", {
+            method: "POST",
+            body: formData
+          })
+          .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(data => {
+            // Hide loading indicator
+            loadingIndicator.classList.add('hidden');
+
+            // Simpan hasil ke localStorage dan redirect
+            localStorage.setItem("hasilPrediksi", JSON.stringify(data));
+            localStorage.setItem("gambarRontgen", imagePreview.src);
+            window.location.href = "hasil-rontgen.html";
+          })
+          .catch(error => {
+            console.error("Gagal memproses prediksi:", error);
+            alert("Terjadi kesalahan saat memproses gambar. " + error.message);
+            // Hide loading indicator and re-show predict button on error
+            loadingIndicator.classList.add('hidden');
+            predictButton.classList.remove('hidden');
+          });
         });
 
         function preventDefaults(e) {
@@ -199,8 +248,9 @@
           }
 
           const file = files[0];
+          uploadedFile = file; // Store the file
           if (!file.type.startsWith('image/')) {
-            alert('Harap unggah file gambar (JPG, JPEG, PNG).'); // Using alert as per instructions, but generally a custom modal is preferred.
+            alert('Harap unggah file gambar (JPG, JPEG, PNG).');
             return;
           }
 
@@ -210,6 +260,7 @@
             imagePreview.src = e.target.result;
             imagePreviewContainer.style.display = 'block';
             predictButton.classList.remove('hidden'); // Show predict button when image is loaded
+            loadingIndicator.classList.add('hidden'); // Ensure loading indicator is hidden
           };
           reader.readAsDataURL(file);
         }

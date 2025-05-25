@@ -3,13 +3,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const articleId = urlParams.get("id");
 
   const titleEl = document.getElementById("article-title");
-  const dateEl = document.getElementById("publish-date");
-  const authorEl = document.getElementById("article-author");
+  const metaEl = document.getElementById("article-meta");
   const imageEl = document.getElementById("article-image");
   const contentEl = document.getElementById("article-content");
-  const urlContainer = document.getElementById("article-source");
-  const urlLink = document.getElementById("article-url");
-  const urlText = document.getElementById("article-url-text");
+
+  if (!titleEl || !metaEl || !imageEl || !contentEl) {
+    console.error("Elemen artikel tidak ditemukan di halaman.");
+    return;
+  }
 
   if (!articleId) {
     titleEl.textContent = "Artikel tidak ditemukan";
@@ -18,36 +19,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
   fetch(`http://127.0.0.1:8000/api/articles/${articleId}`)
     .then(response => {
-      if (!response.ok) throw new Error("Artikel tidak ditemukan");
+      if (!response.ok) {
+        throw new Error("Artikel tidak ditemukan");
+      }
       return response.json();
     })
     .then(article => {
+      // Judul
       titleEl.textContent = article.title || "Tanpa Judul";
-      dateEl.textContent = article.published_at
+
+      // Metadata
+      const date = article.published_at
         ? new Date(article.published_at).toLocaleDateString("id-ID")
         : "Tanggal tidak tersedia";
-      authorEl.textContent = article.author || "Penulis Tidak Diketahui";
 
+      const author = article.author || "Penulis tidak diketahui";
+      metaEl.textContent = `Oleh ${author} | Dipublikasikan pada ${date}`;
+
+      // Gambar
       if (article.url_to_image) {
         imageEl.src = article.url_to_image;
+        imageEl.alt = article.title || "Gambar artikel";
         imageEl.classList.remove("hidden");
       } else {
         imageEl.classList.add("hidden");
       }
 
-      contentEl.innerHTML = article.content ? marked.parse(article.content) : "Konten tidak tersedia";
-
-      if (article.url) {
-        urlLink.href = article.url;
-        urlText.textContent = article.url;
-        urlContainer.classList.remove("hidden");
+      // Konten (dari markdown → HTML)
+      if (article.content) {
+        const html = marked.parse(article.content); // konversi markdown ke HTML
+        contentEl.innerHTML = html;
       } else {
-        urlText.textContent = "Tidak tersedia";
-        urlContainer.classList.add("hidden");
+        contentEl.textContent = "Konten artikel tidak tersedia.";
       }
     })
     .catch(error => {
       console.error(error);
       titleEl.textContent = error.message || "Gagal memuat artikel.";
+      metaEl.textContent = "";
+      contentEl.textContent = "";
+      imageEl.classList.add("hidden");
     });
 });
