@@ -3,208 +3,372 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EPICARE: Dashboard Informasi & Analisis TBC</title>
+    <title>Admin Dashboard - Kelola Artikel</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        
-        #sidebar {
-            width: 280px;
-            transition: all 0.3s ease-in-out;
-            transform: translateX(0);
+    <style type="text/tailwindcss">
+        @layer base {
+            /* Definisi warna kustom untuk Tailwind */
+            :root {
+                --color-primary: #01BF81;
+                --color-secondary: #004854;
+                --color-background-light: #ECEBD6;
+                --color-white: #FFFFFF;
+            }
         }
-        #sidebar.hidden {
-            transform: translateX(-100%);
+        @layer components {
+            .btn-primary {
+                @apply bg-primary hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out;
+                @apply active:scale-95; /* Efek klik */
+            }
+            .btn-secondary {
+                @apply bg-secondary hover:bg-cyan-800 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out;
+                @apply active:scale-95;
+            }
+            .btn-delete {
+                @apply bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out;
+                @apply active:scale-95;
+            }
+            .form-input-modal {
+                @apply w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-200 ease-in-out;
+            }
         }
-        #content-wrapper {
-            transition: all 0.3s ease-in-out;
-            margin-left: 280px; 
+        @layer utilities {
+            /* Animasi fade in */
+            .animate-fade-in {
+                animation: fadeIn 0.8s ease-out forwards;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            /* Animasi modal */
+            .animate-modal-enter {
+                animation: modalEnter 0.3s ease-out forwards;
+            }
+            .animate-modal-leave {
+                animation: modalLeave 0.3s ease-in forwards;
+            }
+            @keyframes modalEnter {
+                from { opacity: 0; transform: translateY(-50px) scale(0.9); }
+                to { opacity: 1; transform: translateY(0) scale(1); }
+            }
+            @keyframes modalLeave {
+                from { opacity: 1; transform: translateY(0) scale(1); }
+                to { opacity: 0; transform: translateY(-50px) scale(0.9); }
+            }
         }
-        #content-wrapper.full-width {
-            margin-left: 0;
-        }
-
-        .bg-primary-custom { background-color: #01BF81;}
-        .text-primary-custom { color: #004854; }
-        .bg-accent-light { background-color: #ECFDF5;}
-        .text-accent-dark { color: #047857;}
     </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: 'var(--color-primary)',
+                        secondary: 'var(--color-secondary)',
+                        backgroundLight: 'var(--color-background-light)',
+                        white: 'var(--color-white)',
+                    },
+                }
+            }
+        }
+    </script>
 </head>
-<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+<body class="bg-backgroundLight min-h-screen flex items-center justify-center p-4 font-sans text-gray-800">
 
-    <div class="flex min-h-screen" x-data="{ sidebarOpen: true }">
-        <div id="sidebar" :class="sidebarOpen ? 'block' : 'hidden'" class="fixed inset-y-0 left-0 w-72 bg-white border-r border-gray-200 shadow-lg z-30 lg:relative lg:block">
-            <div class="p-6 bg-primary-custom text-white flex items-center justify-center">
-                <i class="fas fa-stethoscope text-3xl mr-2"></i>
-                <span class="text-xl font-semibold">DASHBOARD EPICARE</span>
-            </div>
-            <div class="py-4 px-3">
-                <p class="text-sm text-gray-500 mb-4 px-3">Halo, Pengunjung!</p>
-                <nav>
-                    <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg active:bg-gray-200 font-medium mb-1">
-                        <i class="fas fa-chart-line mr-3"></i> Gambaran Umum
-                    </a>
-                    <a href="#edukasi-section" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium mb-1">
-                        <i class="fas fa-book-open mr-3"></i> Materi Edukasi Pilihan
-                    </a>
-                    <a href="#analisis-section" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium mb-1">
-                        <i class="fas fa-chart-pie mr-3"></i> Statistik & Tren TBC
-                    </a>
-                    <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium mb-1">
-                        <i class="fas fa-flask mr-3"></i> Prediksi Risiko TBC
-                    </a>
-                    <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium mb-1">
-                        <i class="fas fa-question-circle mr-3"></i> Pertanyaan Populer
-                    </a>
-                    <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium mb-1">
-                        <i class="fas fa-tools mr-3"></i> Sumber Daya Lain
-                    </a>
-                </nav>
-            </div>
-            <div class="p-6 mt-auto">
-                
-                <button class="w-full border border-primary-custom text-primary-custom py-2 px-4 rounded-lg hover:bg-blue-50 transition duration-300">
-                    <i class="fas fa-comments mr-2"></i> Konsultasi
-                </button>
-            </div>
+    <div class="bg-white rounded-xl shadow-2xl p-6 md:p-10 w-full max-w-4xl animate-fade-in">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-secondary text-3xl md:text-4xl font-extrabold">Kelola Artikel</h1>
+            <button class="btn-primary" onclick="openAddArticleModal()">Tambah Artikel</button>
         </div>
-        <div id="content-wrapper" :class="sidebarOpen ? 'lg:ml-72' : 'lg:ml-0'" class="flex-1 flex flex-col">
-            <header class="bg-white shadow-sm py-4 px-6 flex items-center justify-between border-b border-gray-200">
-                <button @click="sidebarOpen = !sidebarOpen" class="text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:hidden">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
-                <h1 class="text-xl font-semibold text-gray-800 hidden lg:block">Dashboard Informasi & Analisis TBC</h1>
-                <nav class="flex items-center space-x-4">
-                    <a href="#" class="text-gray-600 hover:text-primary-custom font-medium">Beranda</a>
-                    <a href="#" class="text-gray-600 hover:text-primary-custom font-medium">Edukasi TBC</a>
-                    <a href="#" class="text-gray-600 hover:text-primary-custom font-medium">Analisis TBC</a>
-                    <a href="#" class="text-gray-600 hover:text-primary-custom font-medium">Tentang Kami</a>
-                    <a href="#" class="text-gray-600 hover:text-primary-custom font-medium">Kontak</a>
-                    <a href="#" class="text-gray-600 hover:text-primary-custom"><i class="fas fa-user-circle text-xl"></i></a>
-                    <a href="#" class="text-gray-600 hover:text-primary-custom"><i class="fas fa-bell text-xl"></i></a>
-                </nav>
-            </header>
 
-            <main class="flex-1 p-6 bg-gray-50">
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">Selamat Datang di Dashboard EPICARE!</h2>
-                <p class="text-lg text-gray-600 mb-8">Platform informasi dan analisis TBC terpadu untuk meningkatkan pemahaman dan kesadaran masyarakat.</p>
+        <div id="articles-list" class="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+            </div>
 
-                <section id="edukasi-section" class="mb-12">
-                    <h3 class="text-2xl font-bold text-gray-700 mb-6 flex items-center">
-                        <i class="fas fa-book-open text-primary-custom mr-3"></i> Edukasi TBC
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="bg-white rounded-lg shadow-md p-6">
-                            <h4 class="text-xl font-semibold text-primary-custom mb-3 flex items-center">
-                                <i class="fas fa-question-circle mr-2"></i> Apa Itu TBC?
-                            </h4>
-                            <p class="text-gray-700 mb-4">Tuberkulosis (TBC) adalah penyakit menular yang disebabkan oleh bakteri Mycobacterium tuberculosis, umumnya menyerang paru-paru.</p>
-                            <a href="#" class="text-[#01BF81] hover:text-[#008C5D] font-medium flex items-center">
-                                Pelajari Lebih Lanjut <i class="fas fa-arrow-right ml-2 text-sm"></i>
-                            </a>
-                        </div>
-                        <div class="bg-white rounded-lg shadow-md p-6">
-                            <h4 class="text-xl font-semibold text-primary-custom mb-3 flex items-center">
-                                <i class="fas fa-clipboard-list mr-2"></i> Kenali Gejala TBC
-                            </h4>
-                            <ul class="text-gray-700 mb-4 space-y-2">
-                                <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Batuk berkepanjangan (>2 minggu)</li>
-                                <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Demam & Keringat Malam</li>
-                                <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Penurunan Berat Badan</li>
-                                <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Nyeri Dada</li>
-                            </ul>
-                            <a href="#" class="text-[#01BF81] hover:text-[#008C5D] font-medium flex items-center">
-                                Lihat Semua Gejala <i class="fas fa-arrow-right ml-2 text-sm"></i>
-                            </a>
-                        </div>
-                        <div class="bg-white rounded-lg shadow-md p-6">
-                            <h4 class="text-xl font-semibold text-primary-custom mb-3 flex items-center">
-                                <i class="fas fa-shield-alt mr-2"></i> Pencegahan & Pengobatan
-                            </h4>
-                            <p class="text-gray-700 mb-4">Vaksin BCG, etika batuk, ventilasi rumah, dan yang terpenting: patuh pada regimen pengobatan hingga tuntas.</p>
-                            <a href="#" class="text-[#01BF81] hover:text-[#008C5D] font-medium flex items-center">
-                                Panduan Lengkap <i class="fas fa-arrow-right ml-2 text-sm"></i>
-                            </a>
-                        </div>
-                    
-                        <div class="bg-white rounded-lg shadow-md p-6">
-                            <h4 class="text-xl font-semibold text-primary-custom mb-3 flex items-center">
-                                <i class="fas fa-newspaper mr-2"></i> Artikel Terbaru
-                            </h4>
-                            <ul class="text-gray-700 mb-4 space-y-2">
-                                <li>
-                                    <a href="#" class="block text-gray-700 hover:text-blue-600 text-base font-medium">Panduan Nutrisi untuk Pasien TBC <span class="bg-gray-200 text-gray-700 text-xs px-2 py-0.5 rounded-full ml-2">Baru</span></a>
-                                    <p class="text-gray-500 text-xs mt-0.5">20 Mei 2025</p>
-                                </li>
-                                <li>
-                                    <a href="#" class="block text-gray-700 hover:text-blue-600 text-base font-medium">Peran Keluarga dalam Pencegahan TBC</a>
-                                    <p class="text-gray-500 text-xs mt-0.5">18 Mei 2025</p>
-                                </li>
-                                <li>
-                                    <a href="#" class="block text-gray-700 hover:text-blue-600 text-base font-medium">Mitos vs. Fakta Seputar TBC</a>
-                                    <p class="text-gray-500 text-xs mt-0.5">15 Mei 2025</p>
-                                </li>
-                            </ul>
-                            <a href="#" class="text-[#01BF81] hover:text-[#008C5D] font-medium flex items-center">
-                                Baca Lebih Banyak <i class="fas fa-arrow-right ml-2 text-sm"></i>
-                            </a>
-                        </div>
-                    </div>
-                </section>
+    </div>
 
-                <section id="analisis-section" class="mb-12">
-                    <h3 class="text-2xl font-bold text-gray-700 mb-6 flex items-center">
-                        <i class="fas fa-chart-pie text-accent-dark mr-3"></i> Sistem Analisis TBC
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="bg-white rounded-lg shadow-md p-6">
-                            <h4 class="text-xl font-semibold text-accent-dark mb-3 flex items-center">
-                                <i class="fas fa-chart-bar mr-2"></i> Tren Kasus TBC (Nasional)
-                            </h4>
-                            <div class="w-full h-48 bg-gray-100 rounded-md flex items-center justify-center mb-3">
-                                <p class="text-gray-500">Placeholder Grafik (Chart.js)</p>
-                                </div>
-                            <p class="text-gray-700 mb-1"><strong>Total Kasus Terdeteksi (2023):</strong> <span class="font-bold text-lg text-green-600">750.000</span></p>
-                            <p class="text-gray-700 mb-4"><strong>Penurunan dari Tahun Sebelumnya:</strong> <span class="text-green-600 font-bold">5%</span></p>
-                            <a href="#" class="text-accent-dark hover:text-green-700 font-medium flex items-center">
-                                Analisis Data Lengkap <i class="fas fa-arrow-right ml-2 text-sm"></i>
-                            </a>
-                        </div>
-                        
-                        <div class="bg-white rounded-lg shadow-md p-6">
-                            <h4 class="text-xl font-semibold text-accent-dark mb-3 flex items-center">
-                                <i class="fas fa-exclamation-triangle mr-2"></i> Faktor Risiko Utama
-                            </h4>
-                            <ul class="text-gray-700 mb-4 space-y-2">
-                                <li class="flex items-center"><i class="fas fa-times-circle text-red-500 mr-2"></i> Lingkungan Padat Penduduk</li>
-                                <li class="flex items-center"><i class="fas fa-times-circle text-red-500 mr-2"></i> Gizi Buruk & Imunitas Rendah</li>
-                                <li class="flex items-center"><i class="fas fa-times-circle text-red-500 mr-2"></i> Merokok & Konsumsi Alkohol</li>
-                                <li class="flex items-center"><i class="fas fa-times-circle text-red-500 mr-2"></i> HIV/AIDS & Diabetes</li>
-                            </ul>
-                            <a href="#" class="text-accent-dark hover:text-green-700 font-medium flex items-center">
-                                Pahami Risiko Anda <i class="fas fa-arrow-right ml-2 text-sm"></i>
-                            </a>
-                        </div>
-                        
-                    </div>
-                </section>
-            </main>
-
-            <footer class="bg-gray-800 text-white py-6 text-center">
-                <div class="container mx-auto">
-                    <p class="mb-2 text-sm">&copy; 2025 EPICARE. Semua Hak Dilindungi.</p>
-                    <ul class="flex justify-center space-x-6 text-lg">
-                        <li><a href="#" class="hover:text-primary-custom text-sm">Kebijakan Privasi</a></li>
-                        <li><a href="#" class="hover:text-primary-custom text-sm">Syarat & Ketentuan</a></li>
-                        <li><a href="#" class="hover:text-primary-custom"><i class="fab fa-facebook"></i></a></li>
-                        <li><a href="#" class="hover:text-primary-custom"><i class="fab fa-twitter"></i></a></li>
-                        <li><a href="#" class="hover:text-primary-custom"><i class="fab fa-instagram"></i></a></li>
-                    </ul>
+    <div id="editArticleModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl p-6 md:p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-modal-enter relative">
+            <div class="flex justify-between items-center mb-6 sticky top-0 bg-white pb-4 z-10">
+                <h2 class="text-2xl font-bold text-secondary">Edit Artikel</h2>
+                <button class="text-gray-500 hover:text-gray-700 text-3xl font-semibold leading-none" onclick="closeEditModal()">&times;</button>
+            </div>
+            <form id="editArticleForm">
+                <input type="hidden" id="editArticleId">
+                <div class="mb-4">
+                    <label for="modalEditAuthor" class="block text-gray-700 font-semibold mb-2">Author:</label>
+                    <input type="text" id="modalEditAuthor" name="author" class="form-input-modal" required>
                 </div>
-            </footer>
+                <div class="mb-4">
+                    <label for="modalEditTitle" class="block text-gray-700 font-semibold mb-2">Judul Artikel:</label>
+                    <input type="text" id="modalEditTitle" name="title" class="form-input-modal" required>
+                </div>
+                <div class="mb-4">
+                    <label for="modalEditUrl" class="block text-gray-700 font-semibold mb-2">URL Artikel (opsional):</label>
+                    <input type="url" id="modalEditUrl" name="url" class="form-input-modal">
+                </div>
+                <div class="mb-4">
+                    <label for="modalEditDescription" class="block text-gray-700 font-semibold mb-2">Deskripsi Singkat:</label>
+                    <textarea id="modalEditDescription" name="description" rows="3" class="form-input-modal resize-y" required></textarea>
+                </div>
+                <div class="mb-6">
+                    <label for="modalEditContent" class="block text-gray-700 font-semibold mb-2">Isi Konten Artikel:</label>
+                    <textarea id="modalEditContent" name="content" rows="10" class="form-input-modal resize-y" required></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6 sticky bottom-0 bg-white pt-4 z-10">
+                    <button type="button" class="btn-secondary" onclick="closeEditModal()">Batal</button>
+                    <button type="submit" class="btn-primary">Simpan Perubahan</button>
+                </div>
+            </form>
         </div>
+    </div>
+
+    <div id="addArticleModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl p-6 md:p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-modal-enter relative">
+            <div class="flex justify-between items-center mb-6 sticky top-0 bg-white pb-4 z-10">
+                <h2 class="text-2xl font-bold text-secondary">Tambah Artikel Baru</h2>
+                <button class="text-gray-500 hover:text-gray-700 text-3xl font-semibold leading-none" onclick="closeAddArticleModal()">&times;</button>
+            </div>
+            <form id="addArticleForm">
+                <div class="mb-4">
+                    <label for="modalAddAuthor" class="block text-gray-700 font-semibold mb-2">Author:</label>
+                    <input type="text" id="modalAddAuthor" name="author" class="form-input-modal" required>
+                </div>
+                <div class="mb-4">
+                    <label for="modalAddTitle" class="block text-gray-700 font-semibold mb-2">Judul Artikel:</label>
+                    <input type="text" id="modalAddTitle" name="title" class="form-input-modal" required>
+                </div>
+                <div class="mb-4">
+                    <label for="modalAddUrl" class="block text-gray-700 font-semibold mb-2">URL Artikel (opsional):</label>
+                    <input type="url" id="modalAddUrl" name="url" class="form-input-modal">
+                </div>
+                <div class="mb-4">
+                    <label for="modalAddDescription" class="block text-gray-700 font-semibold mb-2">Deskripsi Singkat:</label>
+                    <textarea id="modalAddDescription" name="description" rows="3" class="form-input-modal resize-y" required></textarea>
+                </div>
+                <div class="mb-6">
+                    <label for="modalAddContent" class="block text-gray-700 font-semibold mb-2">Isi Konten Artikel:</label>
+                    <textarea id="modalAddContent" name="content" rows="10" class="form-input-modal resize-y" required></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6 sticky bottom-0 bg-white pt-4 z-10">
+                    <button type="button" class="btn-secondary" onclick="closeAddArticleModal()">Batal</button>
+                    <button type="submit" class="btn-primary">Tambah Artikel</button>
+                </div>
+            </form>
         </div>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
-    </body>
+    </div>
+
+    <script>
+        // Data Artikel Contoh (dalam kasus nyata, ini akan dari database)
+        let articles = [
+            {
+                id: 1,
+                author: "Rian Hidayat",
+                title: "Inovasi Teknologi AI di Era Digital",
+                url: "https://example.com/ai-era-digital",
+                description: "Membahas perkembangan terbaru dalam kecerdasan buatan dan dampaknya pada masyarakat modern. Ini adalah deskripsi yang cukup panjang untuk menguji batas tinggi modal.",
+                content: "Isi lengkap artikel tentang AI di era digital. Ini adalah bagian konten yang sangat, sangat, sangat panjang. Kita akan membuatnya berulang-ulang untuk memastikan modal bisa di-scroll dengan benar dan tidak melebihi layar. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+            },
+            {
+                id: 2,
+                author: "Siti Rahayu",
+                title: "Panduan Lengkap Memulai Berkebun Hidroponik",
+                url: "https://example.com/hidroponik",
+                description: "Tutorial langkah demi langkah untuk pemula yang ingin mencoba berkebun dengan sistem hidroponik di rumah.",
+                content: "Isi lengkap artikel tentang hidroponik..."
+            },
+            {
+                id: 3,
+                author: "Budi Santoso",
+                title: "Strategi Pemasaran Digital untuk UMKM",
+                url: "https://example.com/digital-marketing-umkm",
+                description: "Pelajari strategi efektif untuk meningkatkan visibilitas dan penjualan UMKM melalui pemasaran digital.",
+                content: "Isi lengkap artikel tentang pemasaran digital untuk UMKM..."
+            },
+        ];
+
+        // Elemen DOM untuk Dashboard Utama
+        const articlesList = document.getElementById('articles-list');
+
+        // Elemen DOM untuk Modal Edit Artikel
+        const editArticleModal = document.getElementById('editArticleModal');
+        const editArticleForm = document.getElementById('editArticleForm');
+        const editArticleId = document.getElementById('editArticleId');
+        const modalEditAuthor = document.getElementById('modalEditAuthor');
+        const modalEditTitle = document.getElementById('modalEditTitle');
+        const modalEditUrl = document.getElementById('modalEditUrl');
+        const modalEditDescription = document.getElementById('modalEditDescription');
+        const modalEditContent = document.getElementById('modalEditContent');
+
+        // Elemen DOM untuk Modal Tambah Artikel Baru
+        const addArticleModal = document.getElementById('addArticleModal');
+        const addArticleForm = document.getElementById('addArticleForm');
+        const modalAddAuthor = document.getElementById('modalAddAuthor');
+        const modalAddTitle = document.getElementById('modalAddTitle');
+        const modalAddUrl = document.getElementById('modalAddUrl');
+        const modalAddDescription = document.getElementById('modalAddDescription');
+        const modalAddContent = document.getElementById('modalAddContent');
+
+
+        // --- Fungsionalitas Umum ---
+
+        // Fungsi untuk merender daftar artikel
+        function renderArticles() {
+            articlesList.innerHTML = ''; // Kosongkan daftar yang ada
+            articles.forEach(article => {
+                const articleDiv = document.createElement('div');
+                articleDiv.className = 'article-item flex flex-col md:flex-row items-start md:items-center justify-between p-4 bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200';
+                articleDiv.innerHTML = `
+                    <div class="mb-4 md:mb-0 md:mr-4 flex-grow">
+                        <h2 class="text-xl font-bold text-secondary">${article.title}</h2>
+                        <p class="text-gray-600 text-sm italic">Oleh: ${article.author}</p>
+                        <p class="text-gray-700 mt-1 line-clamp-2">${article.description}</p>
+                    </div>
+                    <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 w-full md:w-auto">
+                        <button class="btn-primary text-sm" onclick="openEditModal(${article.id})">Edit</button>
+                        <button class="btn-delete text-sm" onclick="deleteArticle(${article.id})">Delete</button>
+                    </div>
+                `;
+                articlesList.appendChild(articleDiv);
+            });
+        }
+
+        // Fungsi untuk menghapus artikel
+        function deleteArticle(articleId) {
+            if (confirm('Apakah Anda yakin ingin menghapus artikel ini?')) {
+                articles = articles.filter(article => article.id !== articleId);
+                renderArticles(); // Render ulang daftar artikel
+                alert('Artikel berhasil dihapus!'); // Feedback sederhana
+            }
+        }
+
+        // Render artikel saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', renderArticles);
+
+        // Menutup modal dengan tombol Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                if (!editArticleModal.classList.contains('hidden')) {
+                    closeEditModal();
+                } else if (!addArticleModal.classList.contains('hidden')) {
+                    closeAddArticleModal();
+                }
+            }
+        });
+
+        // Menutup modal saat klik di luar area modal (overlay)
+        editArticleModal.addEventListener('click', function(event) {
+            if (event.target === editArticleModal) {
+                closeEditModal();
+            }
+        });
+        addArticleModal.addEventListener('click', function(event) {
+            if (event.target === addArticleModal) {
+                closeAddArticleModal();
+            }
+        });
+
+
+        // --- Fungsionalitas Modal Edit ---
+
+        // Fungsi untuk membuka modal edit
+        function openEditModal(articleId) {
+            const articleToEdit = articles.find(article => article.id === articleId);
+            if (articleToEdit) {
+                editArticleId.value = articleToEdit.id;
+                modalEditAuthor.value = articleToEdit.author;
+                modalEditTitle.value = articleToEdit.title;
+                modalEditUrl.value = articleToEdit.url;
+                modalEditDescription.value = articleToEdit.description;
+                modalEditContent.value = articleToEdit.content;
+                editArticleModal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden'); // Mencegah scroll body
+                editArticleModal.querySelector('div').classList.remove('animate-modal-leave');
+                editArticleModal.querySelector('div').classList.add('animate-modal-enter');
+            }
+        }
+
+        // Fungsi untuk menutup modal edit
+        function closeEditModal() {
+            const modalContentDiv = editArticleModal.querySelector('div');
+            modalContentDiv.classList.remove('animate-modal-enter');
+            modalContentDiv.classList.add('animate-modal-leave');
+            modalContentDiv.addEventListener('animationend', () => {
+                editArticleModal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden'); // Memungkinkan scroll body kembali
+                modalContentDiv.classList.remove('animate-modal-leave');
+            }, { once: true });
+        }
+
+        // Fungsi untuk menyimpan perubahan artikel
+        editArticleForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const id = parseInt(editArticleId.value);
+            const updatedArticle = {
+                id: id,
+                author: modalEditAuthor.value,
+                title: modalEditTitle.value,
+                url: modalEditUrl.value,
+                description: modalEditDescription.value,
+                content: modalEditContent.value
+            };
+
+            const index = articles.findIndex(article => article.id === id);
+            if (index !== -1) {
+                articles[index] = updatedArticle;
+                renderArticles(); // Render ulang daftar artikel
+                closeEditModal(); // Tutup modal
+                alert('Artikel berhasil diperbarui!'); // Feedback sederhana
+            } else {
+                alert('Error: Artikel tidak ditemukan!');
+            }
+        });
+
+
+        // --- Fungsionalitas Modal Tambah Artikel ---
+
+        // Fungsi untuk membuka modal tambah artikel
+        function openAddArticleModal() {
+            addArticleForm.reset(); // Kosongkan form setiap kali dibuka
+            addArticleModal.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden'); // Mencegah scroll body
+            addArticleModal.querySelector('div').classList.remove('animate-modal-leave');
+            addArticleModal.querySelector('div').classList.add('animate-modal-enter');
+        }
+
+        // Fungsi untuk menutup modal tambah artikel
+        function closeAddArticleModal() {
+            const modalContentDiv = addArticleModal.querySelector('div');
+            modalContentDiv.classList.remove('animate-modal-enter');
+            modalContentDiv.classList.add('animate-modal-leave');
+            modalContentDiv.addEventListener('animationend', () => {
+                addArticleModal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden'); // Memungkinkan scroll body kembali
+                modalContentDiv.classList.remove('animate-modal-leave');
+            }, { once: true });
+        }
+
+        // Fungsi untuk menambahkan artikel baru
+        addArticleForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Mendapatkan ID baru (sederhana: ID terbesar + 1)
+            const newId = articles.length > 0 ? Math.max(...articles.map(a => a.id)) + 1 : 1;
+
+            const newArticle = {
+                id: newId,
+                author: modalAddAuthor.value,
+                title: modalAddTitle.value,
+                url: modalAddUrl.value,
+                description: modalAddDescription.value,
+                content: modalAddContent.value
+            };
+
+            articles.push(newArticle); // Tambahkan artikel baru ke array
+            renderArticles(); // Render ulang daftar artikel
+            closeAddArticleModal(); // Tutup modal
+            alert('Artikel baru berhasil ditambahkan!'); // Feedback
+        });
+
+    </script>
+</body>
 </html>
