@@ -49,10 +49,8 @@
     </section>
 
     <form class="grid md:grid-cols-2 gap-6 text-center">
-      <!-- Card 1 -->
       <div>
         <div class="glass p-6 rounded-2xl shadow-lg space-y-6">
-          <!-- Q11 - Q14 -->
           <div>
             <label class="block font-semibold mb-2 text-lg text-gray-800">Q11. Apakah Anda mudah tersinggung akhir-akhir ini?</label>
             <div class="flex gap-6 justify-center">
@@ -94,16 +92,13 @@
           </div>
         </div>
 
-        <!-- Tombol Prev -->
         <div class="flex justify-center mt-6">
           <a href="./sistem_analisis.html" class="bg-green-600 hover:bg-green-700 transition text-white px-8 py-3 rounded-xl shadow-lg text-lg font-semibold">⬅ Prev</a>
         </div>
       </div>
 
-      <!-- Card 2 -->
       <div>
         <div class="glass p-6 rounded-2xl shadow-lg space-y-6">
-          <!-- Q15 - Q16 -->
           <div>
             <label class="block font-semibold mb-2 text-lg text-gray-800">Q15. Apakah tekanan darah sistolik Anda tinggi?</label>
             <div class="flex gap-6 justify-center">
@@ -114,38 +109,35 @@
             <hr class="border-gray-300 mt-3" />
           </div>
 
+        <div class="glass p-6 rounded-2xl shadow-lg space-y-6 mt-6">
           <div>
-            <label class="block font-semibold mb-2 text-lg text-gray-800">Q16. Apakah berat badan Anda ideal?</label>
-            <div class="flex gap-6 justify-center">
-              <label><input type="radio" name="q16" value="0" class="mr-1 accent-green-600" /> Tidak (Kurang/Lebih)</label>
-              <label><input type="radio" name="q16" value="1" class="mr-1 accent-green-600" /> Sedang</label>
-              <label><input type="radio" name="q16" value="2" class="mr-1 accent-green-600" /> Ya (Ideal)</label>
-            </div>
-            <hr class="border-gray-300 mt-3" />
+            <label for="berat" class="block font-semibold mb-2 text-lg text-gray-800">Berat Badan Anda (kg)</label>
+            <input type="number" id="berat" name="berat" required min="30" max="200" class="w-full p-3 border border-gray-300 rounded-lg" />
+          </div>
+          <div>
+            <label for="tinggi" class="block font-semibold mb-2 text-lg text-gray-800">Tinggi Badan Anda (cm)</label>
+            <input type="number" id="tinggi" name="tinggi" required min="100" max="250" class="w-full p-3 border border-gray-300 rounded-lg" />
           </div>
         </div>
 
-        <!-- Tombol Prediksi -->
+
         <div class="flex justify-center mt-6">
           <button type="button" id="predict-btn" class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl shadow-lg text-lg font-semibold">Prediksi</button>
         </div>
 
-        <!-- Output -->
         <div id="prediction-result" class="hidden mt-4 px-6 py-4 bg-green-100 border border-green-300 rounded-xl text-center text-gray-800 font-medium"></div>
 
-        <div id="loading-spinner" class="mt-6 hidden justify-center">
+        <div id="loading-spinner" class="mt-6 hidden flex items-center justify-center h-24">
           <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-green-600"></div>
         </div>
       </div>
     </form>
 
-    <!-- Reset -->
     <div class="flex justify-center mt-10">
       <button type="button" onclick="resetAndBack()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl shadow-md font-medium">🔁 Reset & Kembali ke Awal</button>
     </div>
   </main>
 
-  <!-- Popup -->
   <div id="popup-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
     <div id="popup" class="p-6 rounded-xl shadow-lg max-w-sm text-center border border-gray-200">
       Mohon isi semua pertanyaan sebelum melanjutkan.
@@ -153,113 +145,116 @@
       <button id="popup-close-btn" class="mt-4 px-4 py-2 rounded-full text-white font-semibold">Tutup</button>
     </div>
   </div>
-
 <script>
   function resetAndBack() {
-    localStorage.clear(); // Bersihkan semua data lokal
-    window.location.href = './sistem_analisis.html'; // Redirect ke page pertama
+    localStorage.clear();
+    window.location.href = './sistem_analisis.html';
   }
 
   const formDataPage1 = JSON.parse(localStorage.getItem('formData')) || {};
 
-  // Restore saved selections from localStorage on page load
   document.addEventListener('DOMContentLoaded', () => {
     const savedData = JSON.parse(localStorage.getItem('formDataPage2')) || {};
-    Object.keys(savedData).forEach(key => {
+
+    ['q11', 'q12', 'q13', 'q14', 'q15'].forEach(key => {
       const value = savedData[key];
       if (value !== null) {
         const radio = document.querySelector(`input[name="${key}"][value="${value}"]`);
-        if (radio) {
-          radio.checked = true;
-        }
+        if (radio) radio.checked = true;
       }
     });
+
+    if (savedData.berat) document.getElementById('berat').value = savedData.berat;
+    if (savedData.tinggi) document.getElementById('tinggi').value = savedData.tinggi;
   });
 
-  // Save form data to localStorage on change
-  const inputs = document.querySelectorAll('input[type="radio"]');
-  inputs.forEach(input => {
-    input.addEventListener('change', () => {
-      const formData = {};
-      ['q11', 'q12', 'q13', 'q14', 'q15', 'q16'].forEach(q => {
-        formData[q] = document.querySelector(`input[name="${q}"]:checked`)?.value || null;
-      });
-      localStorage.setItem('formDataPage2', JSON.stringify(formData));
+  function saveFormDataPage2() {
+    const formData = {};
+    ['q11', 'q12', 'q13', 'q14', 'q15'].forEach(q => {
+      formData[q] = document.querySelector(`input[name="${q}"]:checked`)?.value || null;
     });
+    formData.berat = document.getElementById('berat')?.value || '';
+    formData.tinggi = document.getElementById('tinggi')?.value || '';
+
+    localStorage.setItem('formDataPage2', JSON.stringify(formData));
+  }
+
+  document.querySelectorAll('input[type="radio"]').forEach(input => {
+    input.addEventListener('change', saveFormDataPage2);
   });
+  document.getElementById('berat').addEventListener('input', saveFormDataPage2);
+  document.getElementById('tinggi').addEventListener('input', saveFormDataPage2);
 
   function collectFormDataPage2() {
     const formData = {};
-    formData.q11 = document.querySelector('input[name="q11"]:checked')?.value || null;
-    formData.q12 = document.querySelector('input[name="q12"]:checked')?.value || null;
-    formData.q13 = document.querySelector('input[name="q13"]:checked')?.value || null;
-    formData.q14 = document.querySelector('input[name="q14"]:checked')?.value || null;
-    formData.q15 = document.querySelector('input[name="q15"]:checked')?.value || null;
-    formData.q16 = document.querySelector('input[name="q16"]:checked')?.value || null;
+    ['q11', 'q12', 'q13', 'q14', 'q15'].forEach(q => {
+      formData[q] = document.querySelector(`input[name="${q}"]:checked`)?.value || null;
+    });
     return formData;
   }
 
   async function sendDataToAPI() {
-    // Validate all questions answered
     const formData = collectFormDataPage2();
     const allAnswered = Object.values(formData).every(value => value !== null);
     if (!allAnswered) {
-      // Show popup
       document.getElementById('popup-overlay').classList.remove('hidden');
       return;
     }
 
-    const finalData = { ...formDataPage1, ...formData };
+    const beratStr = document.getElementById("berat")?.value;
+    const tinggiStr = document.getElementById("tinggi")?.value;
+    const berat = parseFloat(beratStr);
+    const tinggi = parseFloat(tinggiStr);
 
+    if (!beratStr || !tinggiStr || isNaN(berat) || isNaN(tinggi) || berat <= 0 || tinggi <= 0) {
+      alert("⚠️ Harap isi berat dan tinggi badan Anda dengan benar.");
+      return;
+    }
+
+    const finalData = { ...formDataPage1, ...formData };
     const dataToSend = [
       finalData.q1, finalData.q2, finalData.q3, finalData.q4,
       finalData.q5, finalData.q6, finalData.q7, finalData.q8,
       finalData.q9, finalData.q10, finalData.q11, finalData.q12,
-      finalData.q13, finalData.q14, finalData.q15, finalData.q16
+      finalData.q13, finalData.q14, finalData.q15,
+      berat, tinggi
     ];
 
-    const numericData = dataToSend.map(value => parseInt(value, 10));
-    console.log("Data yang dikirim ke API:", numericData);
-
+    const numericData = dataToSend.map(value => parseFloat(value));
     const spinner = document.getElementById('loading-spinner');
     const predictionElement = document.getElementById('prediction-result');
     spinner.classList.remove('hidden');
-    predictionElement.innerHTML = ""; // Kosongkan sementara
+    predictionElement.innerHTML = ""; // Kosongkan hasil prediksi saat loading
 
     try {
       const response = await fetch('http://127.0.0.1:8000/predict/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dataToSend)
+        body: JSON.stringify(numericData)
       });
 
       const result = await response.json();
-      console.log("Response from API:", result);
       displayPredictionResult(result);
     } catch (error) {
       console.error("Error sending data to API:", error);
       predictionElement.innerHTML = `<p class="text-red-500">❌ Terjadi kesalahan. Silakan coba lagi.</p>`;
     } finally {
-      spinner.classList.add('hidden'); // Sembunyikan spinner apapun hasilnya
+      spinner.classList.add('hidden');
     }
   }
 
   function displayPredictionResult(result) {
     const predictionElement = document.getElementById('prediction-result');
-    predictionElement.classList.remove('hidden'); // Tampilkan kotak hasil
-
+    predictionElement.classList.remove('hidden');
     let percentage = parseFloat(result.prediction);
     let message = '';
-
     if (percentage < 30) {
-  message = 'Risiko terdeteksi rendah. Tetap jaga pola hidup sehat dan kebersihan.';
+      message = 'Risiko terdeteksi rendah. Tetap jaga pola hidup sehat dan kebersihan.';
     } else if (percentage < 60) {
       message = 'Risiko sedang terdeteksi. Sebaiknya lakukan pemeriksaan medis lebih lanjut.';
     } else {
       message = 'Risiko tinggi terdeteksi. Segera lakukan konsultasi dengan dokter atau fasilitas kesehatan terdekat.';
     }
-
-
     predictionElement.innerHTML = `
       <p class="text-sm mb-2">🔍 <strong>Hasil Anda :</strong></p>
       <p class="text-4xl font-bold mb-2">${percentage}%</p>
@@ -268,8 +263,6 @@
   }
 
   document.getElementById('predict-btn').addEventListener('click', sendDataToAPI);
-
-  // Close popup button
   document.getElementById('popup-close-btn').addEventListener('click', () => {
     document.getElementById('popup-overlay').classList.add('hidden');
   });

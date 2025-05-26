@@ -159,7 +159,7 @@
         if (gambar) formData.append("gambar", gambar);
 
         try {
-          const res = await fetch("/api/artikel/tambah", {
+          const res = await fetch("http://127.0.0.1:8000/api/artikel/tambah", {
             method: "POST",
             body: formData,
           });
@@ -178,7 +178,7 @@
 
 async function loadArtikel() {
   try {
-    const res = await fetch("/api/artikel");
+    const res = await fetch("http://127.0.0.1:8000/api/articles");
     const container = document.getElementById("daftar-artikel");
     container.innerHTML = "";
 
