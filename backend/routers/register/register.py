@@ -4,12 +4,15 @@ from fastapi import APIRouter, Request, status, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 import logging
-from .db import supabase
+# from .db import get_supabase
 from model.users import UserRegisterRequest
 from .auth import hash_password
 import sys
 import os
 from utils.email_sender import send_verification_email
+from .db import get_supabase
+from fastapi import HTTPException
+
 router = APIRouter()
 
 
@@ -27,7 +30,7 @@ async def register_user(request: Request):
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"detail": str(e)})
 
     # Cek apakah email sudah dipakai
-    existing = supabase.table("users").select(
+    existing = get_supabase().table("users").select(
         "id").eq("email", data.email).execute()
     logging.info(f"Existing data for email {data.email}: {existing.data}")
     if existing.data and len(existing.data) > 0:
@@ -40,7 +43,7 @@ async def register_user(request: Request):
     verification_token = str(uuid.uuid4())
 
     # Insert user with verified=False and verification_token
-    response = supabase.table("users").insert({
+    response = get_supabase().table("users").insert({
         "name": data.name,
         "gender": data.gender,
         "date": data.date.isoformat(),
@@ -74,7 +77,7 @@ async def request_password_reset(request: Request):
         if not email:
             return JSONResponse(status_code=400, content={"detail": "Email is required"})
 
-        user_response = supabase.table("users").select(
+        user_response = get_supabase().table("users").select(
             "*").eq("email", email).execute()
         if not user_response.data or len(user_response.data) == 0:
             # For security, do not reveal if email is not registered
@@ -87,7 +90,7 @@ async def request_password_reset(request: Request):
         reset_token_expiry = (datetime.utcnow() +
                               timedelta(hours=1)).isoformat()
 
-        update_response = supabase.table("users").update({
+        update_response = get_supabase().table("users").update({
             "reset_token": reset_token,
             "reset_token_expiry": reset_token_expiry
         }).eq("id", user["id"]).execute()
@@ -124,7 +127,7 @@ async def reset_password(request: Request):
         if not token or not new_password:
             return JSONResponse(status_code=400, content={"detail": "Token and new password are required"})
 
-        user_response = supabase.table("users").select(
+        user_response = get_supabase().table("users").select(
             "*").eq("reset_token", token).execute()
         if not user_response.data or len(user_response.data) == 0:
             return JSONResponse(status_code=400, content={"detail": "Invalid or expired reset token"})
@@ -141,7 +144,7 @@ async def reset_password(request: Request):
 
         hashed_pw = hash_password(new_password)
 
-        update_response = supabase.table("users").update({
+        update_response = get_supabase().table("users").update({
             "password_hash": hashed_pw,
             "reset_token": None,
             "reset_token_expiry": None
@@ -160,7 +163,7 @@ async def reset_password(request: Request):
 @router.get("/verify-email")
 async def verify_email(token: str):
     # Find user by verification token
-    user_response = supabase.table("users").select(
+    user_response = get_supabase().table("users").select(
         "*").eq("verification_token", token).execute()
     if not user_response.data or len(user_response.data) == 0:
         raise HTTPException(
@@ -169,7 +172,7 @@ async def verify_email(token: str):
     user = user_response.data[0]
 
     # Update user to verified
-    update_response = supabase.table("users").update({
+    update_response = get_supabase().table("users").update({
         "verified": True,
         "verification_token": None
     }).eq("id", user["id"]).execute()

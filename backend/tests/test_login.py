@@ -1,4 +1,5 @@
 import unittest
+import json
 from unittest.mock import patch, MagicMock
 from fastapi import status
 from fastapi.requests import Request
@@ -12,6 +13,9 @@ load_dotenv()
 
 class TestLoginUser(unittest.IsolatedAsyncioTestCase):
 
+    def get_response_json(self, response: JSONResponse):
+        return json.loads(response.body.decode())
+
     @patch("routers.register.db.supabase", new_callable=MagicMock)
     @patch("routers.register.login.verify_password")
     async def test_user_not_found(self, mock_verify_password, mock_supabase):
@@ -19,10 +23,11 @@ class TestLoginUser(unittest.IsolatedAsyncioTestCase):
         login_input = LoginInput(email="test@example.com", password="password")
 
         response = await login_user(login_input)
+        content = self.get_response_json(response)
 
         self.assertIsInstance(response, JSONResponse)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('"success":false', response.text)
+        self.assertFalse(content["success"])
 
     @patch("routers.register.db.supabase", new_callable=MagicMock)
     @patch("routers.register.login.verify_password")
@@ -36,10 +41,11 @@ class TestLoginUser(unittest.IsolatedAsyncioTestCase):
             email="test@example.com", password="wrongpassword")
 
         response = await login_user(login_input)
+        content = self.get_response_json(response)
 
         self.assertIsInstance(response, JSONResponse)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('"success":false', response.text)
+        self.assertFalse(content["success"])
 
     @patch("routers.register.db.supabase", new_callable=MagicMock)
     @patch("routers.register.login.verify_password")
@@ -52,11 +58,12 @@ class TestLoginUser(unittest.IsolatedAsyncioTestCase):
         login_input = LoginInput(email="test@example.com", password="password")
 
         response = await login_user(login_input)
+        content = self.get_response_json(response)
 
         self.assertIsInstance(response, JSONResponse)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('"success":false', response.text)
-        self.assertIn("Please verify your email", response.text)
+        self.assertFalse(content["success"])
+        self.assertIn("verify your email", content["message"])
 
     @patch("routers.register.db.supabase", new_callable=MagicMock)
     @patch("routers.register.login.verify_password")
@@ -68,14 +75,20 @@ class TestLoginUser(unittest.IsolatedAsyncioTestCase):
         mock_verify_password.return_value = True
         login_input = LoginInput(email="test@example.com", password="password")
 
-        mock_request = MagicMock(spec=Request)
-        mock_request.session = {}
+        # ✅ Fix: mock request dengan session dictionary
+        class FakeRequest:
+            def __init__(self):
+                self.session = {}
+
+        mock_request = FakeRequest()
 
         response = await login_user(login_input, request=mock_request)
+        content = json.loads(response.body.decode())
 
         self.assertIsInstance(response, JSONResponse)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('"success":true', response.text)
+        self.assertTrue(content["success"])
+        self.assertEqual(content["user"]["email"], "test@example.com")
         self.assertEqual(
             mock_request.session["user"]["email"], "test@example.com")
 
@@ -87,11 +100,12 @@ class TestLoginUser(unittest.IsolatedAsyncioTestCase):
         login_input = LoginInput(email="test@example.com", password="password")
 
         response = await login_user(login_input)
+        content = self.get_response_json(response)
 
         self.assertIsInstance(response, JSONResponse)
         self.assertEqual(response.status_code,
                          status.HTTP_500_INTERNAL_SERVER_ERROR)
-        self.assertIn("Unexpected error", response.text)
+        self.assertIn("Unexpected error", content["detail"])
 
 
 if __name__ == "__main__":

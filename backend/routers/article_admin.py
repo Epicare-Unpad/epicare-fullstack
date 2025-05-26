@@ -43,6 +43,16 @@ class Article(BaseModel):
     content: str
 
 
+class ArticleUpdate(BaseModel):
+    author: str
+    title: str
+    url: str
+    url_to_image: str
+    published_at: Optional[datetime] = None
+    description: str
+    content: str
+
+
 # Data simulasi artikel (biasanya dari database)
 articles = [
     {
@@ -102,20 +112,28 @@ def create_article(article: Article):
 # API: Update artikel berdasarkan ID
 
 
-@router.put("/admin-article/{article_id}", response_model=Article)
-def update_article(article_id: str, updated_article: Article):
+@router.put("/admin-article/{article_id}", response_model=dict)
+def update_article(article_id: str, updated_article: ArticleUpdate):
     data = updated_article.dict(exclude_unset=True)
+
     if "published_at" in data and data["published_at"]:
         data["published_at"] = data["published_at"].isoformat()
 
     res = supabase.table("articles").update(
         data).eq("id", article_id).execute()
 
+    # Debugging
+    print("Update response from Supabase:", res)
+
     if not res.data:
         raise HTTPException(
             status_code=404, detail="Gagal memperbarui artikel (ID tidak ditemukan)")
 
-    return res.data[0]
+    # Jika datanya tidak sesuai ekspektasi
+    if isinstance(res.data, list):
+        return res.data[0]
+    return res.data  # fallback
+
 
 # API: Hapus artikel berdasarkan ID
 
