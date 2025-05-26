@@ -2,12 +2,15 @@ from fastapi import APIRouter, Body
 import tensorflow as tf
 import numpy as np
 from typing import List
-import shap
-import pandas as pd
+import os
 
 router = APIRouter()
 
-model = tf.keras.models.load_model("model/model_nn.keras")
+# Cegah error saat testing jika model tidak tersedia
+MODEL_PATH = "model/model_nn.keras"
+model = None
+if os.path.exists(MODEL_PATH):
+    model = tf.keras.models.load_model(MODEL_PATH)
 
 feature_names = [
     "Batuk", "Berkeringat di Malam Hari", "Kesulitan Bernapas", "Demam",
@@ -57,7 +60,7 @@ def hitung_kategori_bmi(berat_kg: float, tinggi_cm: float) -> int:
 
 
 def predict(input_data: InputData):
-    input_array = np.array([[
+    input_array = np.array([[  # Susun array input
         input_data.Batuk,
         input_data.Berkeringat_di_Malam_Hari,
         input_data.Kesulitan_Bernapas,
@@ -82,7 +85,6 @@ def predict(input_data: InputData):
 
 @router.post("/predict/")
 async def get_prediction(data: List[float] = Body(...)):
-    # Data: 15 fitur awal + berat + tinggi = total 17 elemen
     if len(data) != 17:
         return {"error": "Input harus 17 elemen: 15 fitur + berat + tinggi"}
 

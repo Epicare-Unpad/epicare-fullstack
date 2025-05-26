@@ -30,6 +30,7 @@ class Article(BaseModel):
     description: str
     content: str
 
+
 class ArticleUpdate(BaseModel):
     author: str
     title: str
@@ -38,6 +39,7 @@ class ArticleUpdate(BaseModel):
     published_at: Optional[datetime] = None
     description: str
     content: str
+
 
 # Data simulasi artikel (biasanya dari database)
 articles = [
@@ -105,7 +107,8 @@ def update_article(article_id: str, updated_article: ArticleUpdate):
     if "published_at" in data and data["published_at"]:
         data["published_at"] = data["published_at"].isoformat()
 
-    res = supabase.table("articles").update(data).eq("id", article_id).execute()
+    res = supabase.table("articles").update(
+        data).eq("id", article_id).execute()
 
     # Debugging
     print("Update response from Supabase:", res)
@@ -118,7 +121,6 @@ def update_article(article_id: str, updated_article: ArticleUpdate):
     if isinstance(res.data, list):
         return res.data[0]
     return res.data  # fallback
-
 
 
 # API: Hapus artikel berdasarkan ID

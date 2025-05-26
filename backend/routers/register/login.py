@@ -3,16 +3,22 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 import traceback
 from fastapi import HTTPException, APIRouter, Request
 from fastapi.responses import JSONResponse
-from .db import supabase
 from .auth import verify_password
 from model.LoginInput import LoginInput
 
 router = APIRouter()
 
 
+def get_supabase():
+    # Import supabase client inside the function to delay initialization and ease mocking in tests
+    from .db import supabase
+    return supabase
+
+
 @router.post("/login")
 async def login_user(login_input: LoginInput, request: Request = None):
     try:
+        supabase = get_supabase()
         email = login_input.email
         password = login_input.password
 
@@ -25,15 +31,12 @@ async def login_user(login_input: LoginInput, request: Request = None):
 
         user = user_data[0]
 
-        # Cocokkan password hash
         if not verify_password(password, user["password_hash"]):
             return JSONResponse(status_code=status.HTTP_200_OK, content={"success": False, "message": "Invalid email or password"})
 
-        # Check if user is verified
         if not user.get("verified", False):
             return JSONResponse(status_code=status.HTTP_200_OK, content={"success": False, "message": "Please verify your email before logging in."})
 
-        # Simpan user ke session
         if request:
             request.session["user"] = {
                 "id": user["id"],
@@ -41,7 +44,6 @@ async def login_user(login_input: LoginInput, request: Request = None):
                 "name": user.get("name", "")
             }
 
-        # Return JSON response with user info
         return JSONResponse(status_code=status.HTTP_200_OK, content={
             "success": True,
             "user": {

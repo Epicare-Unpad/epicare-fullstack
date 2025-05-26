@@ -5,14 +5,21 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 import numpy as np
 import io
+import os
 
 router = APIRouter()
 
-best_model = tf.keras.models.load_model("model/best_model.h5")
+MODEL_PATH = "model/best_model.h5"
+best_model = None
+if os.path.exists(MODEL_PATH):
+    best_model = tf.keras.models.load_model(MODEL_PATH)
 
 
 @router.post("/predict-rontgen/")
 async def predict_rontgen(file: UploadFile = File(...)):
+    if best_model is None:
+        return JSONResponse(status_code=500, content={"error": "Model tidak ditemukan di server"})
+
     try:
         contents = await file.read()
         img = image.load_img(io.BytesIO(contents), target_size=(384, 384))
@@ -26,7 +33,7 @@ async def predict_rontgen(file: UploadFile = File(...)):
 
         return JSONResponse(content={
             "label": label,
-            "confidence": float(confidence)
+            "confidence": round(float(confidence), 4)
         })
     except Exception as e:
-        return JSONResponse(status_code=500, content={"error": str(e)})
+        return JSONResponse(status_code=500, content={"error": f"Terjadi error: {str(e)}"})
