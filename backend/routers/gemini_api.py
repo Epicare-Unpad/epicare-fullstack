@@ -22,10 +22,8 @@ class ChatRequest(BaseModel):
 async def chat(req: ChatRequest):
     try:
         model = genai.GenerativeModel("gemini-2.0-flash")
-        convo = model.start_chat()
-        for msg in req.messages[:-1]:
-            convo.send_message(msg)
-        response = convo.send_message(req.messages[-1])
+        full_prompt = "\n".join(req.messages)
+        response = model.generate_content(full_prompt)
         return {"reply": response.text}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
