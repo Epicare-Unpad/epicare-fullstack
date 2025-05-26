@@ -5,14 +5,14 @@ from fastapi import HTTPException, APIRouter, Request
 from fastapi.responses import JSONResponse
 from .auth import verify_password
 from model.LoginInput import LoginInput
-
+from .db import get_supabase
 router = APIRouter()
 
 
-def get_supabase():
-    # Import supabase client inside the function to delay initialization and ease mocking in tests
-    from .db import supabase
-    return supabase
+# def get_supabase():
+#     # Import supabase client inside the function to delay initialization and ease mocking in tests
+#     from .db import get_supabase
+#     return supabase
 
 
 @router.post("/login")

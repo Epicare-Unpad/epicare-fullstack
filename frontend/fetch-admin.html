@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daftar Artikel</title>
+    <script defer src="script.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 text-gray-900">
+    <div class="max-w-4xl mx-auto p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h1 class="text-3xl font-bold">Daftar Artikel</h1>
+            <button id="openModalBtn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                + Add Article
+            </button>
+        </div>
+        <div id="articlesList" class="space-y-4">
+            <!-- Artikel akan dirender di sini -->
+        </div>
+        </div>
+
+        <!-- MODAL -->
+        <div id="modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+            <div class="bg-white rounded-lg w-full max-w-xl p-6 space-y-4 relative max-h-screen overflow-y-auto">
+                <button id="closeModalBtn" class="absolute top-2 right-2 text-gray-600 hover:text-black">&times;</button>
+                <h2 class="text-2xl font-bold mb-4">Tambah Artikel Baru</h2>
+                <form id="articleForm" class="space-y-4">
+                    <div>
+                        <label class="block font-semibold">Author:</label>
+                        <input required name="author" class="w-full p-2 border rounded" />
+                    </div>
+                    <div>
+                        <label class="block font-semibold">Judul Artikel:</label>
+                        <input required name="title" class="w-full p-2 border rounded" />
+                    </div>
+                    <div>
+                        <label class="block font-semibold">Gambar Artikel(link):</label>
+                        <input required name="title" class="w-full p-2 border rounded" />
+                    </div>
+                    <div>
+                        <label class="block font-semibold">URL Artikel (opsional):</label>
+                        <input name="url" class="w-full p-2 border rounded" />
+                    </div>
+                    <div>
+                        <label class="block font-semibold">Deskripsi Singkat:</label>
+                        <textarea name="description" class="w-full p-2 border rounded"></textarea>
+                    </div>
+                    <div>
+                        <label class="block font-semibold">Isi Konten Artikel:</label>
+                        <textarea required name="content" class="w-full p-2 border rounded"></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button type="button" id="cancelBtn"
+                            class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800">Batal</button>
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Tambah
+                            Artikel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    <script>
+        const apiBase = "http://127.0.0.1:8000";
+
+            document.addEventListener("DOMContentLoaded", () => {
+                const modal = document.getElementById("modal");
+                const openBtn = document.getElementById("openModalBtn");
+                const closeBtn = document.getElementById("closeModalBtn");
+                const cancelBtn = document.getElementById("cancelBtn");
+                const form = document.getElementById("articleForm");
+
+                const articlesList = document.getElementById("articlesList");
+
+                // Open/close modal
+                const openModal = () => modal.classList.remove("hidden");
+                const closeModal = () => {
+                    modal.classList.add("hidden");
+                    form.reset();
+                };
+
+                openBtn.addEventListener("click", openModal);
+                closeBtn.addEventListener("click", closeModal);
+                cancelBtn.addEventListener("click", closeModal);
+
+                // Load articles
+                async function fetchArticles() {
+                    try {
+                        const res = await fetch(`${apiBase}/admin-article`);
+                        const articles = await res.json();
+
+                        articlesList.innerHTML = articles.map(article => `
+        <div class="p-4 bg-white rounded shadow">
+          <h2 class="text-xl font-semibold">${article.title}</h2>
+          <p class="text-sm text-gray-500 mb-1">Oleh: ${article.author}</p>
+          <p class="text-gray-600">${article.description || "Tidak ada deskripsi."}</p>
+        </div>
+      `).join("");
+                    } catch (err) {
+                        console.error(err);
+                        articlesList.innerHTML = `<p class="text-red-500">Gagal memuat artikel.</p>`;
+                    }
+                }
+
+                fetchArticles();
+
+                // Submit form
+                form.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+
+                    const formData = new FormData(form);
+                    const data = Object.fromEntries(formData.entries());
+
+                    data.url = data.url || "";
+                    data.url_to_image = data.url_to_image || "https://via.placeholder.com/600x400";
+                    data.published_at = new Date().toISOString();
+
+                    try {
+                        const res = await fetch(`${apiBase}/admin-article`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(data),
+                        });
+
+                        if (!res.ok) throw new Error("Gagal menambahkan artikel.");
+
+                        closeModal();
+                        fetchArticles(); // Refresh list
+                    } catch (err) {
+                        alert("Terjadi kesalahan saat menambahkan artikel.");
+                        console.error(err);
+                    }
+                });
+            });
+
+    </script>
+</body>
+
+</html>

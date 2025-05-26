@@ -1,22 +1,10 @@
-from routers.register.db import supabase
+from routers.register.db import get_supabase
 from uuid import uuid4
 from fastapi import FastAPI, HTTPException, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
-
-
-class Article(BaseModel):
-    id: Optional[str] = None  # UUID
-    author: str
-    title: str
-    url: str
-    url_to_image: Optional[str] = None
-    published_at: Optional[datetime] = None
-    description: str
-    content: str
-
 
 router = APIRouter()
 
@@ -79,7 +67,7 @@ def get_article_by_id(article_id: int):
 
 @router.get("/admin-article", response_model=List[Article])
 def read_articles():
-    res = supabase.table("articles").select(
+    res = get_supabase().table("articles").select(
         "*").order("published_at", desc=True).execute()
     return res.data
 
@@ -102,7 +90,7 @@ def create_article(article: Article):
         "content": article.content
     }
 
-    res = supabase.table("articles").insert(data).execute()
+    res = get_supabase().table("articles").insert(data).execute()
 
     if res.data is None or len(res.data) == 0:
         raise HTTPException(status_code=500, detail="Gagal menyimpan artikel")
@@ -119,11 +107,11 @@ def update_article(article_id: str, updated_article: ArticleUpdate):
     if "published_at" in data and data["published_at"]:
         data["published_at"] = data["published_at"].isoformat()
 
-    res = supabase.table("articles").update(
+    res = get_supabase().table("articles").update(
         data).eq("id", article_id).execute()
 
     # Debugging
-    print("Update response from Supabase:", res)
+    print("Update response from get_supabase():", res)
 
     if not res.data:
         raise HTTPException(
@@ -140,7 +128,7 @@ def update_article(article_id: str, updated_article: ArticleUpdate):
 
 @router.delete("/admin-article/{article_id}")
 def delete_article(article_id: str):
-    res = supabase.table("articles").delete().eq("id", article_id).execute()
+    res = get_supabase().table("articles").delete().eq("id", article_id).execute()
 
     if not res.data:
         raise HTTPException(
