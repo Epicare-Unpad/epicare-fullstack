@@ -1,8 +1,8 @@
 from routers.analisis_rontgen_api import router as rontgen_router
 from utils.load_env import load_environment
 from routers.article import router as article_router
-from routers.article_admin import router as article_admin_router
 from routers.chat_history import router as chat_history_router
+from routers.article_admin import router as article_admin_router
 from routers.oauth.google import router as google_router
 from routers.register.login import router as login_router
 from routers.register.register import router as register_router
@@ -53,11 +53,9 @@ app.include_router(register_router)
 app.include_router(login_router)
 app.include_router(google_router)
 app.include_router(article_router)
-app.include_router(article_admin_router)
 app.include_router(chat_history_router)
-
 app.include_router(rontgen_router)
-
+app.include_router(article_admin_router)
 # Dependency untuk cek login session
 
 
