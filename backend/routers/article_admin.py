@@ -3,10 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
 
-app = FastAPI()
+router = FastAPI()
 
 # Enable CORS supaya frontend bisa akses API tanpa masalah
-app.add_middleware(
+router.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # ganti * dengan domain frontend-mu kalau sudah produksi
     allow_methods=["*"],
@@ -42,20 +42,20 @@ def get_article_by_id(article_id: int):
     return None
 
 # API: List semua artikel
-@app.get("/articles", response_model=List[Article])
+@router.get("/admin-article", response_model=List[Article])
 def read_articles():
     return articles
 
 # API: Tambah artikel baru
-@app.post("/articles", response_model=Article)
+@router.post("/admin-article", response_model=Article)
 def create_article(article: Article):
     new_id = max([a["id"] for a in articles]) + 1 if articles else 1
     article.id = new_id
-    articles.append(article.dict())
+    articles.routerend(article.dict())
     return article
 
 # API: Update artikel berdasarkan ID
-@app.put("/articles/{article_id}", response_model=Article)
+@router.put("/admin-article/{article_id}", response_model=Article)
 def update_article(article_id: int, updated_article: Article):
     article = get_article_by_id(article_id)
     if not article:
@@ -64,7 +64,7 @@ def update_article(article_id: int, updated_article: Article):
     return article
 
 # API: Hapus artikel berdasarkan ID
-@app.delete("/articles/{article_id}")
+@router.delete("/admin-article/{article_id}")
 def delete_article(article_id: int):
     article = get_article_by_id(article_id)
     if not article:
