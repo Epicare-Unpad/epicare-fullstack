@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EPICARE: Dashboard Informasi & Analisis TBC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        
+        #sidebar {
+            width: 280px;
+            transition: all 0.3s ease-in-out;
+            transform: translateX(0);
+        }
+        #sidebar.hidden {
+            transform: translateX(-100%);
+        }
+        #content-wrapper {
+            transition: all 0.3s ease-in-out;
+            margin-left: 280px; 
+        }
+        #content-wrapper.full-width {
+            margin-left: 0;
+        }
+
+        .bg-primary-custom { background-color: #01BF81;}
+        .text-primary-custom { color: #004854; }
+        .bg-accent-light { background-color: #ECFDF5;}
+        .text-accent-dark { color: #047857;}
+    </style>
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+
+    <div class="flex min-h-screen" x-data="{ sidebarOpen: true }">
+        <div id="sidebar" :class="sidebarOpen ? 'block' : 'hidden'" class="fixed inset-y-0 left-0 w-72 bg-white border-r border-gray-200 shadow-lg z-30 lg:relative lg:block">
+            <div class="p-6 bg-primary-custom text-white flex items-center justify-center">
+                <i class="fas fa-stethoscope text-3xl mr-2"></i>
+                <span class="text-xl font-semibold">DASHBOARD EPICARE</span>
+            </div>
+            <div class="py-4 px-3">
+                <p class="text-sm text-gray-500 mb-4 px-3">Halo, Pengunjung!</p>
+                <nav>
+                    <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg active:bg-gray-200 font-medium mb-1">
+                        <i class="fas fa-chart-line mr-3"></i> Gambaran Umum
+                    </a>
+                    <a href="#edukasi-section" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium mb-1">
+                        <i class="fas fa-book-open mr-3"></i> Materi Edukasi Pilihan
+                    </a>
+                    <a href="#analisis-section" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium mb-1">
+                        <i class="fas fa-chart-pie mr-3"></i> Statistik & Tren TBC
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium mb-1">
+                        <i class="fas fa-flask mr-3"></i> Prediksi Risiko TBC
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium mb-1">
+                        <i class="fas fa-question-circle mr-3"></i> Pertanyaan Populer
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium mb-1">
+                        <i class="fas fa-tools mr-3"></i> Sumber Daya Lain
+                    </a>
+                </nav>
+            </div>
+            <div class="p-6 mt-auto">
+                
+                <button class="w-full border border-primary-custom text-primary-custom py-2 px-4 rounded-lg hover:bg-blue-50 transition duration-300">
+                    <i class="fas fa-comments mr-2"></i> Konsultasi
+                </button>
+            </div>
+        </div>
+        <div id="content-wrapper" :class="sidebarOpen ? 'lg:ml-72' : 'lg:ml-0'" class="flex-1 flex flex-col">
+            <header class="bg-white shadow-sm py-4 px-6 flex items-center justify-between border-b border-gray-200">
+                <button @click="sidebarOpen = !sidebarOpen" class="text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:hidden">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                <h1 class="text-xl font-semibold text-gray-800 hidden lg:block">Dashboard Informasi & Analisis TBC</h1>
+                <nav class="flex items-center space-x-4">
+                    <a href="#" class="text-gray-600 hover:text-primary-custom font-medium">Beranda</a>
+                    <a href="#" class="text-gray-600 hover:text-primary-custom font-medium">Edukasi TBC</a>
+                    <a href="#" class="text-gray-600 hover:text-primary-custom font-medium">Analisis TBC</a>
+                    <a href="#" class="text-gray-600 hover:text-primary-custom font-medium">Tentang Kami</a>
+                    <a href="#" class="text-gray-600 hover:text-primary-custom font-medium">Kontak</a>
+                    <a href="#" class="text-gray-600 hover:text-primary-custom"><i class="fas fa-user-circle text-xl"></i></a>
+                    <a href="#" class="text-gray-600 hover:text-primary-custom"><i class="fas fa-bell text-xl"></i></a>
+                </nav>
+            </header>
+
+            <main class="flex-1 p-6 bg-gray-50">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Selamat Datang di Dashboard EPICARE!</h2>
+                <p class="text-lg text-gray-600 mb-8">Platform informasi dan analisis TBC terpadu untuk meningkatkan pemahaman dan kesadaran masyarakat.</p>
+
+                <section id="edukasi-section" class="mb-12">
+                    <h3 class="text-2xl font-bold text-gray-700 mb-6 flex items-center">
+                        <i class="fas fa-book-open text-primary-custom mr-3"></i> Edukasi TBC
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h4 class="text-xl font-semibold text-primary-custom mb-3 flex items-center">
+                                <i class="fas fa-question-circle mr-2"></i> Apa Itu TBC?
+                            </h4>
+                            <p class="text-gray-700 mb-4">Tuberkulosis (TBC) adalah penyakit menular yang disebabkan oleh bakteri Mycobacterium tuberculosis, umumnya menyerang paru-paru.</p>
+                            <a href="#" class="text-[#01BF81] hover:text-[#008C5D] font-medium flex items-center">
+                                Pelajari Lebih Lanjut <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                            </a>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h4 class="text-xl font-semibold text-primary-custom mb-3 flex items-center">
+                                <i class="fas fa-clipboard-list mr-2"></i> Kenali Gejala TBC
+                            </h4>
+                            <ul class="text-gray-700 mb-4 space-y-2">
+                                <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Batuk berkepanjangan (>2 minggu)</li>
+                                <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Demam & Keringat Malam</li>
+                                <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Penurunan Berat Badan</li>
+                                <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Nyeri Dada</li>
+                            </ul>
+                            <a href="#" class="text-[#01BF81] hover:text-[#008C5D] font-medium flex items-center">
+                                Lihat Semua Gejala <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                            </a>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h4 class="text-xl font-semibold text-primary-custom mb-3 flex items-center">
+                                <i class="fas fa-shield-alt mr-2"></i> Pencegahan & Pengobatan
+                            </h4>
+                            <p class="text-gray-700 mb-4">Vaksin BCG, etika batuk, ventilasi rumah, dan yang terpenting: patuh pada regimen pengobatan hingga tuntas.</p>
+                            <a href="#" class="text-[#01BF81] hover:text-[#008C5D] font-medium flex items-center">
+                                Panduan Lengkap <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                            </a>
+                        </div>
+                    
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h4 class="text-xl font-semibold text-primary-custom mb-3 flex items-center">
+                                <i class="fas fa-newspaper mr-2"></i> Artikel Terbaru
+                            </h4>
+                            <ul class="text-gray-700 mb-4 space-y-2">
+                                <li>
+                                    <a href="#" class="block text-gray-700 hover:text-blue-600 text-base font-medium">Panduan Nutrisi untuk Pasien TBC <span class="bg-gray-200 text-gray-700 text-xs px-2 py-0.5 rounded-full ml-2">Baru</span></a>
+                                    <p class="text-gray-500 text-xs mt-0.5">20 Mei 2025</p>
+                                </li>
+                                <li>
+                                    <a href="#" class="block text-gray-700 hover:text-blue-600 text-base font-medium">Peran Keluarga dalam Pencegahan TBC</a>
+                                    <p class="text-gray-500 text-xs mt-0.5">18 Mei 2025</p>
+                                </li>
+                                <li>
+                                    <a href="#" class="block text-gray-700 hover:text-blue-600 text-base font-medium">Mitos vs. Fakta Seputar TBC</a>
+                                    <p class="text-gray-500 text-xs mt-0.5">15 Mei 2025</p>
+                                </li>
+                            </ul>
+                            <a href="#" class="text-[#01BF81] hover:text-[#008C5D] font-medium flex items-center">
+                                Baca Lebih Banyak <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="analisis-section" class="mb-12">
+                    <h3 class="text-2xl font-bold text-gray-700 mb-6 flex items-center">
+                        <i class="fas fa-chart-pie text-accent-dark mr-3"></i> Sistem Analisis TBC
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h4 class="text-xl font-semibold text-accent-dark mb-3 flex items-center">
+                                <i class="fas fa-chart-bar mr-2"></i> Tren Kasus TBC (Nasional)
+                            </h4>
+                            <div class="w-full h-48 bg-gray-100 rounded-md flex items-center justify-center mb-3">
+                                <p class="text-gray-500">Placeholder Grafik (Chart.js)</p>
+                                </div>
+                            <p class="text-gray-700 mb-1"><strong>Total Kasus Terdeteksi (2023):</strong> <span class="font-bold text-lg text-green-600">750.000</span></p>
+                            <p class="text-gray-700 mb-4"><strong>Penurunan dari Tahun Sebelumnya:</strong> <span class="text-green-600 font-bold">5%</span></p>
+                            <a href="#" class="text-accent-dark hover:text-green-700 font-medium flex items-center">
+                                Analisis Data Lengkap <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h4 class="text-xl font-semibold text-accent-dark mb-3 flex items-center">
+                                <i class="fas fa-exclamation-triangle mr-2"></i> Faktor Risiko Utama
+                            </h4>
+                            <ul class="text-gray-700 mb-4 space-y-2">
+                                <li class="flex items-center"><i class="fas fa-times-circle text-red-500 mr-2"></i> Lingkungan Padat Penduduk</li>
+                                <li class="flex items-center"><i class="fas fa-times-circle text-red-500 mr-2"></i> Gizi Buruk & Imunitas Rendah</li>
+                                <li class="flex items-center"><i class="fas fa-times-circle text-red-500 mr-2"></i> Merokok & Konsumsi Alkohol</li>
+                                <li class="flex items-center"><i class="fas fa-times-circle text-red-500 mr-2"></i> HIV/AIDS & Diabetes</li>
+                            </ul>
+                            <a href="#" class="text-accent-dark hover:text-green-700 font-medium flex items-center">
+                                Pahami Risiko Anda <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                            </a>
+                        </div>
+                        
+                    </div>
+                </section>
+            </main>
+
+            <footer class="bg-gray-800 text-white py-6 text-center">
+                <div class="container mx-auto">
+                    <p class="mb-2 text-sm">&copy; 2025 EPICARE. Semua Hak Dilindungi.</p>
+                    <ul class="flex justify-center space-x-6 text-lg">
+                        <li><a href="#" class="hover:text-primary-custom text-sm">Kebijakan Privasi</a></li>
+                        <li><a href="#" class="hover:text-primary-custom text-sm">Syarat & Ketentuan</a></li>
+                        <li><a href="#" class="hover:text-primary-custom"><i class="fab fa-facebook"></i></a></li>
+                        <li><a href="#" class="hover:text-primary-custom"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="#" class="hover:text-primary-custom"><i class="fab fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+            </footer>
+        </div>
+        </div>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    </body>
+</html>
