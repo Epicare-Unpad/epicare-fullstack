@@ -52,6 +52,19 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         contentEl.textContent = "Konten artikel tidak tersedia.";
       }
+
+      // Sumber artikel
+      const urlLinkEl = document.getElementById("article-url");
+      const urlTextEl = document.getElementById("article-url-text");
+
+      if (article.url) {
+        urlLinkEl.href = article.url;
+        urlTextEl.textContent = "Kunjungi artikel asli";
+      } else {
+        urlLinkEl.href = "#";
+        urlTextEl.textContent = "Tautan tidak tersedia";
+      }
+
     })
     .catch(error => {
       console.error(error);

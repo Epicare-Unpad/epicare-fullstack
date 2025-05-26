@@ -1,4 +1,4 @@
-fastapi
+fastapi[all]
 starlette
 pydantic
 supabase
@@ -9,3 +9,7 @@ tensorflow
 numpy
 google-generativeai
 jinja2
+uvicorn
+pydantic[email]
+bcrypt
+pillow
