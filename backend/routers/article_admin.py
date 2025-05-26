@@ -6,18 +6,6 @@ from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
 
-
-class Article(BaseModel):
-    id: Optional[str] = None  # UUID
-    author: str
-    title: str
-    url: str
-    url_to_image: Optional[str] = None
-    published_at: Optional[datetime] = None
-    description: str
-    content: str
-
-
 router = APIRouter()
 
 # Enable CORS supaya frontend bisa akses API tanpa masalah
