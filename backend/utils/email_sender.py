@@ -2,6 +2,8 @@ import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from dotenv import load_dotenv
+load_dotenv()
 
 GMAIL_EMAIL = os.getenv("GMAIL_EMAIL")
 GMAIL_PASSWORD = os.getenv("GMAIL_PASSWORD")
@@ -35,6 +37,7 @@ def send_verification_email(to_email: str, verification_link: str, subject: str 
             server.sendmail(GMAIL_EMAIL, to_email, msg.as_string())
     except Exception as e:
         raise Exception(f"Failed to send email: {e}")
+
 
 def send_password_reset_email(to_email: str, reset_link: str):
     """
