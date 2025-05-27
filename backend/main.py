@@ -7,6 +7,7 @@ from routers.oauth.google import router as google_router
 from routers.register.login import router as login_router
 from routers.register.register import router as register_router
 from routers.analisis_gejala_api import router as gejala_router
+from routers.register.login_admin import router as login_admin_router
 from routers.gemini_api import router as gemini_router
 from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -56,6 +57,7 @@ app.include_router(article_router)
 app.include_router(chat_history_router)
 app.include_router(rontgen_router)
 app.include_router(article_admin_router)
+app.include_router(login_admin_router)
 # Dependency untuk cek login session
 
 

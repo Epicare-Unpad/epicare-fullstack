@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, HTTPException, status  # Impor status
 import tensorflow as tf
 import numpy as np
 from typing import List
@@ -6,16 +6,20 @@ import os
 
 router = APIRouter()
 
-# Cegah error saat testing jika model tidak tersedia
 MODEL_PATH = "model/model_nn.keras"
 model = None
 if os.path.exists(MODEL_PATH):
-    model = tf.keras.models.load_model(MODEL_PATH)
+    try:
+        model = tf.keras.models.load_model(MODEL_PATH)
+        print(f"DEBUG: Model loaded successfully from {MODEL_PATH}")
+    except Exception as e:
+        print(f"ERROR: Failed to load model from {MODEL_PATH}: {e}")
+        model = None  # Pastikan model tetap None jika gagal load
 
 feature_names = [
     "Batuk", "Berkeringat di Malam Hari", "Kesulitan Bernapas", "Demam",
     "Nyeri Dada", "Dahak", "Penekanan Sistem Imun", "Kehilangan Rasa Senang",
-    "Menggigil", "Kehilangan Konsentrasi", "Mudah Tersinggung", "Kehilangan Nafsu Makan",
+    "Menggigil", "Kehilangan Konsentrasi", "Mudah_Tersinggung", "Kehilangan Nafsu Makan",
     "Kehilangan Energi", "Pembengkakan Kelenjar Getah Bening",
     "Tekanan Darah Sistolik", "Kategori BMI"
 ]
@@ -39,6 +43,7 @@ class InputData:
         self.Penekanan_Sistem_Imun = Penekanan_Sistem_Imun
         self.Kehilangan_Rasa_Senang = Kehilangan_Rasa_Senang
         self.Menggigil = Menggigil
+        # PERBAIKAN TYPO DI SINI: Kehilangan_Concentration -> Kehilangan_Konsentrasi
         self.Kehilangan_Konsentrasi = Kehilangan_Konsentrasi
         self.Mudah_Tersinggung = Mudah_Tersinggung
         self.Kehilangan_Nafsu_Makan = Kehilangan_Nafsu_Makan
@@ -60,6 +65,11 @@ def hitung_kategori_bmi(berat_kg: float, tinggi_cm: float) -> int:
 
 
 def predict(input_data: InputData):
+    global model  # Pastikan menggunakan objek model global
+    if model is None:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            detail="Model AI tidak tersedia di server")
+
     input_array = np.array([[  # Susun array input
         input_data.Batuk,
         input_data.Berkeringat_di_Malam_Hari,
@@ -78,9 +88,13 @@ def predict(input_data: InputData):
         input_data.Tekanan_Darah_Sistolik,
         input_data.BMI
     ]])
-    prediction = model.predict(input_array)
-    prediction_value = prediction[0][0] * 100
-    return f"{prediction_value:.2f}%"
+    try:
+        prediction = model.predict(input_array)
+        prediction_value = prediction[0][0] * 100
+        return f"{prediction_value:.2f}%"
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            detail=f"Terjadi error saat prediksi: {str(e)}")
 
 
 @router.post("/predict/")
@@ -91,6 +105,14 @@ async def get_prediction(data: List[float] = Body(...)):
     *fitur, berat, tinggi = data
     bmi_kategori = hitung_kategori_bmi(berat, tinggi)
 
-    input_data = InputData(*fitur, bmi_kategori)
-    prediction = predict(input_data)
-    return {"prediction": prediction}
+    input_data_args = fitur + [bmi_kategori]
+
+    try:
+        input_data = InputData(*input_data_args)
+        prediction = predict(input_data)
+        return {"prediction": prediction}
+    except HTTPException as e:
+        raise e  # Re-raise HTTPException from predict function
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            detail=f"Terjadi error saat pemrosesan: {str(e)}")

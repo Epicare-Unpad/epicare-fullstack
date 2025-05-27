@@ -16,10 +16,15 @@ class TestLoginUser(unittest.IsolatedAsyncioTestCase):
     def get_response_json(self, response: JSONResponse):
         return json.loads(response.body.decode())
 
-    @patch("routers.register.db.supabase", new_callable=MagicMock)
+    # PERBAIKAN DI SINI: Patch get_supabase yang diimpor ke login.py
+    @patch("routers.register.login.get_supabase", new_callable=MagicMock)
     @patch("routers.register.login.verify_password")
-    async def test_user_not_found(self, mock_verify_password, mock_supabase):
-        mock_supabase.table.return_value.select.return_value.eq.return_value.execute.return_value.data = []
+    # Nama mock juga diubah
+    async def test_user_not_found(self, mock_verify_password, mock_get_supabase):
+        mock_supabase_client = MagicMock()
+        # Set return value of get_supabase()
+        mock_get_supabase.return_value = mock_supabase_client
+        mock_supabase_client.table.return_value.select.return_value.eq.return_value.execute.return_value.data = []
         login_input = LoginInput(email="test@example.com", password="password")
 
         response = await login_user(login_input)
@@ -29,10 +34,14 @@ class TestLoginUser(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertFalse(content["success"])
 
-    @patch("routers.register.db.supabase", new_callable=MagicMock)
+    # PERBAIKAN DI SINI: Patch get_supabase yang diimpor ke login.py
+    @patch("routers.register.login.get_supabase", new_callable=MagicMock)
     @patch("routers.register.login.verify_password")
-    async def test_password_mismatch(self, mock_verify_password, mock_supabase):
-        mock_supabase.table.return_value.select.return_value.eq.return_value.execute.return_value.data = [
+    # Nama mock juga diubah
+    async def test_password_mismatch(self, mock_verify_password, mock_get_supabase):
+        mock_supabase_client = MagicMock()
+        mock_get_supabase.return_value = mock_supabase_client
+        mock_supabase_client.table.return_value.select.return_value.eq.return_value.execute.return_value.data = [
             {"id": 1, "email": "test@example.com",
              "password_hash": "hashed_pw", "verified": True}
         ]
@@ -47,10 +56,14 @@ class TestLoginUser(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertFalse(content["success"])
 
-    @patch("routers.register.db.supabase", new_callable=MagicMock)
+    # PERBAIKAN DI SINI: Patch get_supabase yang diimpor ke login.py
+    @patch("routers.register.login.get_supabase", new_callable=MagicMock)
     @patch("routers.register.login.verify_password")
-    async def test_user_not_verified(self, mock_verify_password, mock_supabase):
-        mock_supabase.table.return_value.select.return_value.eq.return_value.execute.return_value.data = [
+    # Nama mock juga diubah
+    async def test_user_not_verified(self, mock_verify_password, mock_get_supabase):
+        mock_supabase_client = MagicMock()
+        mock_get_supabase.return_value = mock_supabase_client
+        mock_supabase_client.table.return_value.select.return_value.eq.return_value.execute.return_value.data = [
             {"id": 1, "email": "test@example.com",
              "password_hash": "hashed_pw", "verified": False}
         ]
@@ -65,10 +78,14 @@ class TestLoginUser(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(content["success"])
         self.assertIn("verify your email", content["message"])
 
-    @patch("routers.register.db.supabase", new_callable=MagicMock)
+    # PERBAIKAN DI SINI: Patch get_supabase yang diimpor ke login.py
+    @patch("routers.register.login.get_supabase", new_callable=MagicMock)
     @patch("routers.register.login.verify_password")
-    async def test_successful_login(self, mock_verify_password, mock_supabase):
-        mock_supabase.table.return_value.select.return_value.eq.return_value.execute.return_value.data = [
+    # Nama mock juga diubah
+    async def test_successful_login(self, mock_verify_password, mock_get_supabase):
+        mock_supabase_client = MagicMock()
+        mock_get_supabase.return_value = mock_supabase_client
+        mock_supabase_client.table.return_value.select.return_value.eq.return_value.execute.return_value.data = [
             {"id": 1, "email": "test@example.com", "password_hash": "hashed_pw",
              "verified": True, "name": "Test User"}
         ]
@@ -92,10 +109,14 @@ class TestLoginUser(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(
             mock_request.session["user"]["email"], "test@example.com")
 
-    @patch("routers.register.db.supabase", new_callable=MagicMock)
+    # PERBAIKAN DI SINI: Patch get_supabase yang diimpor ke login.py
+    @patch("routers.register.login.get_supabase", new_callable=MagicMock)
     @patch("routers.register.login.verify_password")
-    async def test_exception_handling(self, mock_verify_password, mock_supabase):
-        mock_supabase.table.return_value.select.return_value.eq.return_value.execute.side_effect = Exception(
+    # Nama mock juga diubah
+    async def test_exception_handling(self, mock_verify_password, mock_get_supabase):
+        mock_supabase_client = MagicMock()
+        mock_get_supabase.return_value = mock_supabase_client
+        mock_supabase_client.table.return_value.select.return_value.eq.return_value.execute.side_effect = Exception(
             "DB error")
         login_input = LoginInput(email="test@example.com", password="password")
 
