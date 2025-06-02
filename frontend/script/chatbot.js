@@ -79,7 +79,7 @@ async function sendMessage() {
     // 1. Buat chat baru jika belum ada
     if (!currentChatId) {
       const chatTitle = userInput.length > 20 ? userInput.substring(0, 20) + "..." : userInput;
-      const res = await fetch('http://localhost:8000/chat_history/chats', {
+      const res = await fetch('https://epicare-fullstack.onrender.com/chat_history/chats', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user_id: userId, title: chatTitle })
@@ -90,14 +90,14 @@ async function sendMessage() {
     }
 
     // 2. Simpan pesan user ke backend
-    await fetch('http://localhost:8000/chat_history/messages', {
+    await fetch('https://epicare-fullstack.onrender.com/chat_history/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ chat_id: currentChatId, sender: 'user', content: userInput })
     });
 
     // 3. Ambil 3-4 pesan terakhir sebagai konteks
-    const historyRes = await fetch(`http://localhost:8000/chat_history/messages/${currentChatId}`);
+    const historyRes = await fetch(`https://epicare-fullstack.onrender.com/chat_history/messages/${currentChatId}`);
     const historyData = await historyRes.json();
     const lastMessages = historyData.slice(-4).map(msg => `${msg.sender === 'user' ? 'Pengguna' : 'Bot'}: ${msg.content}`);
 
@@ -120,7 +120,7 @@ Kamu adalah Epicare, chatbot medis virtual yang bertugas memberikan informasi se
     lastMessages.push(`Pengguna: ${userInput}`);
 
     // 4. Kirim ke Gemini
-    const res = await fetch('http://localhost:8000/chat', {
+    const res = await fetch('https://epicare-fullstack.onrender.com/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: lastMessages })
@@ -130,7 +130,7 @@ Kamu adalah Epicare, chatbot medis virtual yang bertugas memberikan informasi se
     addChatBubble(data.reply || '⚠️ Respon kosong', 'bot');
 
     // 5. Simpan balasan bot
-    await fetch('http://localhost:8000/chat_history/messages', {
+    await fetch('https://epicare-fullstack.onrender.com/chat_history/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ chat_id: currentChatId, sender: 'bot', content: data.reply || '' })
@@ -167,7 +167,7 @@ async function fetchChatList() {
       document.getElementById('chat-history').innerHTML = '<p class="p-4">User not logged in. Please login again.</p>';
       return;
     }
-    const res = await fetch(`http://localhost:8000/chat_history/chats/${userId}`);
+    const res = await fetch(`https://epicare-fullstack.onrender.com/chat_history/chats/${userId}`);
     if (!res.ok) {
       console.error("Failed to fetch chat list, status:", res.status);
       throw new Error("Failed to fetch chat list");
@@ -253,7 +253,7 @@ function renderChatList(chats) {
         return;
       }
       try {
-        const res = await fetch(`http://localhost:8000/chat_history/chats/${chat.id}`, {
+        const res = await fetch(`https://epicare-fullstack.onrender.com/chat_history/chats/${chat.id}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ title: newTitle })
@@ -288,7 +288,7 @@ function renderChatList(chats) {
       e.stopPropagation();
       if (!confirm('Apakah Anda yakin ingin menghapus percakapan ini?')) return;
       try {
-        const res = await fetch(`http://localhost:8000/chat_history/chats/${chat.id}`, {
+        const res = await fetch(`https://epicare-fullstack.onrender.com/chat_history/chats/${chat.id}`, {
           method: 'DELETE',
         });
         if (!res.ok) throw new Error('Gagal menghapus percakapan');
@@ -315,7 +315,7 @@ async function loadChat(chatId) {
   chatContainer.innerHTML = '';
 
   try {
-    const res = await fetch(`http://localhost:8000/chat_history/messages/${chatId}`);
+    const res = await fetch(`https://epicare-fullstack.onrender.com/chat_history/messages/${chatId}`);
     if (!res.ok) throw new Error("Failed to fetch messages");
     const messages = await res.json();
     messages.forEach(msg => addChatBubble(msg.content, msg.sender));

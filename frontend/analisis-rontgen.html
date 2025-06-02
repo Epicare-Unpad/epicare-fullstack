@@ -194,7 +194,7 @@
           const formData = new FormData();
           formData.append("file", uploadedFile);
 
-          fetch("http://127.0.0.1:8000/predict-rontgen/", {
+          fetch("https://epicare-fullstack.onrender.com/predict-rontgen/", {
             method: "POST",
             body: formData
           })

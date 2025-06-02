@@ -99,7 +99,7 @@
     // Fungsi untuk memuat detail artikel utama
     async function fetchArticleDetail(articleId) {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/articles/${articleId}`);
+        const response = await fetch(`https://epicare-fullstack.onrender.com/api/articles/${articleId}`);
         if (!response.ok) {
           throw new Error('Gagal memuat detail artikel');
         }
@@ -146,7 +146,7 @@
     // Fungsi untuk memuat artikel terkait
     async function fetchRelatedArticles(currentArticleId) {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/articles');
+        const response = await fetch('https://epicare-fullstack.onrender.com/api/articles');
         if (!response.ok) {
           throw new Error('Gagal memuat artikel terkait');
         }

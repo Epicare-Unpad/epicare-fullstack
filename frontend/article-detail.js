@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  fetch(`http://127.0.0.1:8000/api/articles/${articleId}`)
+  fetch(`https://epicare-fullstack.onrender.com/api/articles/${articleId}`)
     .then(response => {
       if (!response.ok) {
         throw new Error("Artikel tidak ditemukan");
