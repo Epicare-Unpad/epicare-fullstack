@@ -5,11 +5,11 @@ from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 import logging
 # from .db import get_supabase
-from model.users import UserRegisterRequest
+from backend.model.users import UserRegisterRequest
 from .auth import hash_password
 import sys
 import os
-from utils.email_sender import send_verification_email
+from backend.utils.email_sender import send_verification_email
 from .db import get_supabase
 from fastapi import HTTPException
 

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
-from routers.register.db import get_supabase
+from backend.routers.register.db import get_supabase
 
 router = APIRouter()
 

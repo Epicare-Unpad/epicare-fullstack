@@ -4,7 +4,7 @@ from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import JSONResponse, HTMLResponse
 from authlib.integrations.starlette_client import OAuth
 from dotenv import load_dotenv
-from model.users import UserRegisterRequest
+from backend.model.users import UserRegisterRequest
 from supabase import create_client, Client
 import os
 

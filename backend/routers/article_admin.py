@@ -1,4 +1,4 @@
-from routers.register.db import get_supabase
+from backend.routers.register.db import get_supabase
 from uuid import uuid4
 from fastapi import FastAPI, HTTPException, APIRouter
 from fastapi.middleware.cors import CORSMiddleware

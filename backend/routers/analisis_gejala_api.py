@@ -6,7 +6,7 @@ import os
 
 router = APIRouter()
 
-MODEL_PATH = "model/model_nn.keras"
+MODEL_PATH = "backend/model/model_nn.keras"
 model = None
 if os.path.exists(MODEL_PATH):
     try:
@@ -100,7 +100,7 @@ def predict(input_data: InputData):
 @router.post("/predict/")
 async def get_prediction(data: List[float] = Body(...)):
     if len(data) != 17:
-        return {"error": "Input harus 17 elemen: 15 fitur + berat + tinggi"}
+        print("error:", "Input harus 17 elemen: 15 fitur + berat + tinggi")
 
     *fitur, berat, tinggi = data
     bmi_kategori = hitung_kategori_bmi(berat, tinggi)
@@ -110,9 +110,19 @@ async def get_prediction(data: List[float] = Body(...)):
     try:
         input_data = InputData(*input_data_args)
         prediction = predict(input_data)
+
+        # ✅ Tambahkan log input-output prediksi
+        print("\n📥 Prediksi diminta:")
+        for nama, nilai in zip(feature_names, input_data_args):
+            print(f"  - {nama}: {nilai}")
+        print(f"📤 Hasil prediksi: {prediction}")
+
         return {"prediction": prediction}
+
     except HTTPException as e:
-        raise e  # Re-raise HTTPException from predict function
+        raise e
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail=f"Terjadi error saat pemrosesan: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Terjadi error saat pemrosesan: {str(e)}"
+        )

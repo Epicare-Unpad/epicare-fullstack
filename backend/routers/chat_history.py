@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, status  # Impor status
-from routers.register.db import get_supabase
+from backend.routers.register.db import get_supabase
 from typing import List
 from pydantic import BaseModel
 from uuid import UUID

@@ -1,14 +1,14 @@
-from routers.analisis_rontgen_api import router as rontgen_router
-from utils.load_env import load_environment
-from routers.article import router as article_router
-from routers.chat_history import router as chat_history_router
-from routers.article_admin import router as article_admin_router
-from routers.oauth.google import router as google_router
-from routers.register.login import router as login_router
-from routers.register.register import router as register_router
-from routers.analisis_gejala_api import router as gejala_router
-from routers.register.login_admin import router as login_admin_router
-from routers.gemini_api import router as gemini_router
+from backend.routers.analisis_rontgen_api import router as rontgen_router
+from backend.utils.load_env import load_environment
+from backend.routers.article import router as article_router
+from backend.routers.chat_history import router as chat_history_router
+from backend.routers.article_admin import router as article_admin_router
+from backend.routers.oauth.google import router as google_router
+from backend.routers.register.login import router as login_router
+from backend.routers.register.register import router as register_router
+from backend.routers.analisis_gejala_api import router as gejala_router
+from backend.routers.register.login_admin import router as login_admin_router
+from backend.routers.gemini_api import router as gemini_router
 from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
@@ -32,8 +32,8 @@ load_environment()
 app = FastAPI()
 
 # Path ke frontend HTML
-app.mount("/frontend", StaticFiles(directory="../frontend"), name="frontend")
-templates = Jinja2Templates(directory="../frontend")
+app.mount("/frontend", StaticFiles(directory="./frontend"), name="frontend")
+templates = Jinja2Templates(directory="./frontend")
 
 # CORS
 app.add_middleware(
