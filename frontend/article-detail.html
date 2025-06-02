@@ -40,13 +40,17 @@
 
   <div id="navbar-placeholder"></div>
   <script>
-    // Memuat navbar secara asinkron dari file eksternal
-    fetch('./navbar.html')
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById('navbar-placeholder').innerHTML = data;
-      })
-      .catch(error => console.error('Error loading navbar:', error));
+      fetch('navbar.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('navbar-placeholder').innerHTML = data;
+          // Reattach menu toggle event listener after loading navbar
+          document.getElementById('menu-toggle').addEventListener('click', function () {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+          });
+        });
+
   </script>
 
   <div class="container mx-auto px-4 py-8 flex-grow">

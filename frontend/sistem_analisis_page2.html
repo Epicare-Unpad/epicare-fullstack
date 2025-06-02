@@ -34,12 +34,17 @@
 
   <div id="navbar-placeholder" class="flex-shrink-0 h-16"></div>
   <script>
-    fetch('./navbar.html')
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById('navbar-placeholder').innerHTML = data;
-      })
-      .catch(error => console.error('Error loading navbar:', error));
+fetch('navbar.html')
+  .then(response => response.text())
+  .then(data => {
+    document.getElementById('navbar-placeholder').innerHTML = data;
+    // Reattach menu toggle event listener after loading navbar
+    document.getElementById('menu-toggle').addEventListener('click', function () {
+      const mobileMenu = document.getElementById('mobile-menu');
+      mobileMenu.classList.toggle('hidden');
+    });
+  });
+
   </script>
 
   <main class="px-4 md:px-8 max-w-7xl mx-auto mt-24 mb-10">

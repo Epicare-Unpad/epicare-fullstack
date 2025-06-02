@@ -60,53 +60,17 @@
   <body class="bg-gradient-to-br from-green-100 via-blue-50 to-purple-50 text-gray-800 min-h-screen flex flex-col">
     <div id="navbar-placeholder" class="flex-shrink-0 h-16"></div>
     <script>
-      fetch('/frontend/navbar.html')
-        .then(response => response.text())
-        .then(data => {
-          document.getElementById('navbar-placeholder').innerHTML = data;
+fetch('navbar.html')
+  .then(response => response.text())
+  .then(data => {
+    document.getElementById('navbar-placeholder').innerHTML = data;
+    // Reattach menu toggle event listener after loading navbar
+    document.getElementById('menu-toggle').addEventListener('click', function () {
+      const mobileMenu = document.getElementById('mobile-menu');
+      mobileMenu.classList.toggle('hidden');
+    });
+  });
 
-          // Tambahkan event listener setelah navbar dimuat
-          const profileIcon = document.getElementById('profile-icon');
-          const dropdownMenu = document.getElementById('dropdown-menu');
-
-          if (profileIcon && dropdownMenu) {
-            profileIcon.addEventListener('click', () => {
-              dropdownMenu.classList.toggle('hidden');
-            });
-
-            // Optional: tutup dropdown saat klik di luar
-            document.addEventListener('click', (e) => {
-              if (!profileIcon.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                dropdownMenu.classList.add('hidden');
-              }
-            });
-          }
-
-          // Add hamburger menu toggle event listener
-          const hamburgerBtn = document.getElementById('hamburger-btn');
-          const navLinks = document.getElementById('nav-links');
-
-          if (hamburgerBtn && navLinks) {
-            hamburgerBtn.addEventListener('click', () => {
-              if (navLinks.classList.contains('hidden')) {
-                navLinks.classList.remove('hidden');
-                navLinks.classList.add('flex', 'flex-col', 'absolute', 'top-full', 'left-0', 'w-full',
-                  'bg-[#01BF81]/90', 'backdrop-blur-md', 'border-t', 'border-white/20',
-                  'sm:border-none', 'sm:bg-transparent', 'sm:static', 'sm:flex-row', 'sm:space-x-8',
-                  'z-50', 'sm:z-auto', 'sm:relative');
-                hamburgerBtn.setAttribute('aria-expanded', 'true');
-              } else {
-                navLinks.classList.add('hidden');
-                navLinks.classList.remove('flex', 'flex-col', 'absolute', 'top-full', 'left-0', 'w-full',
-                  'bg-[#01BF81]/90', 'backdrop-blur-md', 'border-t', 'border-white/20',
-                  'sm:border-none', 'sm:bg-transparent', 'sm:static', 'sm:flex-row', 'sm:space-x-8',
-                  'z-50', 'sm:z-auto', 'sm:relative');
-                hamburgerBtn.setAttribute('aria-expanded', 'false');
-              }
-            });
-          }
-        })
-        .catch(error => console.error('Error loading navbar:', error));
     </script>
 
     <main class="flex-grow px-4 md:px-8 max-w-7xl mx-auto py-8">

@@ -57,8 +57,11 @@ async def register_user(request: Request):
         raise HTTPException(status_code=500, detail="Gagal mendaftarkan user")
 
     # Send verification email
-    frontend_url = os.getenv("FRONTEND_URL", "http://127.0.0.1:8000")
+    frontend_url = os.getenv(
+        "FRONTEND_URL", "https://epicare-fullstack.onrender.com")
+    print(f"Using FRONTEND_URL: {frontend_url}")
     verification_link = f"{frontend_url}/verify-email?token={verification_token}"
+
     try:
         send_verification_email(data.email, verification_link)
     except Exception as e:
@@ -81,7 +84,7 @@ async def request_password_reset(request: Request):
             "*").eq("email", email).execute()
         if not user_response.data or len(user_response.data) == 0:
             # For security, do not reveal if email is not registered
-            return JSONResponse(status_code=200, content={"message": "If the email is registered, a reset link has been sent."})
+            return JSONResponse(status_code=200, content={"message": "A reset link has been sent to email."})
 
         user = user_response.data[0]
 
@@ -99,7 +102,7 @@ async def request_password_reset(request: Request):
             return JSONResponse(status_code=500, content={"detail": "Failed to set reset token"})
 
         frontend_url = os.getenv(
-            "FRONTEND_URL", "http://127.0.0.1:8000/frontend")
+            "FRONTEND_URL", "https://epicare-fullstack.onrender.com/frontend")
         reset_link = f"{frontend_url}/reset-password.html?token={reset_token}"
 
         try:

@@ -38,7 +38,7 @@ templates = Jinja2Templates(directory="./frontend")
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://epicare-fullstack.onrender.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
