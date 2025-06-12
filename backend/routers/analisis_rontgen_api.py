@@ -9,7 +9,7 @@ import os
 
 router = APIRouter()
 
-MODEL_PATH = "backend/model/best_model.h5"
+MODEL_PATH = "model/best_model.h5"
 best_model = None
 if os.path.exists(MODEL_PATH):
     best_model = tf.keras.models.load_model(MODEL_PATH)

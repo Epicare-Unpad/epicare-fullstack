@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Body, HTTPException, status  # Impor status
+from fastapi import APIRouter, Body, HTTPException, status
 import tensorflow as tf
 import numpy as np
 from typing import List
 import os
+from fastapi.responses import JSONResponse
 
 router = APIRouter()
 
@@ -43,7 +44,6 @@ class InputData:
         self.Penekanan_Sistem_Imun = Penekanan_Sistem_Imun
         self.Kehilangan_Rasa_Senang = Kehilangan_Rasa_Senang
         self.Menggigil = Menggigil
-        # PERBAIKAN TYPO DI SINI: Kehilangan_Concentration -> Kehilangan_Konsentrasi
         self.Kehilangan_Konsentrasi = Kehilangan_Konsentrasi
         self.Mudah_Tersinggung = Mudah_Tersinggung
         self.Kehilangan_Nafsu_Makan = Kehilangan_Nafsu_Makan
@@ -65,7 +65,7 @@ def hitung_kategori_bmi(berat_kg: float, tinggi_cm: float) -> int:
 
 
 def predict(input_data: InputData):
-    global model  # Pastikan menggunakan objek model global
+    global model
     if model is None:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             detail="Model AI tidak tersedia di server")
@@ -99,8 +99,12 @@ def predict(input_data: InputData):
 
 @router.post("/predict/")
 async def get_prediction(data: List[float] = Body(...)):
-    if len(data) != 17:
-        print("error:", "Input harus 17 elemen: 15 fitur + berat + tinggi")
+    # ✅ Nama variabel sudah benar: "data"
+    if not isinstance(data, list) or len(data) != 17:
+        return JSONResponse(
+            status_code=200,
+            content={"error": "Input harus 17 elemen: 15 fitur + berat + tinggi"}
+        )
 
     *fitur, berat, tinggi = data
     bmi_kategori = hitung_kategori_bmi(berat, tinggi)
@@ -111,7 +115,6 @@ async def get_prediction(data: List[float] = Body(...)):
         input_data = InputData(*input_data_args)
         prediction = predict(input_data)
 
-        # ✅ Tambahkan log input-output prediksi
         print("\n📥 Prediksi diminta:")
         for nama, nilai in zip(feature_names, input_data_args):
             print(f"  - {nama}: {nilai}")

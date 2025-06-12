@@ -1,19 +1,15 @@
 import unittest
 from unittest.mock import patch, MagicMock
 from fastapi.testclient import TestClient
-from fastapi import FastAPI, HTTPException  # Impor HTTPException juga
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import JSONResponse
 import numpy as np
 import os
 
-# Import router dan fungsi-fungsi dari analisis_gejala_api
-# Impor predict dan InputData
 from routers.analisis_gejala_api import router, hitung_kategori_bmi, predict, InputData
-
-# Hapus @patch di atas kelas. Kita akan mem-patch secara individual di setiap metode tes.
 
 
 class TestPredictAPI(unittest.TestCase):
-    # TestClient harus diinisialisasi sekali untuk semua tes
     @classmethod
     def setUpClass(cls):  # Tidak perlu menerima argumen mock di sini lagi
         cls.app = FastAPI()

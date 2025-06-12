@@ -4,7 +4,7 @@ import traceback
 from fastapi import HTTPException, APIRouter, Request
 from fastapi.responses import JSONResponse
 from .auth import verify_password
-from backend.model.LoginInput import LoginInput
+from model.LoginInput import LoginInput
 from .db import get_supabase
 router = APIRouter()
 
